@@ -1,4 +1,3 @@
-import React from 'react';
 import Title from '../../components/Home/Title';
 import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
@@ -10,10 +9,12 @@ import AncoholIcon from '../../components/Icons/profile/AncoholIcon';
 import GenderIcon from '../../components/Icons/profile/GenderIcon';
 import ReligionIcon from '../../components/Icons/profile/ReligionIcon';
 import EducationIcon from '../../components/Icons/profile/EducationIcon';
+import { NextPageWithLayout } from '../../types/global';
+import NavbarLayout from '../../components/NavbarLayout';
 
-const index = () => {
+const Profile: NextPageWithLayout = () => {
     return (
-        <section className="container">
+        <section className="container with-navbar">
             <Title
                 className="mb-2"
                 content={
@@ -40,22 +41,22 @@ const index = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-                <DoubleGroup title='Tại sao bạn lại ở đây' desc='Muốn hẹn hò' />
-                <DoubleGroup title='Giới thiệu bản thân' desc='Ăn cơm phải có canh' />
+                <DoubleGroup title="Tại sao bạn lại ở đây" desc="Muốn hẹn hò" />
+                <DoubleGroup title="Giới thiệu bản thân" desc="Ăn cơm phải có canh" />
             </div>
 
             <div className="flex flex-col gap-2 my-9">
-                <SingleGroup icon={<ChildrenIcon />} title='Trẻ con' desc='Không có' />
-                <SingleGroup icon={<AncoholIcon />} title='Rượu bia' desc='Không bao giờ' />
-                <SingleGroup icon={<GenderIcon />} title='Giới tính' desc='Giới tính thẳng' />
-                <SingleGroup icon={<ReligionIcon />} title='Tôn giáo' desc='Không' />
-                <SingleGroup icon={<EducationIcon />} title='Học vấn' desc='Không' />
+                <SingleGroup icon={<ChildrenIcon />} title="Trẻ con" desc="Không có" />
+                <SingleGroup icon={<AncoholIcon />} title="Rượu bia" desc="Không bao giờ" />
+                <SingleGroup icon={<GenderIcon />} title="Giới tính" desc="Giới tính thẳng" />
+                <SingleGroup icon={<ReligionIcon />} title="Tôn giáo" desc="Không" />
+                <SingleGroup icon={<EducationIcon />} title="Học vấn" desc="Không" />
             </div>
 
             <div>
                 <div className="flex justify-between mt-2 mb-4">
                     <h5 className="font-bold text-neutral-100">Sở thích</h5>
-                    <span className="body-3 text-main-purple">Chỉnh sửa</span>
+                    <button className="body-3 text-main-purple">Chỉnh sửa</button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                     <Tag className="bg-[#FFF0F0]" content="mua sắm" />
@@ -68,4 +69,5 @@ const index = () => {
     );
 };
 
-export default index;
+Profile.getLayout = (page) => <NavbarLayout>{page}</NavbarLayout>;
+export default Profile;

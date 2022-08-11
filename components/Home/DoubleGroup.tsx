@@ -2,8 +2,8 @@ import ArrowRightIcon from '../Icons/ArrowRightIcon';
 
 interface Props {
     className?: string;
-    title: React.ReactNode;
-    desc: React.ReactNode;
+    title: string;
+    desc: string;
     onClick?: () => Function;
 }
 export default function DoubleGroup({ className = '', title, desc, onClick }: Props) {

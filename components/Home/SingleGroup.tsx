@@ -5,10 +5,11 @@ interface Props {
     title: React.ReactNode;
     desc: React.ReactNode;
     icon: React.ReactNode;
+    onClick?: () => Function;
 }
-export default function SingleGroup({ icon, className = '', title, desc }: Props) {
+export default function SingleGroup({ icon, className = '', title, desc, onClick }: Props) {
     return (
-        <section className={`${className} flex justify-between items-center py-[7px]`}>
+        <button className={`${className} flex justify-between items-center py-[7px]`} onClick={onClick}>
             <div className="flex flex-row gap-1 item-end">
                 <span>{icon}</span>
                 <span className="font-bold text-neutral-100 body-3">{title}</span>
@@ -17,6 +18,6 @@ export default function SingleGroup({ icon, className = '', title, desc }: Props
                 <span className="text-neutral-40 body-3">{desc}</span>
                 <ArrowRightIcon className="scale-75" />
             </div>
-        </section>
+        </button>
     );
 }

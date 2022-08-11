@@ -75,14 +75,17 @@
     }
 }
 @layer utilities {
+    .with-navbar {
+        @apply pb-24;
+    }
     .button-1 {
         @apply font-bold leading-button-1 text-button-1;
     }
-    .body-2{
+    .body-2 {
         @apply text-body-2 leading-body-2;
     }
-    .body-3{
-        @apply text-body-3 leading-body-3
+    .body-3 {
+        @apply text-body-3 leading-body-3;
     }
     .container {
         @apply bg-white w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
