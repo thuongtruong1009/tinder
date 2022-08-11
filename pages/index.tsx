@@ -4,6 +4,8 @@ import { useContext, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import PhoneOTP from '../components/Auth/PhoneOTP';
+import InfoUser from '../components/Auth/InfoUser';
+import LoginPhone from '../components/Auth/LoginPhone';
 import Button from '../components/Button';
 import Background from '../components/Home';
 import HomeComponent from '../components/Home/HomeComponent';
@@ -87,6 +89,8 @@ const Home: NextPageWithLayout = () => {
                     </div>
                 </div>
             </section> */}
+            {/* <LoginPhone /> */}
+            <InfoUser />
         </>
     );
 };

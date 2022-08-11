@@ -1,4 +1,5 @@
 @import './font.css';
+
 @tailwind base;
 @layer base {
     h1,
@@ -18,6 +19,10 @@
     }
     h4 {
         @apply text-h4 leading-h4;
+    }
+    input,
+    button {
+        @apply outline-none;
     }
     /* svg {
         @apply flex-center;
@@ -55,6 +60,9 @@
     .radio:checked::before {
         @apply visible opacity-100;
     }
+    input {
+        box-shadow: inset 100px 100px 100px 100px #f4f5f5;
+    }
 }
 @tailwind utilities;
 
@@ -67,11 +75,23 @@
     }
 }
 @layer utilities {
+    .with-navbar {
+        @apply pb-24;
+    }
     .button-1 {
         @apply font-bold leading-button-1 text-button-1;
     }
+    .body-2 {
+        @apply text-body-2 leading-body-2;
+    }
+    .body-3 {
+        @apply text-body-3 leading-body-3;
+    }
     .container {
-        @apply bg-white py-4 w-full px-4 mx-auto max-w-[377px] min-h-screen border shadow-md border-slate-200;
+        @apply bg-white w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
+    }
+    .container-np {
+        @apply bg-white w-full mx-auto max-w-[377px] min-h-screen shadow-md;
     }
     .flex-center {
         @apply flex items-center justify-center;
@@ -105,3 +125,4 @@
         @apply object-cover !w-full !h-full !relative;
     }
 }
+@import './datepicker.css';
