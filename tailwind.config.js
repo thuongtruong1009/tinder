@@ -10,8 +10,8 @@ module.exports = {
             fontSize: {
                 h1: '2.5rem',
                 h2: '2rem',
-                h3: '1.5rem',
-                h4: '1.25rem',
+                h3: '1.25rem',
+                h4: '1rem',
                 'button-1': '18px',
                 'button-2': '16px',
                 'caption-1': '14px',
@@ -19,13 +19,14 @@ module.exports = {
                 'small-r': '12px',
                 'body-1': '24px',
                 'body-2': '16px',
+                'body-3': '14px',
                 display: '64px',
             },
             lineHeight: {
                 h1: '52px',
                 h2: '42px',
-                h3: '32px',
-                h4: '26px',
+                h3: '26px',
+                h4: '20px',
                 'button-1': '24px',
                 'button-2': '24px',
                 'caption-1': '18px',
@@ -33,6 +34,7 @@ module.exports = {
                 'small-r': '16px',
                 'body-1': '32px',
                 'body-2': '24px',
+                'body-3': '18px',
                 display: '82px',
             },
             colors: {
@@ -40,6 +42,7 @@ module.exports = {
                     100: '#2a2846',
                     80: '#55536B',
                     65: '#7F7E90',
+                    60: '#7A838C',
                     40: '#AAA9B5',
                     20: '#D4D4DA',
                     10: '#EAE9ED',
@@ -53,6 +56,9 @@ module.exports = {
                     50: '#7a56fe',
                 },
                 danger: '#FE5D5D',
+                main:{
+                    'purple': '#7A56FE',
+                }
             },
             fontFamily: {
                 primary: 'SVN-Circular',
