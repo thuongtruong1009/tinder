@@ -1,0 +1,7 @@
+.react-datepicker-wrapper {
+}
+.react-datepicker__input-container {
+}
+.react-datepicker-wrapper .react-datepicker__input-container input {
+    @apply w-full;
+}
