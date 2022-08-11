@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import InfoUser from '../components/Auth/InfoUser';
+import LoginPhone from '../components/Auth/LoginPhone';
 import Button from '../components/Button';
 import Background from '../components/Home';
 import Title from '../components/Home/Title';
@@ -11,7 +13,7 @@ const Home: NextPageWithLayout = () => {
     return (
         <>
             {/* <Background /> */}
-            <section className="container">
+            {/* <section className="container">
                 <Title
                     className="mb-4"
                     content={<h1 className="font-extrabold leading-10 text-h2 text-primary-50 font-secondary">Foxy</h1>}
@@ -38,7 +40,9 @@ const Home: NextPageWithLayout = () => {
                         </button>
                     </div>
                 </div>
-            </section>
+            </section> */}
+            {/* <LoginPhone /> */}
+            <InfoUser />
         </>
     );
 };

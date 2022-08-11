@@ -19,6 +19,11 @@
     h4 {
         @apply text-h4 leading-h4;
     }
+    input,
+    button {
+        @apply outline-none;
+        font-family: inherit;
+    }
     /* svg {
         @apply flex-center;
     }
@@ -55,6 +60,9 @@
     .radio:checked::before {
         @apply visible opacity-100;
     }
+    input {
+        box-shadow: inset 100px 100px 100px 100px #f4f5f5;
+    }
 }
 @tailwind utilities;
 
@@ -71,7 +79,7 @@
         @apply font-bold leading-button-1 text-button-1;
     }
     .container {
-        @apply bg-white py-4 w-full px-4 mx-auto max-w-[377px] min-h-screen border shadow-md border-slate-200;
+        @apply bg-white w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
     }
     .flex-center {
         @apply flex items-center justify-center;

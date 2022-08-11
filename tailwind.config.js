@@ -52,6 +52,7 @@ module.exports = {
                     65: '#F9F9FF',
                     50: '#7a56fe',
                 },
+                danger: '#FE5D5D',
             },
             fontFamily: {
                 primary: 'SVN-Circular',
