@@ -9,7 +9,7 @@ module.exports = {
             },
             fontSize: {
                 h1: '2.5rem',
-                h2: '2rem',
+                h2: '1.5rem',
                 h3: '1.5rem',
                 h4: '1.25rem',
                 'button-1': '18px',
@@ -18,12 +18,12 @@ module.exports = {
                 'small-b': '12px',
                 'small-r': '12px',
                 'body-1': '24px',
-                'body-2': '16px',
+                'body-2': '14px',
                 display: '64px',
             },
             lineHeight: {
                 h1: '52px',
-                h2: '42px',
+                h2: '32px',
                 h3: '32px',
                 h4: '26px',
                 'button-1': '24px',
@@ -32,7 +32,7 @@ module.exports = {
                 'small-b': '16px',
                 'small-r': '16px',
                 'body-1': '32px',
-                'body-2': '24px',
+                'body-2': '18px',
                 display: '82px',
             },
             colors: {
