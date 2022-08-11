@@ -1,4 +1,5 @@
 @import './font.css';
+
 @tailwind base;
 @layer base {
     h1,
@@ -22,7 +23,6 @@
     input,
     button {
         @apply outline-none;
-        font-family: inherit;
     }
     /* svg {
         @apply flex-center;
@@ -113,3 +113,4 @@
         @apply object-cover !w-full !h-full !relative;
     }
 }
+@import './datepicker.css';

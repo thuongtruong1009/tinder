@@ -4,20 +4,7 @@ interface Props {
     name: string;
     label: string;
     placeholder: string;
-    type?:
-        | 'text'
-        | 'password'
-        | 'email'
-        | 'number'
-        | 'tel'
-        | 'search'
-        | 'url'
-        | 'date'
-        | 'time'
-        | 'datetime-local'
-        | 'month'
-        | 'week'
-        | 'color';
+    type?: 'text' | 'email';
     required?: boolean;
     value?: string;
     onChange?: Dispatch<SetStateAction<string>>;
