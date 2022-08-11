@@ -1,0 +1,19 @@
+.iconMarkerMe,
+.iconMarkerFriends {
+    border-radius: 50%;
+    border: 2px solid;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.iconMarkerFriends {
+    border-color: #0693e3;
+}
+
+.iconMarkerMe {
+    border-color: #eb144c;
+}
+
+.container {
+    height: 800px;
+    width: 1000px;
+}

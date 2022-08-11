@@ -1,0 +1,86 @@
+import { useFormik } from 'formik';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { useCookies } from 'react-cookie';
+import * as Yup from 'yup';
+import { UserContextType } from '../@type/user';
+import { UserContext } from '../context/userContext';
+
+const OTP: NextPage = () => {
+    const router = useRouter();
+    const { phone, userSignUp, saveJwtToken } = useContext(UserContext) as UserContextType;
+    const [cookies, setCookie] = useCookies(['userEmail']);
+    console.log('email cookie: ', cookies.userEmail);
+
+    console.log('phone: ', phone);
+
+    const formikOTP = useFormik({
+        initialValues: {
+            otp: '',
+        },
+        validationSchema: Yup.object().shape({
+            otp: Yup.string()
+                .length(6, 'OTP must be contain 6 numbers!')
+                .matches(/^[0-9]*$/, 'OTP only contains number')
+                .required('Required'),
+        }),
+        onSubmit: async (values) => {
+            console.log('OTP: ', values.otp);
+
+            let body = {};
+            if (phone) {
+                body = {
+                    phone,
+                };
+            } else if (cookies.userEmail) {
+                body = {
+                    email: cookies.userEmail,
+                };
+            }
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_URL_VERIFY_OTP_LOGIN}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    ...body,
+                    otp: values.otp,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                alert(result.error);
+            } else {
+                console.log(result);
+                saveJwtToken(result.data.token);
+                router.push('/');
+            }
+        },
+    });
+
+    return (
+        <section className="flex justify-center px-20">
+            <form onSubmit={formikOTP.handleSubmit} className="flex flex-col">
+                <label htmlFor="otp">OTP</label>
+                <input
+                    type="text"
+                    name="otp"
+                    id="otp"
+                    className="border rounded mb-3"
+                    onChange={formikOTP.handleChange}
+                />
+                {formikOTP.touched.otp && formikOTP.errors.otp ? (
+                    <div className="text-red-500">* {formikOTP.errors.otp}</div>
+                ) : null}
+                <button className="py-1 rounded bg-blue-400 text-white" type="submit">
+                    Submit
+                </button>
+            </form>
+        </section>
+    );
+};
+
+export default OTP;

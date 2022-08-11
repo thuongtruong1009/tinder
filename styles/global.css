@@ -1,0 +1,107 @@
+@import './font.css';
+@tailwind base;
+@layer base {
+    h1,
+    h2,
+    h3,
+    h4 {
+        @apply font-bold;
+    }
+    h1 {
+        @apply text-h1 leading-h1;
+    }
+    h2 {
+        @apply text-h2 leading-h2;
+    }
+    h3 {
+        @apply text-h3 leading-h3;
+    }
+    h4 {
+        @apply text-h4 leading-h4;
+    }
+    /* svg {
+        @apply flex-center;
+    }
+    svg path {
+        @apply block;
+    } */
+}
+@tailwind components;
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-between gap-8 text-white font-primary;
+    }
+    .btn svg {
+        @apply flex-shrink-0;
+    }
+    .btn-md {
+        @apply px-6 py-[10px] button-1 rounded-[13px];
+    }
+    .btn-primary {
+        @apply bg-primary-50;
+    }
+    .btn-secondary {
+        @apply text-base font-bold bg-neutral-100;
+    }
+    .radio {
+        @apply relative w-6 h-6 transition-all border-2 rounded-full appearance-none cursor-pointer border-neutral-40;
+    }
+    .radio::before {
+        @apply w-[14px] h-[14px] transition-all rounded-full absolute-center bg-primary-50 invisible opacity-0;
+    }
+    .radio:checked {
+        @apply border-primary-50;
+    }
+    .radio:checked::before {
+        @apply visible opacity-100;
+    }
+}
+@tailwind utilities;
+
+@layer base {
+    html {
+        @apply font-primary;
+    }
+    body {
+        @apply bg-black;
+    }
+}
+@layer utilities {
+    .button-1 {
+        @apply font-bold leading-button-1 text-button-1;
+    }
+    .container {
+        @apply bg-white py-4 w-full px-4 mx-auto max-w-[377px] min-h-screen border shadow-md border-slate-200;
+    }
+    .flex-center {
+        @apply flex items-center justify-center;
+    }
+    .flex-center-y {
+        @apply flex items-center;
+    }
+    .flex-center-x {
+        @apply flex justify-center;
+    }
+    .flex-col-center {
+        @apply flex flex-col items-center justify-center;
+    }
+    .absolute-center-y {
+        @apply absolute -translate-y-1/2 top-1/2;
+    }
+    .absolute-center {
+        @apply content-[""] absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2;
+    }
+    .absolute-center-x {
+        @apply absolute -translate-x-1/2 left-1/2;
+    }
+    .image-container {
+        @apply relative;
+    }
+    .image-container span {
+        position: unset !important;
+        @apply !h-full;
+    }
+    .image-container .image {
+        @apply object-cover !w-full !h-full !relative;
+    }
+}
