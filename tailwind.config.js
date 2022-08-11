@@ -51,6 +51,8 @@ module.exports = {
                     80: '#C5C2F3',
                     65: '#F9F9FF',
                     50: '#7a56fe',
+                    40: '#5D5FEF',
+                    30: '#a48bfe',
                 },
             },
             fontFamily: {
