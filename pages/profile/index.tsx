@@ -40,8 +40,8 @@ const index = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-                <DoubleGroup title={'Tại sao bạn lại ở đây'} desc={'Muốn hẹn hò'} />
-                <DoubleGroup title={'Giới thiệu bản thân'} desc={'Ăn cơm phải có canh'} />
+                <DoubleGroup title='Tại sao bạn lại ở đây' desc='Muốn hẹn hò' />
+                <DoubleGroup title='Giới thiệu bản thân' desc='Ăn cơm phải có canh' />
             </div>
 
             <div className="flex flex-col gap-2 my-9">
