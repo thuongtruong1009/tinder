@@ -59,8 +59,8 @@ const Home: NextPageWithLayout = () => {
     return (
         <>
             {/* <Background /> */}
-            {/* <HomeComponent /> */}
-            <PhoneOTP />
+            <HomeComponent />
+            {/* <PhoneOTP /> */}
             {/* <section className="container">
                 <Title
                     className="mb-4"
@@ -90,7 +90,7 @@ const Home: NextPageWithLayout = () => {
                 </div>
             </section> */}
             {/* <LoginPhone /> */}
-            <InfoUser />
+            {/* <InfoUser /> */}
         </>
     );
 };

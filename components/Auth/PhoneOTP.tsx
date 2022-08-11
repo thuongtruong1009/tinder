@@ -1,9 +1,7 @@
 import { NextPageWithLayout } from '../../types/global';
-import Button from '../Button';
 import Title from '../Home/Title';
 import ArrowLeft from '../Icons/ArrowLeft';
-import ArrowRightCircleIcon from '../Icons/ArrowRightCircleIcon';
-import Key from '../Icons/Key';
+import Key from '../Icons/KeyIcon';
 
 const PhoneOTP: NextPageWithLayout = () => {
     return (
