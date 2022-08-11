@@ -7,7 +7,6 @@ import PhoneOTP from '../components/Auth/PhoneOTP';
 import InfoUser from '../components/Auth/InfoUser';
 import LoginPhone from '../components/Auth/LoginPhone';
 import Button from '../components/Button';
-import Background from '../components/Home';
 import HomeComponent from '../components/Home/HomeComponent';
 import Title from '../components/Home/Title';
 import AppleIcon from '../components/Icons/AppleIcon';
@@ -58,7 +57,6 @@ const Home: NextPageWithLayout = () => {
 
     return (
         <>
-            {/* <Background /> */}
             {/* <HomeComponent /> */}
             <PhoneOTP />
             {/* <section className="container">
