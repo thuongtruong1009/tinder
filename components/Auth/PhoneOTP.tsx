@@ -1,9 +1,11 @@
+import { useRouter } from 'next/router';
 import { NextPageWithLayout } from '../../types/global';
 import Title from '../Home/Title';
 import ArrowLeft from '../Icons/ArrowLeft';
 import Key from '../Icons/KeyIcon';
 
 const PhoneOTP: NextPageWithLayout = () => {
+    const router = useRouter();
     return (
         <>
             <section className="container">
@@ -21,7 +23,7 @@ const PhoneOTP: NextPageWithLayout = () => {
                     </div>
                     <div>
                         <h4 className="mb-1">Mã xác thực</h4>
-                        <p className="text-caption-1 leading-caption-1 text-neutral-40 mb-6">
+                        <p className="mb-6 text-caption-1 leading-caption-1 text-neutral-40">
                             Vui lòng nhập mã OTP được gửi về số điện thoại của bạn, để hoàn thành đăng nhập.
                         </p>
 
@@ -32,7 +34,10 @@ const PhoneOTP: NextPageWithLayout = () => {
                         />
 
                         <div className="flex justify-end">
-                            <button className="font-normal text-primary-40 text-caption-1 leading-caption-1 underline hover:cursor-pointer">
+                            <button
+                                className="font-normal underline text-primary-40 text-caption-1 leading-caption-1 hover:cursor-pointer"
+                                onClick={() => router.push('/map')}
+                            >
                                 Gửi lại OTP
                             </button>
                         </div>

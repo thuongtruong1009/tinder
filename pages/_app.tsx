@@ -6,9 +6,17 @@ import { store } from '../app/store';
 import { Toaster } from 'react-hot-toast';
 import { CookiesProvider } from 'react-cookie';
 import UserProvider from '../context/userContext';
+import Background from '../components/Home';
+import { useEffect, useState } from 'react';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+    const [loading, setLoading] = useState(false);
     const getLayout = Component.getLayout ?? ((page) => page);
+    useEffect(() => {
+        window.setTimeout(() => {
+            setLoading(true);
+        }, 2000);
+    }, []);
     return (
         <CookiesProvider>
             <UserProvider>
@@ -20,7 +28,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <link rel="icon" href="/logo.svg" />
                 </Head>
                 <Provider store={store}>
-                    <>{getLayout(<Component {...pageProps} />)}</>
+                    {loading ? <>{getLayout(<Component {...pageProps} />)}</> : <Background />}
+
                     <Toaster />
                 </Provider>
             </UserProvider>
