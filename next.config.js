@@ -11,6 +11,9 @@ const nextConfig = {
         SEND_OTP_REGISTER: process.env.API_URL + process.env.SEND_OTP_REGISTER,
         VERIFY_OTP_LOGIN: process.env.API_URL + process.env.VERIFY_OTP_LOGIN,
     },
+    images: {
+        domains: ['lh3.googleusercontent.com', 'platform-lookaside.fbsbx.com'],
+    },
 };
 
 module.exports = nextConfig;
