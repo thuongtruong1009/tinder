@@ -88,7 +88,7 @@ const Home: NextPageWithLayout = () => {
                 </div>
             </section> */}
             {/* <LoginPhone /> */}
-            <InfoUser />
+            {/* <InfoUser /> */}
         </>
     );
 };
