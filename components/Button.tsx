@@ -1,7 +1,3 @@
-import { ReactNode } from 'react';
-import ArrowDownIcon from './Icons/ArrowDownIcon';
-import ArrowRightCircleIcon from './Icons/ArrowRightCircleIcon';
-
 interface Props {
     title?: string;
     size?: 'tiny' | 'small' | 'medium';
@@ -9,9 +5,18 @@ interface Props {
     Icon?: JSX.Element;
     block?: boolean;
     className?: string;
+    onClick?: () => void;
 }
 
-export default function Button({ className = '', title, size = 'medium', type = 'primary', Icon, block }: Props) {
+export default function Button({
+    className = '',
+    onClick,
+    title,
+    size = 'medium',
+    type = 'primary',
+    Icon,
+    block,
+}: Props) {
     const sizeClass = () => {
         switch (size) {
             case 'tiny':
@@ -35,7 +40,7 @@ export default function Button({ className = '', title, size = 'medium', type = 
         }
     };
     return (
-        <button className={`btn ${className} ${block && 'w-full'} ${sizeClass()} ${typeClass()}`}>
+        <button className={`btn ${className} ${block && 'w-full'} ${sizeClass()} ${typeClass()}`} onClick={onClick}>
             <p className={`${Icon ? '' : 'text-center w-full'}`}>{title}</p>
             {Icon && Icon}
         </button>
