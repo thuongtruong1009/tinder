@@ -7,6 +7,13 @@ declare interface ISendOTPRegister {
 }
 declare interface IVerifyOTP {
     otp: string;
-    email: string;
-    phone: string;
+    email?: string;
+    phone?: string;
+}
+declare interface IVerifyOTPResponse {
+    message: string;
+    data: {
+        token: string;
+        user: IUser;
+    };
 }
