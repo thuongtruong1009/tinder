@@ -7,18 +7,20 @@ import CircleButton from './CircleButton';
 
 type Props = {
     user: IResponseUser;
-    handleSeenInfo: (user: IResponseUser) => void;
+    onSeen: (user: IResponseUser) => () => void;
 };
 
-const UserCard = ({ user, handleSeenInfo }: Props) => {
+const UserCard = ({ user, onSeen }: Props) => {
     return (
         <div className="image-container rounded-[40px] h-[70vh] overflow-hidden">
             <Image className="object-cover image" alt="avatar" objectPosition="top" layout="fill" src={user.avatar} />
             <div className="absolute bottom-0 w-full px-4">
                 <div className="justify-between mb-2 flex-center-y">
-                    <h3 className="text-white">{user.name.firstName + ' ' + user.name.lastName}, 22t</h3>
+                    <h3 className="text-white">
+                        {user.name.firstName + ' ' + user.name.lastName}, {user.age || '?'}t
+                    </h3>
 
-                    <button onClick={() => handleSeenInfo(user)}>
+                    <button onClick={onSeen(user)}>
                         <InformationIcon />
                     </button>
                 </div>

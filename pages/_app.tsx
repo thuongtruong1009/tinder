@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../hooks/redux';
 import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
+import ProtectRoute from '../components/ProtectRoute';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     // const dispatch = useAppDispatch();
@@ -31,20 +32,36 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             }, 1);
     }, []);
     return (
-        <UserProvider>
-            <Head>
-                <title>Foxy</title>
-                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                <meta name="description" content="A social network to connect with your friends" />
-                <meta name="keywords" content="foxy, social network, friends, connect, social, network" />
-                <link rel="icon" href="/logo.svg" />
-            </Head>
-            <Provider store={store}>
-                {!loading ? <>{getLayout(<Component {...pageProps} />)}</> : <Loading />}
+        <CookiesProvider>
+            <UserProvider>
+                <Head>
+                    <title>Foxy</title>
+                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                    <meta name="description" content="A social network to connect with your friends" />
+                    <meta name="keywords" content="foxy, social network, friends, connect, social, network" />
+                    <link rel="icon" href="/logo.svg" />
+                </Head>
+                <Provider store={store}>
+                    {!loading ? (
+                        <>
+                            {Component.protected ? (
+                                <ProtectRoute>{getLayout(<Component {...pageProps} />)}</ProtectRoute>
+                            ) : (
+                                getLayout(<Component {...pageProps} />)
+                            )}
+                        </>
+                    ) : (
+                        <Loading />
+                    )}
 
-                <Toaster />
-            </Provider>
-        </UserProvider>
+                    <Toaster
+                        toastOptions={{
+                            className: 'z-[500]',
+                        }}
+                    />
+                </Provider>
+            </UserProvider>
+        </CookiesProvider>
     );
 }
 

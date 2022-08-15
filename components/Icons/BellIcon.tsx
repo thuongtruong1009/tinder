@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SVGProps } from 'react';
 
-const Bell = (props: SVGProps<SVGSVGElement>) => (
+const BellIcon = (props: SVGProps<SVGSVGElement>) => (
     <svg
         width={24}
         height={24}
@@ -18,4 +18,4 @@ const Bell = (props: SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-export default Bell;
+export default BellIcon;
