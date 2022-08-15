@@ -6,7 +6,7 @@ import LocationIcon from '../Icons/LocationIcon';
 import HeartIcon from '../Icons/HeartIcon';
 import CircleButton from './CircleButton';
 import CloseIcon from '../Icons/CloseIcon';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import ArrowDownSolidIcon from '../Icons/ArrowDownSolidIcon';
 import QuoteLeftIcon from '../Icons/QuoteLeftIcon';
 import InfoComponent from './InfoComponent';
@@ -18,68 +18,108 @@ import EducationIcon from '../Icons/EducationIcon';
 import SportIcon from '../Icons/SportIcon';
 import LanguageIcon from '../Icons/LanguageIcon';
 import Hobby from './Hobby';
+import 'swiper/css';
+import 'swiper/css/effect-creative';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCreative } from 'swiper';
+import UserCard from './UserCard';
 
-export const HomeComponent = () => {
-    const [isNotSeenInfo, setIsNotSeenInfo] = useState(true);
+type Props = {
+    strangeFriends: IResponseUser[];
+};
 
-    const handleSeenInfo = () => {
-        setIsNotSeenInfo(false);
-    };
+export const HomeComponent = ({ strangeFriends }: Props) => {
+    // strangeFriends = [];
 
-    const handleCloseInfo = () => {
-        setIsNotSeenInfo(true);
-    };
+    const [stranger, setStranger] = useState<IResponseUser>();
+    const userInfoRef = useRef<HTMLDivElement>(null);
+
+    const handleSeenInfo = useCallback((stranger: IResponseUser) => {
+        console.log('click');
+        if (userInfoRef.current) {
+            setStranger(stranger);
+            userInfoRef.current.classList.remove('hidden');
+            setTimeout(() => {
+                userInfoRef.current?.classList.remove('translate-y-full');
+            }, 100);
+        }
+    }, []);
+
+    const handleCloseInfo = useCallback(() => {
+        if (userInfoRef.current) {
+            userInfoRef.current?.classList.add('translate-y-full');
+            setTimeout(() => {
+                userInfoRef.current?.classList.add('hidden');
+            }, 1100);
+        }
+    }, []);
 
     return (
         <>
-            {isNotSeenInfo ? (
-                <section className="container">
-                    <div>
-                        <Title
-                            className="py-[7px] mb-6    "
-                            content={
-                                <div className="justify-between flex-center-y">
-                                    <h1 className="font-extrabold leading-10 text-h2 text-primary-50 font-secondary">
-                                        Foxy
-                                    </h1>
-                                    <button className="p-2">
-                                        <Bell />
-                                    </button>
-                                </div>
-                            }
-                        />
+            <section className="px-4 pb-32 bg-white">
+                <div>
+                    <Title
+                        className="py-[7px] mb-6"
+                        content={
+                            <div className="justify-between flex-center-y">
+                                <h1 className="font-extrabold leading-10 text-h2 text-primary-50 font-secondary">
+                                    Foxy
+                                </h1>
+                                <button className="p-2">
+                                    <Bell />
+                                </button>
+                            </div>
+                        }
+                    />
 
-                        <div className="image-container rounded-[40px] overflow-hidden">
+                    {/* Swiper */}
+                    {strangeFriends?.length > 0 ? (
+                        <Swiper
+                            grabCursor={true}
+                            effect={'creative'}
+                            creativeEffect={{
+                                prev: {
+                                    shadow: true,
+                                    translate: ['-120%', 0, -500],
+                                },
+                                next: {
+                                    shadow: true,
+                                    translate: ['120%', 0, -500],
+                                },
+                            }}
+                            modules={[EffectCreative]}
+                        >
+                            {strangeFriends.map((strangerInfo, index) => (
+                                <SwiperSlide key={index} className="rounded-[40px]">
+                                    <UserCard handleSeenInfo={handleSeenInfo} user={strangerInfo} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    ) : (
+                        <div className="image-container rounded-[40px] h-[70vh] overflow-hidden">
                             <Image
-                                className="image w-full h-[555px] object-cover"
+                                className="object-cover image"
                                 alt="avatar"
+                                objectPosition="top"
                                 layout="fill"
-                                src="/assets/images/avatar1.png"
+                                src="https://res.cloudinary.com/cake-shop/image/upload/v1660488404/default_zpdpgj.jpg"
                             />
-                            <div className="absolute bottom-0 w-full px-4">
-                                <div className="justify-between mb-2 flex-center-y">
-                                    <h3 className="text-white">Linda, 22t</h3>
-
-                                    <button onClick={handleSeenInfo}>
-                                        <InformationIcon />
-                                    </button>
-                                </div>
-
-                                <div className="px-2 py-1 bg-white flex-center-y rounded-[25px] w-fit gap-2 mb-7">
-                                    <LocationIcon />
-                                    <span className="text-caption-1 leading-caption-1">Cách 200m</span>
-                                </div>
-
-                                <div className="justify-center gap-10 mb-6 flex-center-y">
-                                    <CircleButton Icon={<CloseIcon />} />
-                                    <CircleButton Icon={<HeartIcon />} />
+                            <div className="absolute w-full px-4 top-5">
+                                <div className="justify-between mb-2 text-center">
+                                    <h3 className="text-white">Không có bạn mới quanh đây</h3>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-            ) : (
-                <section className="container flex-center-x">
+                    )}
+                </div>
+            </section>
+
+            {/* User info */}
+            <div
+                className="fixed top-0 left-0 z-10 hidden w-screen h-screen px-4 overflow-y-auto transition duration-1000 ease-in-out translate-y-full bg-white component"
+                ref={userInfoRef}
+            >
+                <div className="flex-center-x">
                     <div className="relative pt-6">
                         <button
                             onClick={handleCloseInfo}
@@ -89,16 +129,19 @@ export const HomeComponent = () => {
                                 <ArrowDownSolidIcon />
                             </div>
                         </button>
-                        {/* i
-                        <div>
-                        </div>mage */}
+
                         <div className="image-container">
                             <div className="rounded-t-[40px] overflow-hidden">
                                 <Image
+                                    id="avatar"
                                     className="image w-full h-[555px] object-cover rounded-t-[40px]"
                                     alt="avatar"
                                     layout="fill"
-                                    src="/assets/images/avatar1.png"
+                                    src={
+                                        stranger
+                                            ? stranger.avatar
+                                            : 'https://res.cloudinary.com/cake-shop/image/upload/v1660488404/default_zpdpgj.jpg'
+                                    }
                                 />
                             </div>
                         </div>
@@ -107,10 +150,10 @@ export const HomeComponent = () => {
                         <div className="px-4 mb-16">
                             {/* user name and location */}
                             <div className="space-y-[7px] m-1 pb-[13px]">
-                                <h3>Linda, 22t</h3>
+                                <h3>{stranger?.name.firstName + ' ' + stranger?.name.lastName}, 22t</h3>
                                 <div className="gap-2 flex-center-y ">
                                     <LocationIcon />
-                                    <span className="text-caption-1 leading-caption-1">Cách 200m</span>
+                                    <span className="text-caption-1 leading-caption-1">Cách {stranger?.distance}m</span>
                                 </div>
                             </div>
 
@@ -128,7 +171,7 @@ export const HomeComponent = () => {
                                 {/* Infor of user */}
                                 <div className="space-y-4">
                                     <h5 className="font-medium text-caption-1 leading-caption-1 text-neutral-65">
-                                        Thông tin của Linda
+                                        Thông tin của {stranger?.name.lastName}
                                     </h5>
                                     <div className="flex flex-wrap gap-x-4 gap-y-2">
                                         <InfoComponent title="Độc thân" Icon={<MatiralStatusIcon />} />
@@ -161,29 +204,29 @@ export const HomeComponent = () => {
                             <Image
                                 src="/assets/images/favoriteImage1.png"
                                 alt="favoriteImage"
-                                className="image object-cover"
+                                className="object-cover image"
                                 layout="fill"
                             />
                             <Image
                                 src="/assets/images/favoriteImage2.png"
                                 alt="favoriteImage"
-                                className="image object-cover"
+                                className="object-cover image"
                                 layout="fill"
                             />
                             <Image
                                 src="/assets/images/favoriteImage3.png"
                                 alt="favoriteImage"
-                                className="image object-cover"
+                                className="object-cover image"
                                 layout="fill"
                             />
                         </div>
                     </div>
-                    <div className="fixed bottom-[39px] justify-center gap-10 mb-6 flex-center-y">
+                    <div className="fixed justify-center gap-10 mb-6 bottom-5 flex-center-y">
                         <CircleButton Icon={<CloseIcon />} />
                         <CircleButton Icon={<HeartIcon />} />
                     </div>
-                </section>
-            )}
+                </div>
+            </div>
         </>
     );
 };

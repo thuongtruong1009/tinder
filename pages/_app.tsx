@@ -8,6 +8,7 @@ import { CookiesProvider } from 'react-cookie';
 import UserProvider from '../context/userContext';
 import Background from '../components/Home';
 import { useEffect, useState } from 'react';
+import 'swiper/css/bundle';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const [loading, setLoading] = useState(false);

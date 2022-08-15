@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import PhoneOTP from '../components/Auth/PhoneOTP';
@@ -15,12 +15,16 @@ import GoogleIcon from '../components/Icons/GoogleIcon';
 import { UserContext } from '../context/userContext';
 import { UserContextType } from '../types/context/user';
 import { NextPageWithLayout } from '../types/global';
+import userApi from '../apis/userApi';
 
 const Home: NextPageWithLayout = () => {
     const router = useRouter();
     const { savePhone } = useContext(UserContext) as UserContextType;
     const { register, handleSubmit } = useForm();
+
     const [phone, setPhone] = useState<any | undefined>();
+    const [strangeFriends, setStrangeFriends] = useState<IResponseUser | any>();
+
     const [cookies, setCookie, removeCookie] = useCookies(['errMessage']);
 
     const onSubmit = async (data: any) => {
@@ -55,10 +59,19 @@ const Home: NextPageWithLayout = () => {
         window.open(`${process.env.URL_LOGIN_WITH_FACEBOOK}`, '_self');
     };
 
+    const getStrangeFriends = async () => {
+        const strangers = await userApi.findStrangeFriendsAround();
+        setStrangeFriends(strangers);
+    };
+
+    useEffect(() => {
+        getStrangeFriends();
+    }, []);
+
     return (
         <>
-            {/* <HomeComponent /> */}
-            <PhoneOTP />
+            <HomeComponent strangeFriends={strangeFriends} />
+            {/* <PhoneOTP /> */}
             {/* <section className="container">
                 <Title
                     className="mb-4"

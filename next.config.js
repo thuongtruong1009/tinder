@@ -12,7 +12,7 @@ const nextConfig = {
         VERIFY_OTP_LOGIN: process.env.API_URL + process.env.VERIFY_OTP_LOGIN,
     },
     images: {
-        domains: ['lh3.googleusercontent.com', 'platform-lookaside.fbsbx.com'],
+        domains: ['lh3.googleusercontent.com', 'platform-lookaside.fbsbx.com', 'res.cloudinary.com'],
     },
 };
 
