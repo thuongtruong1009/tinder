@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useRef, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import Button from '../../components/Button';
 import Title from '../../components/Home/Title';
@@ -9,28 +10,80 @@ import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import PhoneOtpIcon from '../../components/Icons/PhoneOtpIcon';
 import VNFlagIcon from '../../components/Icons/VietNamFlagIcon';
 import APP_PATH from '../../constant/appPath';
+import { UserContext } from '../../context/userContext';
+import { UserContextType } from '../../types/context/user';
 
 interface Props {}
 
 export default function LoginPhone(props: Props) {
     const inputRef = useRef(null);
     const router = useRouter();
-    const [phone, setPhone] = useState('');
+
+    const [cookies, setCookie, removeCookie] = useCookies(['userEmail']);
+
+    const { phone, savePhone } = useContext(UserContext) as UserContextType;
+
     const handleClickBack = () => {
         router.push(APP_PATH.ROOT);
     };
+
     const handleChangePhone = (e: ChangeEvent<HTMLInputElement>) => {
-        setPhone(e.target.value);
+        savePhone(e.target.value);
     };
-    const handleSubmit = () => {
+
+    const handleSubmit = async () => {
         const regex = /(([03+[2-9]|05+[6|8|9]|07+[0|6|7|8|9]|08+[1-9]|09+[1-4|6-9]]){3})+[0-9]{7}\b/g;
+
         if (regex.test(phone)) {
-            alert('success');
+            console.log('phone: ', phone);
+            console.log('userEmail: ', cookies.userEmail);
+
+            if (cookies.userEmail) {
+                const response = await fetch(`${process.env.SEND_OTP_REGISTER}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        phone: phone,
+                        email: cookies.userEmail,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    alert(errorResult.error);
+                } else {
+                    setCookie('userEmail', '');
+
+                    alert('Verify phone successfully. Next enter OTP.');
+                    router.push('/auth/otp');
+                }
+            } else {
+                const response = await fetch(`${process.env.LOGIN_WITH_PHONE_LOGIN}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        phone: phone,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    alert(errorResult.error);
+                } else {
+                    alert('Verify phone successfully. Next enter OTP.');
+                    router.push('/auth/otp');
+                }
+            }
         } else {
-            alert('fail');
+            alert('Phone is not correct!');
         }
         // router.push(APP_PATH.OTP);
     };
+
     return (
         <section className="container">
             <div className="relative h-screen">

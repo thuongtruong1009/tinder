@@ -39,7 +39,7 @@ const Signin: NextPage = () => {
             alert(errorResult.error);
         } else {
             savePhone(phone);
-            router.push('/auth/otp');
+            router.push('/auth/phone');
         }
     };
     console.log(cookies.errMessage);
