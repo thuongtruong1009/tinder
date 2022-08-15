@@ -3,17 +3,16 @@ import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { UserContextType } from '../../types/context/user';
 import { UserContext } from '../../context/userContext';
-import { useForm } from 'react-hook-form';
 import { useAppDispatch } from '../../hooks/redux';
-import { userVerifyOTP } from '../../redux/actions/userActions';
-import PhoneOTP from '../../components/Auth/PhoneOTP';
-import InputOTP from '../../components/Auth/InputOTP';
 import Button from '../../components/Button';
 import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import Title from '../../components/Home/Title';
 import Key from '../../components/Icons/KeyIcon';
 import Cookies from 'js-cookie';
+import APP_PATH from '../../constant/appPath';
+import { userVerifyOTP } from '../../redux/actions/userActions';
+import { toastError } from '../../utils/toast';
 
 const OTP: NextPage = () => {
     const router = useRouter();
@@ -32,40 +31,22 @@ const OTP: NextPage = () => {
     };
 
     const handleSubmit = async () => {
-        alert(otp);
-
-        let body = {};
-        if (phone) {
-            body = {
-                phone,
-            };
-        } else if (userEmail) {
-            body = {
-                email: userEmail,
-            };
-        }
-        const response = await fetch(`${process.env.VERIFY_OTP_LOGIN}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                ...body,
-                otp,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        const result = await response.json();
-        if (!response.ok) {
-            alert(result.error);
-        } else {
-            console.log('delete useEmal cookie');
+        let body = {
+            phone: phone || undefined,
+            email: userEmail || undefined,
+        };
+        try {
+            const response = dispatch(
+                userVerifyOTP({
+                    ...body,
+                    otp,
+                }),
+            ).unwrap();
+            console.log('response: ', response);
             Cookies.remove('userEmail');
-
-            console.log(result);
-            //jwt token
-            console.log(result.data.token);
-            router.push('/home');
+            router.push(APP_PATH.SURF);
+        } catch (error) {
+            toastError('loi');
         }
     };
 

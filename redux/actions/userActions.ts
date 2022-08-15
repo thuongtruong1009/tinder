@@ -16,7 +16,6 @@ export const userVerifyOTP = createAsyncThunk('user/verifyOTP', async (data: IVe
         const response = await authApi.verifyOTP(data);
         return response.data.data;
     } catch (error) {
-        console.log(error);
         return thunkAPI.rejectWithValue(error);
     }
 });

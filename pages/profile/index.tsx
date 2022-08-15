@@ -68,6 +68,6 @@ const Profile: NextPageWithLayout = () => {
         </section>
     );
 };
-
+Profile.protected = true;
 Profile.getLayout = (page) => <NavbarLayout>{page}</NavbarLayout>;
 export default Profile;

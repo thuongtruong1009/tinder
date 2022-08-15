@@ -12,6 +12,7 @@ import APP_PATH from '../../constant/appPath';
 import { UserContext } from '../../context/userContext';
 import { UserContextType } from '../../types/context/user';
 import Cookies from 'js-cookie';
+import { toastSuccess } from '../../utils/toast';
 
 interface Props {}
 
@@ -56,8 +57,8 @@ export default function LoginPhone(props: Props) {
                     alert(errorResult.error);
                 } else {
                     Cookies.remove('userEmail');
-                    alert('Verify phone successfully. Next enter OTP.');
-                    router.push('/auth/otp');
+                    toastSuccess('Verify phone successfully. Next enter OTP.');
+                    router.push(APP_PATH.AUTH_OTP);
                 }
             } else {
                 console.log('khong co email');
@@ -75,8 +76,8 @@ export default function LoginPhone(props: Props) {
                     const errorResult = await response.json();
                     alert(errorResult.error);
                 } else {
-                    alert('Verify phone successfully. Next enter OTP.');
-                    router.push('/auth/otp');
+                    toastSuccess('Verify phone successfully. Next enter OTP.');
+                    router.push(APP_PATH.AUTH_OTP);
                 }
             }
         } else {
