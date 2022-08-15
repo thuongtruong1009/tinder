@@ -5,9 +5,12 @@ import { useCookies } from 'react-cookie';
 import { UserContextType } from '../../types/context/user';
 import { UserContext } from '../../context/userContext';
 import { useForm } from 'react-hook-form';
+import { useAppDispatch } from '../../hooks/redux';
+import { userVerifyOTP } from '../../redux/actions/userActions';
 
 const OTP: NextPage = () => {
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const [cookies, setCookie] = useCookies(['userEmail']);
     const { register, handleSubmit } = useForm();
     console.log('email cookie: ', cookies.userEmail);
@@ -28,26 +31,31 @@ const OTP: NextPage = () => {
                 email: cookies.userEmail,
             };
         }
-
-        const response = await fetch(`${process.env.VERIFY_OTP_LOGIN}`, {
-            method: 'POST',
-            body: JSON.stringify({
+        await dispatch(
+            userVerifyOTP({
                 ...body,
                 otp: data.otp,
             }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        );
+        // const response = await fetch(`${process.env.VERIFY_OTP_LOGIN}`, {
+        //     method: 'POST',
+        //     body: JSON.stringify({
+        //         ...body,
+        //         otp: data.otp,
+        //     }),
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // });
 
-        const result = await response.json();
-        if (!response.ok) {
-            alert(result.error);
-        } else {
-            console.log(result);
-            saveJwtToken(result.data.token);
-            router.push('/');
-        }
+        // const result = await response.json();
+        // if (!response.ok) {
+        //     alert(result.error);
+        // } else {
+        //     console.log(result);
+        //     // saveJwtToken(result.data.token);
+        //     // router.push('/');
+        // }
     };
 
     return (

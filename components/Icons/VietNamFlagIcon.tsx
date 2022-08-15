@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SVGProps } from 'react';
 
-const VietNamFlagIcon = (props: SVGProps<SVGSVGElement>) => (
+const VNFlagIcon = (props: SVGProps<SVGSVGElement>) => (
     <svg width={40} height={28} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
         <path
             d="M37.015.896H2.993A2.993 2.993 0 0 0 0 3.889v20.223a2.993 2.993 0 0 0 2.993 2.992h34.014A2.993 2.993 0 0 0 40 24.112V3.889A2.981 2.981 0 0 0 37.015.896Z"
@@ -14,4 +14,4 @@ const VietNamFlagIcon = (props: SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-export default VietNamFlagIcon;
+export default VNFlagIcon;

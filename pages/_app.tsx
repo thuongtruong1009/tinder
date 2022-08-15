@@ -6,17 +6,30 @@ import { store } from '../app/store';
 import { Toaster } from 'react-hot-toast';
 import { CookiesProvider } from 'react-cookie';
 import UserProvider from '../context/userContext';
-import Background from '../components/Home';
+import Loading from '../components/Loading';
 import { useEffect, useState } from 'react';
+import { useAppDispatch } from '../hooks/redux';
+import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
 
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-    const [loading, setLoading] = useState(false);
+    // const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(true);
     const getLayout = Component.getLayout ?? ((page) => page);
     useEffect(() => {
-        window.setTimeout(() => {
-            setLoading(true);
-        }, 2000);
+        async function getCurrentUser() {
+            await store.dispatch(userCurrentUser());
+        }
+        if (localStorage.getItem('token')) {
+            getCurrentUser();
+            window.setTimeout(() => {
+                setLoading(false);
+            }, 1);
+        } else
+            window.setTimeout(() => {
+                setLoading(false);
+            }, 1);
     }, []);
     return (
         <CookiesProvider>
@@ -29,7 +42,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <link rel="icon" href="/logo.svg" />
                 </Head>
                 <Provider store={store}>
-                    {loading ? <>{getLayout(<Component {...pageProps} />)}</> : <Background />}
+                    {!loading ? <>{getLayout(<Component {...pageProps} />)}</> : <Loading />}
 
                     <Toaster />
                 </Provider>

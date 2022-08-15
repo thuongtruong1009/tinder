@@ -1,0 +1,19 @@
+.inputOTP {
+    @apply flex text-center;
+}
+.inputOTP .inputOTP-item input::-webkit-outer-spin-button,
+.inputOTP .inputOTP-item input::-webkit-inner-spin-button {
+    @apply m-0 appearance-none;
+}
+.inputOTP .inputOTP-item input {
+    @apply w-full h-full font-bold text-center;
+}
+.inputOTP .inputOTP-item {
+    @apply relative h-[30px] w-[30px];
+}
+.inputOTP .inputOTP-item input:placeholder-shown ~ span {
+    @apply w-4 h-4 rounded-full pointer-events-none select-none absolute-center bg-neutral-20;
+}
+.inputOTP .inputOTP-item input:focus ~ span {
+    @apply invisible opacity-0;
+}

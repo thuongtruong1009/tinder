@@ -6,9 +6,13 @@ import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input';
+import authApi from '../../apis/authApi';
+import { useAppDispatch } from '../../hooks/redux';
+import { userRegisterWithPhone } from '../../redux/actions/userActions';
 
 const SignUp: NextPage = () => {
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const [cookies, setCookie] = useCookies(['userEmail']);
     const [phone, setPhone] = useState<any | undefined>();
 
@@ -41,24 +45,15 @@ const SignUp: NextPage = () => {
                 router.push('/auth/otp');
             }
         } else {
-            const response = await fetch(`${process.env.LOGIN_WITH_PHONE_REGISTER}`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    phone: phone,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                const errorResult = await response.json();
-                alert(errorResult.error);
-            } else {
-                savePhone(phone);
-                alert('Register phone successfully. Next enter OTP.');
-                router.push('/auth/otp');
-            }
+            await dispatch(userRegisterWithPhone({ phone }));
+            // if (!response.ok) {
+            //     const errorResult = await response.json();
+            //     alert(errorResult.error);
+            // } else {
+            //     savePhone(phone);
+            //     alert('Register phone successfully. Next enter OTP.');
+            //     router.push('/auth/otp');
+            // }
         }
     };
 

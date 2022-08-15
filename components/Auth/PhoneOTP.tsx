@@ -5,15 +5,16 @@ import Title from '../Home/Title';
 import ArrowLeft from '../Icons/ArrowLeft';
 import ArrowRightCircleIcon from '../Icons/ArrowRightCircleIcon';
 import Key from '../Icons/KeyIcon';
+import InputOTP from './InputOTP';
 
 const PhoneOTP: NextPageWithLayout = () => {
     const router = useRouter();
     return (
         <>
             <section className="container">
-                <div className="relative h-screen">
+                <div className="relative min-h-screen with-button">
                     <Title
-                        className="mb-[32px]"
+                        className="mb-8"
                         content={
                             <button className="p-2">
                                 <ArrowLeft />
@@ -29,16 +30,7 @@ const PhoneOTP: NextPageWithLayout = () => {
                             <p className="mb-6 text-caption-1 leading-caption-1 text-neutral-40">
                                 Vui lòng nhập mã OTP được gửi về số điện thoại của bạn, để hoàn thành đăng nhập.
                             </p>
-
-                            <input
-                                type="text"
-                                pattern="^[0-9]*$"
-                                maxLength={10}
-                                minLength={10}
-                                title="Only accept number and contain 6 numbers"
-                                className="rounded h-14 w-full mb-4 px-[10px] text-neutral-20 tracking-widest"
-                                placeholder="••••••"
-                            />
+                            <InputOTP />
 
                             <div className="flex justify-end">
                                 <button

@@ -17,6 +17,13 @@ const Signin: NextPage = () => {
     const [phone, setPhone] = useState<any | undefined>();
     const [cookies, setCookie, removeCookie] = useCookies(['errMessage']);
 
+    const loginWithGoogle = () => {
+        window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
+    };
+    const loginWithFacebook = () => {
+        window.open(`${process.env.URL_LOGIN_WITH_FACEBOOK}`, '_self');
+    };
+
     const onSubmit = async (data: any) => {
         const response = await fetch(`${process.env.LOGIN_WITH_PHONE_LOGIN}`, {
             method: 'POST',
@@ -40,13 +47,6 @@ const Signin: NextPage = () => {
         alert(cookies.errMessage);
         removeCookie('errMessage');
     }
-    const loginWithGoogle = async () => {
-        window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
-    };
-
-    const loginWithFacebook = () => {
-        window.open(`${process.env.URL_LOGIN_WITH_FACEBOOK}`, '_self');
-    };
 
     return (
         <div className="flex flex-col justify-center max-w-md mx-auto">
