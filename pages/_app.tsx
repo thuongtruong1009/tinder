@@ -10,6 +10,8 @@ import Loading from '../components/Loading';
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../hooks/redux';
 import { userCurrentUser } from '../redux/actions/userActions';
+import 'swiper/css/bundle';
+
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     // const dispatch = useAppDispatch();

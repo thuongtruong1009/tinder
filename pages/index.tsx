@@ -7,15 +7,18 @@ import FacebookIcon from '../components/Icons/FacebookIcon';
 import GoogleIcon from '../components/Icons/GoogleIcon';
 import APP_PATH from '../constant/appPath';
 import { NextPageWithLayout } from '../types/global';
+import userApi from '../apis/userApi';
 
 const Home: NextPageWithLayout = () => {
     const router = useRouter();
+    
     const loginWithGoogle = () => {
         window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
     };
     const loginWithFacebook = () => {
         window.open(`${process.env.URL_LOGIN_WITH_FACEBOOK}`, '_self');
     };
+
     const handleClickPhone = () => {
         router.push(APP_PATH.AUTH_PHONE);
     };
