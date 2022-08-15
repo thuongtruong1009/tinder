@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { UserContextType } from '../../types/context/user';
 import { UserContext } from '../../context/userContext';
 import { useForm } from 'react-hook-form';
@@ -14,14 +13,16 @@ import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import Title from '../../components/Home/Title';
 import Key from '../../components/Icons/KeyIcon';
+import Cookies from 'js-cookie';
 
 const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
 
+    const cookies = Cookies.get();
+    const userEmail = cookies.userEmail;
+
     const [otp, setOtp] = useState('');
-    const [cookies, setCookie, removeCookie] = useCookies(['userEmail']);
-    console.log('email cookie: ', cookies.userEmail);
 
     const { phone, userSignUp, saveJwtToken } = useContext(UserContext) as UserContextType;
     console.log('phone: ', phone);
@@ -38,9 +39,9 @@ const OTP: NextPage = () => {
             body = {
                 phone,
             };
-        } else if (cookies.userEmail) {
+        } else if (userEmail) {
             body = {
-                email: cookies.userEmail,
+                email: userEmail,
             };
         }
         const response = await fetch(`${process.env.VERIFY_OTP_LOGIN}`, {
@@ -59,7 +60,8 @@ const OTP: NextPage = () => {
             alert(result.error);
         } else {
             console.log('delete useEmal cookie');
-            setCookie('userEmail', '');
+            Cookies.remove('userEmail');
+
             console.log(result);
             //jwt token
             console.log(result.data.token);

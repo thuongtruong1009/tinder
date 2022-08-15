@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useContext, useRef, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import Button from '../../components/Button';
 import Title from '../../components/Home/Title';
@@ -12,14 +11,13 @@ import VNFlagIcon from '../../components/Icons/VietNamFlagIcon';
 import APP_PATH from '../../constant/appPath';
 import { UserContext } from '../../context/userContext';
 import { UserContextType } from '../../types/context/user';
+import Cookies from 'js-cookie';
 
 interface Props {}
 
 export default function LoginPhone(props: Props) {
     const inputRef = useRef(null);
     const router = useRouter();
-
-    const [cookies, setCookie, removeCookie] = useCookies(['userEmail']);
 
     const { phone, savePhone } = useContext(UserContext) as UserContextType;
 
@@ -36,14 +34,17 @@ export default function LoginPhone(props: Props) {
 
         if (regex.test(phone)) {
             console.log('phone: ', phone);
-            console.log('userEmail: ', cookies.userEmail);
+            const cookies = Cookies.get();
+            const userEmail = cookies.userEmail;
+            console.log('userEmail: ', userEmail);
 
-            if (cookies.userEmail) {
+            if (userEmail) {
+                console.log('co email');
                 const response = await fetch(`${process.env.SEND_OTP_REGISTER}`, {
                     method: 'POST',
                     body: JSON.stringify({
                         phone: phone,
-                        email: cookies.userEmail,
+                        email: userEmail,
                     }),
                     headers: {
                         'Content-Type': 'application/json',
@@ -54,12 +55,12 @@ export default function LoginPhone(props: Props) {
                     const errorResult = await response.json();
                     alert(errorResult.error);
                 } else {
-                    setCookie('userEmail', '');
-
+                    Cookies.remove('userEmail');
                     alert('Verify phone successfully. Next enter OTP.');
                     router.push('/auth/otp');
                 }
             } else {
+                console.log('khong co email');
                 const response = await fetch(`${process.env.LOGIN_WITH_PHONE_LOGIN}`, {
                     method: 'POST',
                     body: JSON.stringify({
