@@ -8,10 +8,11 @@ import GoogleIcon from '../components/Icons/GoogleIcon';
 import APP_PATH from '../constant/appPath';
 import { NextPageWithLayout } from '../types/global';
 import userApi from '../apis/userApi';
+import PhoneOTP from '../components/Auth/PhoneOTP';
 
 const Home: NextPageWithLayout = () => {
     const router = useRouter();
-    
+
     const loginWithGoogle = () => {
         window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
     };
@@ -24,6 +25,7 @@ const Home: NextPageWithLayout = () => {
     };
     return (
         <>
+            <PhoneOTP />
             <section className="container">
                 <Title
                     className="mb-4"
