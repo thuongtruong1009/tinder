@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../hooks/redux';
 import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
-
+import ProtectRoute from '../components/ProtectRoute';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     // const dispatch = useAppDispatch();
@@ -42,9 +42,23 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <link rel="icon" href="/logo.svg" />
                 </Head>
                 <Provider store={store}>
-                    {!loading ? <>{getLayout(<Component {...pageProps} />)}</> : <Loading />}
+                    {!loading ? (
+                        <>
+                            {Component.protected ? (
+                                <ProtectRoute>{getLayout(<Component {...pageProps} />)}</ProtectRoute>
+                            ) : (
+                                getLayout(<Component {...pageProps} />)
+                            )}
+                        </>
+                    ) : (
+                        <Loading />
+                    )}
 
-                    <Toaster />
+                    <Toaster
+                        toastOptions={{
+                            className: 'z-[500]',
+                        }}
+                    />
                 </Provider>
             </UserProvider>
         </CookiesProvider>

@@ -1,14 +1,13 @@
-import { Marker, Popup, useMapEvents } from 'react-leaflet';
+import { Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { memo, useEffect } from 'react';
 import L from 'leaflet';
-import { memo, useEffect, useState } from 'react';
-import MapUserInfo from './MapUserInfo';
 
 interface Props {
     info: IResponseUpdateLocation;
     current?: boolean;
     isFocus?: boolean;
-    handleClick?: (user: IResponseUpdateLocation) => void;
+    onClick?: (user: IFindFriendsAroundResponse) => void;
 }
 
 function getIconMarkerMe(imageUrl: string) {
@@ -23,12 +22,12 @@ function getIconMarkerFriends(imageUrl: string) {
     return L.icon({
         iconUrl: '/Pin.svg',
         iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        // className: ' translate-y-full',
     });
 }
 
-function MapMaker({ isFocus, info, current, handleClick }: Props) {
-    const [isClick, setIsClick] = useState(false);
-
+function MapMaker({ isFocus, info, current, onClick }: Props) {
     const map = useMapEvents({});
     useEffect(() => {
         if (info && current) {
@@ -41,17 +40,15 @@ function MapMaker({ isFocus, info, current, handleClick }: Props) {
         <>
             <Marker
                 eventHandlers={{
-                    click: (e: any) => {
+                    click: () => {
                         {
-                            handleClick && handleClick(info);
+                            onClick && onClick(info);
                         }
                     },
                 }}
                 position={[info.lastLocation.latitude, info.lastLocation.longitude]}
                 icon={current ? getIconMarkerMe(info.avatar) : getIconMarkerFriends(info.avatar)}
-            >
-                {isClick ? <MapUserInfo avatar={info.avatar} name={info.name.lastName} /> : ''}
-            </Marker>
+            ></Marker>
         </>
     );
 }
