@@ -14,7 +14,7 @@ export default function StatusRadioList({ className = '', title, icon, radioIcon
     return (
         <button
             onClick={onClick}
-            className="bg-neutral-5 rounded-xl flex justify-between items-center py-2.5 px-2 font-bold text-neutral-100 cursor-pointer"
+            className="bg-neutral-5 rounded-xl flex justify-between items-center py-2.5 px-2 font-bold text-neutral-100 cursor-pointer ease-linear hover:shadow-md"
         >
             <div className="flex gap-2">
                 {icon}
