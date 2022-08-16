@@ -23,7 +23,7 @@ function Navbar(props: Props) {
             className="fixed bottom-0 z-[600] -translate-x-1/2 left-1/2 max-w-[377px] w-full "
             section="section"
         >
-            <div className="py-2 px-[26px] bg-white rounded-t-3xl grid grid-cols-4 gap-4">
+            <div className="py-2 px-[26px] bg-white rounded-t-3xl grid grid-cols-4 gap-4 border border-slate-200 shadow-nav">
                 <NavBarItem
                     Icon={<SurfIcon />}
                     IconActive={<SurfFillIcon />}
