@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { toastSuccess } from '../../utils/toast';
 import CloseIcon from '../Icons/CloseIcon';
 import HeartIcon from '../Icons/HeartIcon';
 import InformationIcon from '../Icons/InformationIcon';
@@ -6,15 +7,32 @@ import LocationIcon from '../Icons/LocationIcon';
 import CircleButton from './CircleButton';
 
 type Props = {
-    user: IResponseUser;
-    onSeen: (user: IResponseUser) => () => void;
+    user: IDataFindFriendsAroundResponse;
+    onSeen: (user: IDataFindFriendsAroundResponse) => () => void;
+    onRemove: (_id: string) => void;
 };
 
-const UserCard = ({ user, onSeen }: Props) => {
+const UserCard = ({ user, onSeen, onRemove }: Props) => {
+    const handleLike = async () => {
+        onRemove(user._id);
+        toastSuccess('You liked this user ' + user._id);
+    };
+    const handleBlock = async () => {
+        onRemove(user._id);
+        toastSuccess('You blocked this user ' + user._id);
+    };
     return (
-        <div className="image-container rounded-[40px] h-[70vh] overflow-hidden">
-            <Image className="object-cover image" alt="avatar" objectPosition="top" layout="fill" src={user.avatar} />
-            <div className="absolute bottom-0 w-full px-4">
+        <div className="rounded-[40px] h-[70vh] relative before:absolute before:inset-0 before:bg-card before:z-10">
+            <div className="w-full h-full image-container">
+                <Image
+                    className="object-cover image"
+                    alt="avatar"
+                    objectPosition="top"
+                    layout="fill"
+                    src={user.avatar}
+                />
+            </div>
+            <div className="absolute bottom-0 z-20 w-full px-4">
                 <div className="justify-between mb-2 flex-center-y">
                     <h3 className="text-white">
                         {user.name.firstName + ' ' + user.name.lastName}, {user.age || '?'}t
@@ -31,8 +49,8 @@ const UserCard = ({ user, onSeen }: Props) => {
                 </div>
 
                 <div className="justify-center gap-10 mb-6 flex-center-y">
-                    <CircleButton Icon={<CloseIcon />} />
-                    <CircleButton Icon={<HeartIcon />} />
+                    <CircleButton Icon={<CloseIcon />} onClick={handleBlock} />
+                    <CircleButton Icon={<HeartIcon />} onClick={handleLike} />
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@ import InformationIcon from '../Icons/InformationIcon';
 import LocationIcon from '../Icons/LocationIcon';
 
 interface Props {
-    data: IFindFriendsAroundResponse;
+    data: IDataFindFriendsAroundResponse;
 }
 
 export default function MapUserInfo({ data }: Props) {

@@ -144,6 +144,10 @@
     .image-container .image {
         @apply object-cover !w-full !h-full !relative;
     }
+    .bg-card {
+        background: rgb(0, 0, 0);
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.7038165608040091) 0%, rgba(255, 255, 255, 0) 60%);
+    }
 }
 @import './datepicker.css';
 @import './input-otp.css';

@@ -4,17 +4,18 @@ import MapUserInfo from './MapUserInfo';
 import MapMaker from './MapMaker';
 import { useState } from 'react';
 import LocationIcon from '../Icons/LocationIcon';
+import MapMakerFriend from './MapMakerFriend';
 
 type Props = {
     isFocus: boolean;
-    me?: IResponseUpdateLocation;
-    friends: IResponseUpdateLocation[];
+    me?: IUserLocation;
+    friends: IDataFindFriendsAroundResponse[];
     handleFocus: () => void;
 };
 
 export default function Map({ me, isFocus, handleFocus, friends }: Props) {
-    const [userInfo, setUserInfo] = useState<IResponseUpdateLocation>();
-    const saveUserInfo = (user: IResponseUpdateLocation) => {
+    const [userInfo, setUserInfo] = useState<IDataFindFriendsAroundResponse>();
+    const saveUserInfo = (user: IDataFindFriendsAroundResponse) => {
         setUserInfo(user);
     };
 
@@ -34,9 +35,7 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
             )}
 
             <MapContainer
-                center={
-                    me ? [me.lastLocation.latitude, me.lastLocation.longitude] : [10.870330250338068, 106.8030272760722]
-                }
+                center={me ? [me.latitude, me.longitude] : [10.870330250338068, 106.8030272760722]}
                 zoom={20}
                 scrollWheelZoom={true}
                 className="w-full h-screen"
@@ -47,16 +46,12 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
                 />
                 {me && (
                     <>
-                        <MapMaker info={me} current isFocus={isFocus} />
-                        <Circle
-                            center={[me.lastLocation.latitude, me.lastLocation.longitude]}
-                            radius={200}
-                            color="#fac3ce"
-                        />
+                        <MapMaker info={me} isFocus={isFocus} />
+                        <Circle center={[me.latitude, me.longitude]} radius={200} color="#fac3ce" />
                     </>
                 )}
                 {friends?.map((friend, index) => (
-                    <MapMaker key={index} info={friend} onClick={saveUserInfo} />
+                    <MapMakerFriend key={index} info={friend} onClick={saveUserInfo} />
                 ))}
             </MapContainer>
             {userInfo && <MapUserInfo data={userInfo} />}

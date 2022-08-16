@@ -2,7 +2,15 @@ declare interface IUpdateLocation {
     latitude: number;
     longitude: number;
 }
-declare interface IResponseUpdateLocation {
+declare interface IResponseUpdateLocation extends IResponseSuccess {
+    data: {
+        latitude: number;
+        longitude: number;
+        updatedAt: string;
+    };
+}
+declare interface IDataFindFriendsAroundResponse {
+    _id: string;
     name: IUserName;
     avatar: string;
     lastLocation: {
@@ -12,13 +20,6 @@ declare interface IResponseUpdateLocation {
     distance: number;
     age: number;
 }
-declare interface IFindFriendsAroundResponse {
-    name: IUserName;
-    avatar: string;
-    lastLocation: {
-        latitude: number;
-        longitude: number;
-    };
-    distance: number;
-    age: number;
+declare interface IFindFriendsAroundResponse extends IResponseSuccess {
+    data: IDataFindFriendsAroundResponse[];
 }

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { userVerifyOTP, userCurrentUser } from '../actions/userActions';
+import { userVerifyOTP, userCurrentUser, userUpdateLocation } from '../actions/userActions';
 
 interface UserState {
     isLogin: boolean;
@@ -24,17 +24,22 @@ export const userSlice = createSlice({
             state.data = user;
             localStorage.setItem('token', token);
         });
-        builder.addCase(userCurrentUser.rejected, (state, { payload }) => {
+        builder.addCase(userCurrentUser.rejected, (state) => {
             state.isLogin = false;
             state.data = null;
             localStorage.removeItem('token');
-        }),
-            builder.addCase(userVerifyOTP.fulfilled, (state, { payload }) => {
-                const { token, user } = payload;
-                state.isLogin = true;
-                state.data = user;
-                localStorage.setItem('token', token);
-            });
+        });
+        builder.addCase(userVerifyOTP.fulfilled, (state, { payload }) => {
+            const { token, user } = payload;
+            state.isLogin = true;
+            state.data = user;
+            localStorage.setItem('token', token);
+        });
+        builder.addCase(userUpdateLocation.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.lastLocation = payload;
+            }
+        });
     },
 });
 

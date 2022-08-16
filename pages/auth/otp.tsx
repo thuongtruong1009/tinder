@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import APP_PATH from '../../constant/appPath';
 import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
+import InputOTP from '../../components/Auth/InputOTP';
 
 const OTP: NextPage = () => {
     const router = useRouter();
@@ -23,12 +24,15 @@ const OTP: NextPage = () => {
 
     const [otp, setOtp] = useState('');
 
-    const { phone, userSignUp, saveJwtToken } = useContext(UserContext) as UserContextType;
-    console.log('phone: ', phone);
+    const { phone } = useContext(UserContext) as UserContextType;
 
-    const handleChangeOtp = (e: any) => {
-        setOtp(e.target.value);
+    const handleChangeOtp = (value: string) => {
+        setOtp(value);
     };
+
+    if (!phone && !userEmail) {
+        router.push(APP_PATH.ROOT);
+    }
 
     const handleSubmit = async () => {
         let body = {
@@ -70,8 +74,7 @@ const OTP: NextPage = () => {
                             <p className="mb-6 text-caption-1 leading-caption-1 text-neutral-40">
                                 Vui lòng nhập mã OTP được gửi về số điện thoại của bạn, để hoàn thành đăng nhập.
                             </p>
-                            {/* <InputOTP /> */}
-                            <input className="border" type="text" onChange={handleChangeOtp} />
+                            <InputOTP onChange={handleChangeOtp} />
 
                             <div className="flex justify-end">
                                 <button className="font-normal underline text-primary-40 text-caption-1 leading-caption-1 hover:cursor-pointer">

@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
-interface Props {}
+interface Props {
+    onChange: (value: string) => void;
+}
 
-export default function InputOTP(props: Props) {
+export default function InputOTP({ onChange }: Props) {
     const firstRef = useRef<HTMLInputElement>(null);
     const secondRef = useRef<HTMLInputElement>(null);
     const thirdRef = useRef<HTMLInputElement>(null);
@@ -46,53 +48,54 @@ export default function InputOTP(props: Props) {
                 refs[i].addEventListener('keydown', function (event) {
                     if (event.key === 'Backspace') {
                         refs[i].value = '';
+                        handleChange(refs);
                         if (i !== 0) refs[i - 1].focus();
                     } else {
                         if (i === refs.length - 1 && refs[i].value !== '') {
+                            handleChange(refs);
                             return true;
-                        } else if (event.keyCode > 47 && event.keyCode < 58) {
-                            if (/^[0-9]*$/.test(event.key)) {
-                                refs[i].value = event.key;
-                                if (i !== refs.length - 1) refs[i + 1].focus();
-                            }
-                            event.preventDefault();
-                        } else if (event.keyCode > 64 && event.keyCode < 91) {
-                            if (/^[0-9]*$/.test(event.key)) {
-                                refs[i].value = event.key;
-                                if (i !== refs.length - 1) refs[i + 1].focus();
-                            }
-                            event.preventDefault();
+                        } else if (/^[0-9]*$/.test(event.key)) {
+                            refs[i].value = event.key;
+                            handleChange(refs);
+                            if (i !== refs.length - 1) refs[i + 1].focus();
                         }
+                        event.preventDefault();
                     }
                 });
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [firstRef, secondRef, thirdRef, fourthRef, fifthRef, sixthRef]);
-
+    const handleChange = (refs: any) => {
+        const results = refs.reduce((acc: string, curr: any) => {
+            return acc + curr.value;
+        }, '');
+        onChange(results);
+    };
     return (
         <div className="inputOTP">
             <div className="inputOTP-item">
-                <input type="text" id="first" maxLength={1} placeholder=" " ref={firstRef} />
+                <input type="text" id="first" name="first" maxLength={1} placeholder=" " ref={firstRef} />
                 <span></span>
             </div>
             <div className="inputOTP-item">
-                <input type="text" id="second" maxLength={1} placeholder=" " ref={secondRef} />
+                <input type="text" id="second" name="second" maxLength={1} placeholder=" " ref={secondRef} />
                 <span></span>
             </div>
             <div className="inputOTP-item">
-                <input type="text" id="third" maxLength={1} placeholder=" " ref={thirdRef} />
+                <input type="text" id="third" name="third" maxLength={1} placeholder=" " ref={thirdRef} />
                 <span></span>
             </div>
             <div className="inputOTP-item">
-                <input type="text" id="fourth" maxLength={1} placeholder=" " ref={fourthRef} />
+                <input type="text" id="fourth" name="fourth" maxLength={1} placeholder=" " ref={fourthRef} />
                 <span></span>
             </div>
             <div className="inputOTP-item">
-                <input type="text" id="fifth" maxLength={1} placeholder=" " ref={fifthRef} />
+                <input type="text" id="fifth" name="fifth" maxLength={1} placeholder=" " ref={fifthRef} />
                 <span></span>
             </div>
             <div className="inputOTP-item">
-                <input type="text" id="sixth" maxLength={1} placeholder=" " ref={sixthRef} />
+                <input type="text" id="sixth" name="sixth" maxLength={1} placeholder=" " ref={sixthRef} />
                 <span></span>
             </div>
         </div>

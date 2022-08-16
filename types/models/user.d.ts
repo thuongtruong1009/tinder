@@ -25,7 +25,7 @@ declare interface IUserBlock extends IUserFriend {}
 declare interface IUserLocation {
     latitude: number;
     longitude: number;
-    updatedAt: Date;
+    updatedAt: string;
 }
 
 declare interface IUserBagItem {

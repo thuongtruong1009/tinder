@@ -13,10 +13,10 @@ import NavbarLayout from '../components/NavbarLayout';
 import SurtItem from '../components/Surf/SurtItem';
 
 const Surf: NextPageWithLayout = () => {
-    const [stranger, setStranger] = useState<IResponseUser>();
-    const [strangers, setStrangers] = useState<IResponseUser[]>([]);
+    const [stranger, setStranger] = useState<IDataFindFriendsAroundResponse>();
+    const [strangers, setStrangers] = useState<IDataFindFriendsAroundResponse[]>([]);
 
-    const handleSeenInfo = (stranger: IResponseUser) => () => {
+    const handleSeenInfo = (stranger: IDataFindFriendsAroundResponse) => () => {
         setStranger(stranger);
     };
 
@@ -24,12 +24,19 @@ const Surf: NextPageWithLayout = () => {
         setStranger(undefined);
     };
 
+    const handleRemove = (_id: string) => {
+        setStrangers(strangers.filter((stranger) => stranger._id !== _id));
+    };
+
     useEffect(() => {
         async function findStrangeFriendsAround() {
             const response = await userApi.findStrangeFriendsAround();
-            setStrangers(response.data);
+            setStrangers(response.data.data);
         }
         findStrangeFriendsAround();
+        return () => {
+            setStrangers([]);
+        };
     }, []);
 
     return (
@@ -64,7 +71,7 @@ const Surf: NextPageWithLayout = () => {
                     >
                         {strangers.map((strange, index) => (
                             <SwiperSlide key={index} className="rounded-[40px]">
-                                <UserCard onSeen={handleSeenInfo} user={strange} />
+                                <UserCard onSeen={handleSeenInfo} user={strange} onRemove={handleRemove} />
                             </SwiperSlide>
                         ))}
                     </Swiper>

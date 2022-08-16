@@ -6,6 +6,6 @@ const URL = `${API}/${ENDPOINT}`;
 
 const userApi = {
     updateHobbies: () => axiosService.patch<IResponseUser[]>(`${URL}/hobby`),
-    findStrangeFriendsAround: () => axiosService.get<IResponseUser[]>(`${URL}/strange-friends`),
+    findStrangeFriendsAround: () => axiosService.get<IFindStrangeFriendsAroundResponse>(`${URL}/strange-friends`),
 };
 export default userApi;

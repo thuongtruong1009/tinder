@@ -28,7 +28,6 @@ const Home: NextPageWithLayout = () => {
     }
 
     const loginWithGoogle = () => {
-        console.log(process.env.URL_LOGIN_WITH_GOOGLE);
         window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
     };
     const loginWithFacebook = () => {

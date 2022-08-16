@@ -1,31 +1,40 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import mapApi from '../apis/mapApi';
 import Navbar from '../components/Navbar';
 import NavbarLayout from '../components/NavbarLayout';
+import { useAppDispatch } from '../hooks/redux';
+import { userFindFriendsAround, userUpdateLocation } from '../redux/actions/userActions';
+import { selectUser } from '../redux/reducers/userSlice';
 import { NextPageWithLayout } from '../types/global';
 import { toastError } from '../utils/toast';
 const Map = dynamic(() => import('../components/Map'), { ssr: false });
 
 const MapContainer: NextPageWithLayout = () => {
-    const [userLocation, setUserLocation] = useState<IResponseUpdateLocation[] | any>(null);
+    const dispatch = useAppDispatch();
+    const sUser = useSelector(selectUser);
     const [isFocus, setIsFocus] = useState(false);
-    const [friends, setFriends] = useState<IResponseUpdateLocation[] | any>([]);
+    const [friends, setFriends] = useState<IDataFindFriendsAroundResponse[] | any>([]);
     const handlePermission = async () => {
         navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
             if (result.state === 'granted') {
                 navigator.geolocation.getCurrentPosition(async function (position) {
-                    const response1 = await mapApi.updateLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    });
-                    setUserLocation(response1.data);
-                    const response2 = await mapApi.findFriendsAround();
-                    setFriends(response2.data);
+                    try {
+                        await dispatch(
+                            userUpdateLocation({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude,
+                            }),
+                        );
+                        setFriends(await dispatch(userFindFriendsAround()).unwrap());
+                    } catch (error: any) {
+                        toastError(error.error);
+                    }
                 });
             } else {
-                toastError('You need to allow location permission to use this feature');
+                toastError('Bạn chưa cấp quyền vị trí vì vậy không thể tìm bạn bè xung quanh');
             }
         });
     };
@@ -37,13 +46,17 @@ const MapContainer: NextPageWithLayout = () => {
     useEffect(() => {
         handlePermission();
         return () => {
-            setUserLocation(null);
             setFriends([]);
         };
     }, []);
     return (
         <>
-            <Map me={userLocation || undefined} isFocus={isFocus} handleFocus={handleFocus} friends={friends} />
+            <Map
+                me={sUser.data?.lastLocation || undefined}
+                isFocus={isFocus}
+                handleFocus={handleFocus}
+                friends={friends}
+            />
         </>
     );
 };
