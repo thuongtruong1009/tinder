@@ -36,17 +36,16 @@ const OTP: NextPage = () => {
             email: userEmail || undefined,
         };
         try {
-            const response = dispatch(
+            await dispatch(
                 userVerifyOTP({
                     ...body,
                     otp,
                 }),
             ).unwrap();
-            console.log('response: ', response);
             Cookies.remove('userEmail');
             router.push(APP_PATH.SURF);
-        } catch (error) {
-            toastError('loi');
+        } catch (error: any) {
+            toastError(error.error);
         }
     };
 

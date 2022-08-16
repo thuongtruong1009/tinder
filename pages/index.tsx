@@ -9,6 +9,8 @@ import APP_PATH from '../constant/appPath';
 import { useAppSelector } from '../hooks/redux';
 import { selectUser } from '../redux/reducers/userSlice';
 import { NextPageWithLayout } from '../types/global';
+import Cookies from 'js-cookie';
+import { toastError } from '../utils/toast';
 
 const Home: NextPageWithLayout = () => {
     const router = useRouter();
@@ -17,6 +19,14 @@ const Home: NextPageWithLayout = () => {
         router.push(APP_PATH.SURF);
         return null;
     }
+
+    const cookies = Cookies.get();
+    const errMessage = cookies.errMessage;
+    if (errMessage) {
+        toastError(errMessage);
+        Cookies.remove('errMessage');
+    }
+
     const loginWithGoogle = () => {
         console.log(process.env.URL_LOGIN_WITH_GOOGLE);
         window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');

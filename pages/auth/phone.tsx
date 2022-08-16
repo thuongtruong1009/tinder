@@ -1,7 +1,5 @@
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useContext, useRef, useState } from 'react';
-import { isValidPhoneNumber } from 'react-phone-number-input';
 import Button from '../../components/Button';
 import Title from '../../components/Home/Title';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
@@ -12,11 +10,15 @@ import APP_PATH from '../../constant/appPath';
 import { UserContext } from '../../context/userContext';
 import { UserContextType } from '../../types/context/user';
 import Cookies from 'js-cookie';
-import { toastSuccess } from '../../utils/toast';
+import { toastError, toastSuccess } from '../../utils/toast';
+import authApi from '../../apis/authApi';
+import { useAppDispatch } from '../../hooks/redux';
+import { userSendOTPRegister } from '../../redux/actions/userActions';
 
 interface Props {}
 
 export default function LoginPhone(props: Props) {
+    const dispatch = useAppDispatch();
     const inputRef = useRef(null);
     const router = useRouter();
 
@@ -32,58 +34,38 @@ export default function LoginPhone(props: Props) {
 
     const handleSubmit = async () => {
         const regex = /(([03+[2-9]|05+[6|8|9]|07+[0|6|7|8|9]|08+[1-9]|09+[1-4|6-9]]){3})+[0-9]{7}\b/g;
-
         if (regex.test(phone)) {
-            console.log('phone: ', phone);
             const cookies = Cookies.get();
             const userEmail = cookies.userEmail;
-            console.log('userEmail: ', userEmail);
 
             if (userEmail) {
                 console.log('co email');
-                const response = await fetch(`${process.env.SEND_OTP_REGISTER}`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        phone: phone,
-                        email: userEmail,
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    const errorResult = await response.json();
-                    alert(errorResult.error);
-                } else {
+                try {
+                    await dispatch(
+                        userSendOTPRegister({
+                            phone,
+                            email: userEmail,
+                        }),
+                    );
                     Cookies.remove('userEmail');
                     toastSuccess('Verify phone successfully. Next enter OTP.');
                     router.push(APP_PATH.AUTH_OTP);
+                } catch (error: any) {
+                    toastError(error.error);
                 }
             } else {
-                console.log('khong co email');
-                const response = await fetch(`${process.env.LOGIN_WITH_PHONE_LOGIN}`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        phone: phone,
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    const errorResult = await response.json();
-                    alert(errorResult.error);
-                } else {
+                try {
+                    await authApi.loginWithPhone({ phone });
                     toastSuccess('Verify phone successfully. Next enter OTP.');
                     router.push(APP_PATH.AUTH_OTP);
+                } catch (error: any) {
+                    console.log('error1212121: ', error);
+                    toastError(error.error);
                 }
             }
         } else {
-            alert('Phone is not correct!');
+            toastError('Phone is incorrect!');
         }
-        // router.push(APP_PATH.OTP);
     };
 
     return (
