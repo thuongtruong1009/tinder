@@ -3,7 +3,7 @@ import 'swiper/css';
 import 'swiper/css/effect-creative';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative } from 'swiper';
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Title from '../components/Home/Title';
 import BellIcon from '../components/Icons/BellIcon';
 import UserCard from '../components/Surf/UserCard';
@@ -12,9 +12,8 @@ import userApi from '../apis/userApi';
 import NavbarLayout from '../components/NavbarLayout';
 import SurtItem from '../components/Surf/SurtItem';
 import { Popover } from '@headlessui/react';
-import HeartIcon from '../components/Icons/HeartIcon';
-import NotificationItem from '../components/Surf/NotificationItem';
 import notificationApi from '../apis/notificationApi';
+import NotificationItem from '../components/Surf/NotificationItem';
 
 const Surf: NextPageWithLayout = () => {
     const [notifications, setNotifications] = useState<IDataGetNotificationResponse[]>([]);
