@@ -1,11 +1,17 @@
+import { MouseEventHandler } from 'react';
+
 interface Props {
     title?: string;
     size?: 'tiny' | 'small' | 'medium';
     type?: 'primary' | 'secondary';
     Icon?: JSX.Element;
     block?: boolean;
+    htmlType?: 'button' | 'submit';
     className?: string;
-    onClick?: () => void;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+    name?: string;
+    disabled?: boolean;
+    form?: string;
 }
 
 export default function Button({
@@ -16,6 +22,10 @@ export default function Button({
     type = 'primary',
     Icon,
     block,
+    htmlType = 'button',
+    name,
+    disabled = false,
+    form,
 }: Props) {
     const sizeClass = () => {
         switch (size) {
@@ -40,7 +50,14 @@ export default function Button({
         }
     };
     return (
-        <button className={`btn ${className} ${block && 'w-full'} ${sizeClass()} ${typeClass()}`} onClick={onClick}>
+        <button
+            type={htmlType}
+            className={`btn ${className} ${block && 'w-full'} ${sizeClass()} ${typeClass()}`}
+            onClick={onClick}
+            name={name}
+            disabled={disabled}
+            form={form}
+        >
             <p className={`${Icon ? '' : 'text-center w-full'}`}>{title}</p>
             {Icon && Icon}
         </button>

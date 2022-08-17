@@ -29,7 +29,6 @@ export const userCurrentUser = createAsyncThunk('user/currentUser', async (_data
         const response = await authApi.currentUser();
         return response.data.data;
     } catch (error) {
-        console.log(error);
         return thunkAPI.rejectWithValue(error);
     }
 });

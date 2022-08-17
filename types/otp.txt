@@ -11,9 +11,6 @@ const OTP: NextPage = () => {
     const router = useRouter();
     const { phone, userSignUp, saveJwtToken } = useContext(UserContext) as UserContextType;
     const [cookies, setCookie] = useCookies(['userEmail']);
-    console.log('email cookie: ', cookies.userEmail);
-
-    console.log('phone: ', phone);
 
     const formikOTP = useFormik({
         initialValues: {
@@ -26,7 +23,6 @@ const OTP: NextPage = () => {
                 .required('Required'),
         }),
         onSubmit: async (values) => {
-            console.log('OTP: ', values.otp);
 
             let body = {};
             if (phone) {
@@ -54,7 +50,6 @@ const OTP: NextPage = () => {
             if (!response.ok) {
                 alert(result.error);
             } else {
-                console.log(result);
                 saveJwtToken(result.data.token);
                 router.push('/');
             }
