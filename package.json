@@ -23,7 +23,8 @@
         "react-leaflet": "^4.0.1",
         "react-phone-number-input": "^3.2.6",
         "react-redux": "^8.0.2",
-        "swiper": "^8.3.2"
+        "swiper": "^8.3.2",
+        "timeago-react": "^3.0.5"
     },
     "devDependencies": {
         "@types/js-cookie": "^3.0.2",

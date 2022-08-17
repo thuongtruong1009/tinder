@@ -3,16 +3,21 @@ import 'swiper/css';
 import 'swiper/css/effect-creative';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative } from 'swiper';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import Title from '../components/Home/Title';
 import BellIcon from '../components/Icons/BellIcon';
-import UserCard from '../components/Home/UserCard';
+import UserCard from '../components/Surf/UserCard';
 import { NextPageWithLayout } from '../types/global';
 import userApi from '../apis/userApi';
 import NavbarLayout from '../components/NavbarLayout';
 import SurtItem from '../components/Surf/SurtItem';
+import { Popover } from '@headlessui/react';
+import HeartIcon from '../components/Icons/HeartIcon';
+import NotificationItem from '../components/Surf/NotificationItem';
+import notificationApi from '../apis/notificationApi';
 
 const Surf: NextPageWithLayout = () => {
+    const [notifications, setNotifications] = useState<IDataGetNotificationResponse[]>([]);
     const [stranger, setStranger] = useState<IDataFindFriendsAroundResponse>();
     const [strangers, setStrangers] = useState<IDataFindFriendsAroundResponse[]>([]);
 
@@ -29,16 +34,20 @@ const Surf: NextPageWithLayout = () => {
     };
 
     useEffect(() => {
+        async function getNotifications() {
+            const response = await notificationApi.getNotifications();
+            setNotifications(response.data.data);
+        }
         async function findStrangeFriendsAround() {
             const response = await userApi.findStrangeFriendsAround();
             setStrangers(response.data.data);
         }
+        getNotifications();
         findStrangeFriendsAround();
         return () => {
             setStrangers([]);
         };
     }, []);
-
     return (
         <>
             <section className="container relative px-4 pb-32 bg-white">
@@ -47,9 +56,21 @@ const Surf: NextPageWithLayout = () => {
                     content={
                         <div className="justify-between flex-center-y">
                             <h1 className="font-extrabold leading-10 text-h2 text-primary-50 font-secondary">Foxy</h1>
-                            <button className="p-2">
-                                <BellIcon />
-                            </button>
+                            <Popover className="relative">
+                                <Popover.Button as={Fragment}>
+                                    <button className="p-2">
+                                        <BellIcon />
+                                    </button>
+                                </Popover.Button>
+
+                                <Popover.Panel className="absolute right-0 z-10 top-full">
+                                    <div className="flex flex-col gap-1 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[320px]">
+                                        {notifications.map((notification) => (
+                                            <NotificationItem key={notification._id} data={notification} />
+                                        ))}
+                                    </div>
+                                </Popover.Panel>
+                            </Popover>
                         </div>
                     }
                 />

@@ -1,10 +1,12 @@
 import Image from 'next/image';
-import { toastSuccess } from '../../utils/toast';
+import { toastError, toastSuccess } from '../../utils/toast';
 import CloseIcon from '../Icons/CloseIcon';
 import HeartIcon from '../Icons/HeartIcon';
 import InformationIcon from '../Icons/InformationIcon';
 import LocationIcon from '../Icons/LocationIcon';
-import CircleButton from './CircleButton';
+import CircleButton from '../Home/CircleButton';
+import { useAppDispatch } from '../../hooks/redux';
+import { userBlockUser, userLikeUser } from '../../redux/actions/userActions';
 
 type Props = {
     user: IDataFindFriendsAroundResponse;
@@ -13,13 +15,24 @@ type Props = {
 };
 
 const UserCard = ({ user, onSeen, onRemove }: Props) => {
+    const dispatch = useAppDispatch();
     const handleLike = async () => {
-        onRemove(user._id);
-        toastSuccess('You liked this user ' + user._id);
+        try {
+            await dispatch(userLikeUser(user._id)).unwrap();
+            onRemove(user._id);
+            toastSuccess('Bạn đã thích thành công');
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
     };
     const handleBlock = async () => {
-        onRemove(user._id);
-        toastSuccess('You blocked this user ' + user._id);
+        try {
+            await dispatch(userBlockUser(user._id)).unwrap();
+            onRemove(user._id);
+            toastSuccess('Bạn đã chặn thành công');
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
     };
     return (
         <div className="rounded-[40px] h-[70vh] relative before:absolute before:inset-0 before:bg-card before:z-10">

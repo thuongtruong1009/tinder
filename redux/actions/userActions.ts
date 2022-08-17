@@ -60,3 +60,21 @@ export const userFindFriendsAround = createAsyncThunk('user/findFriendsAround', 
         return thunkAPI.rejectWithValue(error);
     }
 });
+
+export const userBlockUser = createAsyncThunk('user/blockUser', async (id: string, thunkAPI) => {
+    try {
+        const response = await userApi.blockUser(id);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
+export const userLikeUser = createAsyncThunk('user/likeUser', async (id: string, thunkAPI) => {
+    try {
+        const response = await userApi.likeUser(id);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});

@@ -14,7 +14,7 @@ function getIconMarker(imageUrl: string) {
     return L.icon({
         iconUrl: imageUrl,
         iconSize: [50, 50],
-        className: 'rounded-full border-2 border-red-500',
+        className: 'rounded-full border-2 border-red-500 object-cover',
     });
 }
 
