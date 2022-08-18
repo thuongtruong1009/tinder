@@ -27,7 +27,7 @@ interface Props {
 
 export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) {
     return (
-        <div className="animate-up fixed container top-0 px-4 inset-x-0 h-screen z-[601] overflow-auto bg-white">
+        <div className="animate-up fixed container top-0 px-4 inset-x-0 h-screen z-[1001] overflow-auto bg-white">
             <div className="fixed z-10 gap-10 -translate-x-1/2 left-1/2 bottom-4 flex-center-y">
                 <CircleButton
                     Icon={<CloseIcon />}
