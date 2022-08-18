@@ -11,15 +11,23 @@ import ReligionIcon from '../../components/Icons/profile/ReligionIcon';
 import EducationIcon from '../../components/Icons/profile/EducationIcon';
 import { NextPageWithLayout } from '../../types/global';
 import NavbarLayout from '../../components/NavbarLayout';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import WhyDialog from '../../components/Profile/WhyDialog';
 import BioDialog from '../../components/Profile/BioDialog';
 import HobbyDialog from '../../components/Profile/HobbyDialog';
+import { Popover } from '@headlessui/react';
+import { useAppDispatch } from '../../hooks/redux';
+import { userLogOut } from '../../redux/reducers/userSlice';
 
 const Profile: NextPageWithLayout = () => {
+    const dispatch = useAppDispatch();
     const [isOpenWhyDialog, setIsOpenWhyDialog] = useState(false);
     const [isOpenBioDialog, setIsOpenBioDialog] = useState(false);
     const [isOpenHobbyDialog, setIsOpenHobbyDialog] = useState(false);
+
+    const handleLogOut = () => {
+        dispatch(userLogOut());
+    };
 
     const handleOpenHobbyialog = () => {
         setIsOpenHobbyDialog(true);
@@ -50,9 +58,26 @@ const Profile: NextPageWithLayout = () => {
                     content={
                         <div className="justify-between flex-center-y">
                             <h2 className="text-neutral-100">Tài khoản</h2>
-                            <button className="p-2">
-                                <SettingIcon />
-                            </button>
+                            <Popover className="relative">
+                                <Popover.Button as={Fragment}>
+                                    <button className="p-2">
+                                        <SettingIcon />
+                                    </button>
+                                </Popover.Button>
+
+                                <Popover.Panel className="absolute right-0 z-10 top-full">
+                                    <ul className="flex flex-col gap-1 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
+                                        <li>
+                                            <button
+                                                className="w-full py-1 text-center rounded-md text-primary-50 button-2 bg-slate-100"
+                                                onClick={handleLogOut}
+                                            >
+                                                Đăng xuất
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </Popover.Panel>
+                            </Popover>
                         </div>
                     }
                 />

@@ -11,7 +11,7 @@ interface Props {
 export default function Dialog({ title, isOpen, onClose, children }: Props) {
     return (
         <Transition appear show={isOpen} as={Fragment}>
-            <DialogContainer as="div" className="relative z-[600]" onClose={onClose}>
+            <DialogContainer as="div" className="relative z-[1000]" onClose={onClose}>
                 <div className="fixed inset-0 bg-black bg-opacity-25" />
                 <Transition.Child
                     as={Fragment}

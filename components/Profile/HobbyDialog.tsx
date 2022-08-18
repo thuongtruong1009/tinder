@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Dialog from '../Dialog';
 import { IoMdClose } from 'react-icons/io';
+import Button from '../Button';
 
 interface Props {
     isOpen: boolean;
@@ -98,6 +99,7 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
                         )}
                     </div>
                 </div>
+                <Button block title="Lưu" type="secondary" className="mt-auto" />
             </Dialog>
         </>
     );

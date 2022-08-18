@@ -16,7 +16,12 @@ const initialState: UserState = {
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        userLogOut: () => {
+            localStorage.removeItem('token');
+            return initialState;
+        },
+    },
     extraReducers(builder) {
         builder.addCase(userCurrentUser.fulfilled, (state, { payload }) => {
             const { token, user } = payload;
@@ -43,7 +48,7 @@ export const userSlice = createSlice({
     },
 });
 
-// export const {} = userSlice.actions;
+export const { userLogOut } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 
