@@ -77,3 +77,12 @@ export const userLikeUser = createAsyncThunk('user/likeUser', async (id: string,
         return thunkAPI.rejectWithValue(error);
     }
 });
+
+export const userUpdateHobbies = createAsyncThunk('user/updateHobbies', async (data: string[], thunkAPI) => {
+    try {
+        const response = await userApi.updateHobbies(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});

@@ -5,7 +5,6 @@ const ENDPOINT = 'user';
 const URL = `${API}/${ENDPOINT}`;
 
 const userApi = {
-    updateHobbies: () => axiosService.patch<IResponseUser[]>(`${URL}/hobby`),
     findStrangeFriendsAround: () => axiosService.get<IFindStrangeFriendsAroundResponse>(`${URL}/strange-friends`),
     blockUser: (userId: string) =>
         axiosService.post<IResponseUser>(`${URL}/block/`, {
@@ -18,6 +17,11 @@ const userApi = {
     likeUser: (userId: string) =>
         axiosService.post<IResponseUser>(`${URL}/like/`, {
             userId,
+        }),
+
+    updateHobbies: (hobbies: string[]) =>
+        axiosService.patch<IUpdateHobbiesResponse>(`${URL}/hobby`, {
+            hobbies,
         }),
 };
 export default userApi;
