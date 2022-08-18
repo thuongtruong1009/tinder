@@ -4,7 +4,6 @@ import APP_PATH from '../constant/appPath';
 import { useAppSelector } from '../hooks/redux';
 import { selectUser } from '../redux/reducers/userSlice';
 import { io } from 'socket.io-client';
-import { toastSuccess } from '../utils/toast';
 import toast from 'react-hot-toast';
 
 interface Props {

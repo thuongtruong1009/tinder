@@ -19,16 +19,30 @@ import SexIcon from '../Icons/SexIcon';
 import SportIcon from '../Icons/SportIcon';
 
 interface Props {
-    stranger: any;
+    stranger: IDataFindFriendsAroundResponse;
     onClose: () => void;
+    onLike: (_id: string) => void;
+    onBlock: (_id: string) => void;
 }
 
-export default function SurtItem({ stranger, onClose }: Props) {
+export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) {
     return (
         <div className="animate-up fixed container top-0 px-4 inset-x-0 h-screen z-[601] overflow-auto bg-white">
             <div className="fixed z-10 gap-10 -translate-x-1/2 left-1/2 bottom-4 flex-center-y">
-                <CircleButton Icon={<CloseIcon />} />
-                <CircleButton Icon={<HeartIcon />} />
+                <CircleButton
+                    Icon={<CloseIcon />}
+                    onClick={() => {
+                        onBlock(stranger._id);
+                        onClose();
+                    }}
+                />
+                <CircleButton
+                    Icon={<HeartIcon />}
+                    onClick={() => {
+                        onLike(stranger._id);
+                        onClose();
+                    }}
+                />
             </div>
             <button
                 onClick={onClose}
