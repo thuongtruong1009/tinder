@@ -71,6 +71,7 @@ module.exports = {
                 danger: '#FE5D5D',
                 main: {
                     purple: '#7A56FE',
+                    grey: "#343E58"
                 },
             },
             fontFamily: {
