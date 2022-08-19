@@ -3,6 +3,7 @@ const APP_PATH = {
     AUTH: '/auth',
     AUTH_PHONE: '/auth/phone',
     AUTH_OTP: '/auth/otp',
+    AUTH_UPDATE: '/auth/update-info',
     SURF: '/surf',
     MAP: '/map',
     CHAT: '/chat',

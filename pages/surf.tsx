@@ -20,9 +20,11 @@ import { notificationGetNotifications } from '../redux/actions/notificationActio
 import { toastError, toastSuccess } from '../utils/toast';
 import { selectNotification } from '../redux/reducers/notificationSlice';
 import { userBlockUser, userLikeUser } from '../redux/actions/userActions';
+import { selectUser } from '../redux/reducers/userSlice';
 
 const Surf: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
+    const sUser = useSelector(selectUser);
     const sNotification = useSelector(selectNotification).data;
     const [stranger, setStranger] = useState<IDataFindFriendsAroundResponse>();
     const [strangers, setStrangers] = useState<IDataFindFriendsAroundResponse[]>([]);
@@ -69,13 +71,15 @@ const Surf: NextPageWithLayout = () => {
         }
         try {
             getNotifications();
-            findStrangeFriendsAround();
+            if (sUser.data?.lastLocation) findStrangeFriendsAround();
+            else toastError('Bạn chưa cập nhật vị trí');
         } catch (error) {
             toastError((error as IResponseError).error);
         }
         return () => {
             setStrangers([]);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
     return (
         <>
@@ -114,11 +118,11 @@ const Surf: NextPageWithLayout = () => {
                         creativeEffect={{
                             prev: {
                                 shadow: true,
-                                translate: ['-120%', 0, -500],
+                                translate: ['-130%', 0, -500],
                             },
                             next: {
                                 shadow: true,
-                                translate: ['120%', 0, -500],
+                                translate: ['130%', 0, -500],
                             },
                         }}
                         modules={[EffectCreative]}

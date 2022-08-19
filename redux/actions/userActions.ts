@@ -86,3 +86,12 @@ export const userUpdateHobbies = createAsyncThunk('user/updateHobbies', async (d
         return thunkAPI.rejectWithValue(error);
     }
 });
+export const userFirstUpdate = createAsyncThunk('user/userFirstUpdate', async (data: IFirstUpdateUser, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.firstUpdate(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});

@@ -23,5 +23,7 @@ const userApi = {
         axiosService.patch<IUpdateHobbiesResponse>(`${URL}/hobby`, {
             hobbies,
         }),
+    firstUpdate: (body: IFirstUpdateUser) =>
+        axiosService.put<IFirstUpdateUserResponse>(`${URL}/first-update-profile`, body),
 };
 export default userApi;
