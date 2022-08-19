@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 interface Props {
@@ -9,8 +10,10 @@ interface Props {
 export default function ChatList({ name, avatar, onClick }: Props) {
     return (
         <li className="flex items-center gap-4 cursor-pointer" onClick={onClick}>
-            <p className={'bg-cover w-12 h-12 bg-[url(' + avatar + ')]'}></p>
-            <p className="text-neutral-100 body-1 font-bold">{name}</p>
+            <div className="image-container max-w-[200px] rounded-xl overflow-hidden w-12 h-12">
+                <Image className="image" src={avatar} alt="avatar_img" layout="fill" />
+            </div>
+            <p className="font-bold text-neutral-100 body-1">{name}</p>
         </li>
     );
 }

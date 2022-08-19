@@ -26,7 +26,7 @@ const Index: NextPageWithLayout = () => {
                     </div>
                 }
             />
-            <p className="body-1 font-bold text-neutral-100 my-2">Danh sách lượt thích</p>
+            <p className="my-2 font-bold body-1 text-neutral-100">Danh sách lượt thích</p>
             <Swiper
                 spaceBetween={16}
                 slidesPerView={3.5}
@@ -39,8 +39,8 @@ const Index: NextPageWithLayout = () => {
                     </SwiperSlide>
                 ))}
             </Swiper>
-            <h5 className="body-1 text-neutral-100 font-bold my-4">Trò chuyện</h5>
-            <ul className="flex flex-col gap-4 max-h-72 overflow-y-scroll">
+            <h5 className="my-4 font-bold body-1 text-neutral-100">Trò chuyện</h5>
+            <ul className="flex flex-col gap-4 max-h-[calc(100vh-303px)] overflow-y-scroll">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
                     <ChatList
                         name="Cameron Greer"
