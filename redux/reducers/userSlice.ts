@@ -58,6 +58,7 @@ export const userSlice = createSlice({
         });
         builder.addCase(userFirstUpdate.fulfilled, (state, { payload }) => {
             if (state.data) {
+                state.data.status.isFirstUpdate = false;
                 state.data.name = payload.name;
                 state.data.email = payload.email;
                 state.data.gender = payload.gender;
