@@ -16,7 +16,6 @@ export const genderSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder.addCase(genderGetAllGenders.fulfilled, (state, { payload }) => {
-            console.log('payload: ', payload);
             state.data = payload;
         });
     },

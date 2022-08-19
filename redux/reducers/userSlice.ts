@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { userVerifyOTP, userCurrentUser, userUpdateLocation, userUpdateHobbies } from '../actions/userActions';
+import {
+    userVerifyOTP,
+    userCurrentUser,
+    userUpdateLocation,
+    userUpdateHobbies,
+    userFirstUpdate,
+} from '../actions/userActions';
 
 interface UserState {
     isLogin: boolean;
@@ -48,6 +54,14 @@ export const userSlice = createSlice({
         builder.addCase(userUpdateHobbies.fulfilled, (state, { payload }) => {
             if (state.data) {
                 state.data.hobbies = payload;
+            }
+        });
+        builder.addCase(userFirstUpdate.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.name = payload.name;
+                state.data.email = payload.email;
+                state.data.gender = payload.gender;
+                state.data.birthday = payload.birthday;
             }
         });
     },

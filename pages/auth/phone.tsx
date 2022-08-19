@@ -35,7 +35,7 @@ export default function LoginPhone(props: Props) {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const regex = /(([03+[2-9]|05+[6|8|9]|07+[0|6|7|8|9]|08+[1-9]|09+[1-4|6-9]]){3})+[0-9]{7}\b/g;
+        const regex = /(0[3|5|7|8|9])+([0-9]{8})\b/g;
         if (regex.test(phone)) {
             const cookies = Cookies.get();
             const userEmail = cookies.userEmail;

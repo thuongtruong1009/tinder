@@ -1,4 +1,5 @@
 import { MouseEventHandler } from 'react';
+import { SubmitHandler } from 'react-hook-form';
 
 interface Props {
     title?: string;
@@ -8,7 +9,7 @@ interface Props {
     block?: boolean;
     htmlType?: 'button' | 'submit';
     className?: string;
-    onClick?: MouseEventHandler<HTMLButtonElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement> | SubmitHandler<any>;
     name?: string;
     disabled?: boolean;
     form?: string;

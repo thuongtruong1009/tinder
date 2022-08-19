@@ -15,14 +15,12 @@ import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import InputOTP from '../../components/Auth/InputOTP';
 import { selectUser } from '../../redux/reducers/userSlice';
-import { genderGetAllGenders } from '../../redux/actions/genderAction';
-import { selectGender } from '../../redux/reducers/genderSlice';
 
 const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
 
-    // const sUser = useAppSelector(selectUser);
+    const sUser = useAppSelector(selectUser);
 
     const cookies = Cookies.get();
     const userEmail = cookies.userEmail;
@@ -45,18 +43,16 @@ const OTP: NextPage = () => {
             email: userEmail || undefined,
         };
         try {
-            await dispatch(
+            const response = await dispatch(
                 userVerifyOTP({
                     ...body,
                     otp,
                 }),
             ).unwrap();
 
-            await dispatch(genderGetAllGenders()).unwrap();
             Cookies.remove('userEmail');
-            // if (sUser.data?.status.isFirstUpdate) router.push(APP_PATH.AUTH_UPDATE);
-
-            router.push(APP_PATH.AUTH_UPDATE);
+            if (response.user.status.isFirstUpdate) router.push(APP_PATH.AUTH_UPDATE);
+            else router.push(APP_PATH.SURF);
         } catch (error: any) {
             toastError(error.error);
         }
@@ -69,7 +65,7 @@ const OTP: NextPage = () => {
                     <Title
                         className="mb-8"
                         content={
-                            <button className="p-2">
+                            <button className="p-2" onClick={() => router.back()}>
                                 <ArrowLeft />
                             </button>
                         }
