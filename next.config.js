@@ -3,6 +3,7 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     env: {
+        API_HOST: process.env.API_HOST,
         API_URL: process.env.API_URL,
         URL_LOGIN_WITH_GOOGLE: process.env.API_URL + process.env.URL_LOGIN_WITH_GOOGLE,
         URL_LOGIN_WITH_FACEBOOK: process.env.API_URL + process.env.URL_LOGIN_WITH_FACEBOOK,

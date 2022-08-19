@@ -10,10 +10,10 @@ import { useEffect, useState } from 'react';
 import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
 import ProtectRoute from '../components/ProtectRoute';
-
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const [loading, setLoading] = useState(true);
     const getLayout = Component.getLayout ?? ((page) => page);
+
     useEffect(() => {
         async function getCurrentUser() {
             if (localStorage.getItem('token') && !store.getState().user.isLogin) {
@@ -49,7 +49,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 ) : (
                     <Loading />
                 )}
-
                 <Toaster
                     toastOptions={{
                         className: 'z-[500]',

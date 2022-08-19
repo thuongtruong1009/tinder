@@ -17,3 +17,7 @@ declare interface IDataGetNotificationResponse {
 declare interface IGetNotificationResponse extends IResponseSuccess {
     data: IDataGetNotificationResponse[];
 }
+
+declare interface IUpdateHobbiesResponse extends IResponseSuccess {
+    data: IHobby[];
+}

@@ -4,7 +4,7 @@ interface Props {
     className?: string;
     title: string;
     desc: string;
-    onClick?: () => Function;
+    onClick?: () => void;
 }
 export default function DoubleGroup({ className = '', title, desc, onClick }: Props) {
     return (
