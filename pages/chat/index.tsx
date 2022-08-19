@@ -35,7 +35,7 @@ const Index: NextPageWithLayout = () => {
             >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
                     <SwiperSlide key={index}>
-                        <LikeList avatar="/assets/images/chat_preview.png" />
+                        <LikeList avatar="/assets/images/chat_preview.png" name="Full name" loved={false} />
                     </SwiperSlide>
                 ))}
             </Swiper>
