@@ -73,7 +73,8 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                     {/* user name and location */}
                     <div className="space-y-[7px] m-1 pb-[13px]">
                         <h3>
-                            {stranger?.name.firstName + ' ' + stranger?.name.lastName}, {stranger?.age}t
+                            {stranger?.name.firstName + ' ' + stranger?.name.lastName},{' '}
+                            {stranger.age && stranger.age + 't'}
                         </h3>
                         <div className="gap-2 flex-center-y ">
                             <LocationIcon />

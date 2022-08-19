@@ -41,22 +41,23 @@ const UpdateInfo: NextPageWithLayout = () => {
         },
     });
     const [gender, setGender] = useState<any>();
-    const [birthday, setBirthday] = useState<Date>(new Date());
+    const [birthday, setBirthday] = useState<Date>(new Date('1975-04-30'));
     const [genders, setGenders] = useState<IGenderOption[]>();
     const onSubmit: SubmitHandler<InputProps> = async (data) => {
         try {
             if (sUser?.data?.email) {
                 const { name } = data;
-                await dispatch(userFirstUpdate({ name, birthday: birthday.toISOString(), gender: gender.value }));
+                await dispatch(
+                    userFirstUpdate({ name, birthday: birthday.toISOString(), gender: gender.value }),
+                ).unwrap();
             } else {
                 const { name, email } = data;
                 await dispatch(
                     userFirstUpdate({ email, name, birthday: birthday.toISOString(), gender: gender.value }),
-                );
+                ).unwrap();
             }
             router.push(APP_PATH.SURF);
         } catch (error) {
-            console.log('error: ', error);
             toastError((error as IResponseError).error);
         }
     };

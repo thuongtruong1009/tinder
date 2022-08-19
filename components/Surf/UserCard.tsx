@@ -27,7 +27,7 @@ const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
             <div className="absolute bottom-0 z-20 w-full px-4">
                 <div className="justify-between mb-2 flex-center-y">
                     <h3 className="text-white">
-                        {user.name.firstName + ' ' + user.name.lastName}, {user.age || '?'}t
+                        {user.name.firstName + ' ' + user.name.lastName}, {user.age && user.age + 't'}
                     </h3>
 
                     <button onClick={onSeen(user)}>

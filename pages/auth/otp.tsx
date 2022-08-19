@@ -51,8 +51,7 @@ const OTP: NextPage = () => {
             ).unwrap();
 
             Cookies.remove('userEmail');
-            if (response.user.status.isFirstUpdate) router.push(APP_PATH.AUTH_UPDATE);
-            else router.push(APP_PATH.SURF);
+            router.push(APP_PATH.SURF);
         } catch (error: any) {
             toastError(error.error);
         }
