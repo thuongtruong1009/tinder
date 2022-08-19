@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { UserContextType } from '../../types/context/user';
 import { UserContext } from '../../context/userContext';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Button from '../../components/Button';
 import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
@@ -14,10 +14,15 @@ import APP_PATH from '../../constant/appPath';
 import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import InputOTP from '../../components/Auth/InputOTP';
+import { selectUser } from '../../redux/reducers/userSlice';
+import { genderGetAllGenders } from '../../redux/actions/genderAction';
+import { selectGender } from '../../redux/reducers/genderSlice';
 
 const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
+
+    // const sUser = useAppSelector(selectUser);
 
     const cookies = Cookies.get();
     const userEmail = cookies.userEmail;
@@ -46,8 +51,12 @@ const OTP: NextPage = () => {
                     otp,
                 }),
             ).unwrap();
+
+            await dispatch(genderGetAllGenders()).unwrap();
             Cookies.remove('userEmail');
-            router.push(APP_PATH.SURF);
+            // if (sUser.data?.status.isFirstUpdate) router.push(APP_PATH.AUTH_UPDATE);
+
+            router.push(APP_PATH.AUTH_UPDATE);
         } catch (error: any) {
             toastError(error.error);
         }

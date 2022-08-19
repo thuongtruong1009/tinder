@@ -11,7 +11,11 @@ interface Props {
 }
 
 export default function InputSelect({ onChange, name, label, required, options }: Props) {
+    console.log(options);
+    //khong gan dc input
     const [input, setInput] = useState<any>(options[0]);
+    console.log('input: ', input);
+
     useEffect(() => {
         onChange && onChange(input);
     }, [input, onChange]);

@@ -4,6 +4,7 @@ declare interface IUserGender {
 }
 
 declare interface IUserStatus {
+    isFirstUpdate: boolean;
     isVerified: boolean;
     isActive: boolean;
 }
