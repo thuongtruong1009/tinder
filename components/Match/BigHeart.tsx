@@ -4,7 +4,7 @@ interface IProps {
     imgUrl: string;
 }
 
-const Heart = ({ imgUrl }: IProps) => {
+const BigHeart = ({ imgUrl }: IProps) => {
     return (
         <svg className="heart-main" viewBox="0 0 512 512">
             <defs>
@@ -31,4 +31,4 @@ const Heart = ({ imgUrl }: IProps) => {
     );
 };
 
-export default Heart;
+export default BigHeart;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { IHeart } from './heart-container';
+import { IHeart } from './HeartWrapper';
 type PropsT = {
     data: IHeart;
 };
 
-const LittleHeart = ({ data }: PropsT) => {
+const SmallHeart = ({ data }: PropsT) => {
     return (
         <svg
             className="little-heart"
@@ -45,4 +45,4 @@ const LittleHeart = ({ data }: PropsT) => {
     );
 };
 
-export default LittleHeart;
+export default SmallHeart;

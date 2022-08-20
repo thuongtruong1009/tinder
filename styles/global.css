@@ -113,7 +113,7 @@
         @apply text-body-3 leading-body-3;
     }
     .container {
-        @apply bg-white w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
+        @apply w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
     }
     .container-np {
         @apply bg-white w-full mx-auto max-w-[377px] min-h-screen shadow-md;

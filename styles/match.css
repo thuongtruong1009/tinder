@@ -2,6 +2,9 @@
     --pink: #fd65b7;
     --gap: 1.6rem;
 }
+.match-title{
+    font-family: 'DynaPuff', sans-serif;
+}
 
 /* .matchingFrame .heart-container .icon {
     fill: transparent;

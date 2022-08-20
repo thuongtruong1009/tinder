@@ -32,7 +32,7 @@ export default function InfoUser(props: Props) {
         email: '',
     });
     return (
-        <section className="container">
+        <section className="container bg-white">
             <div className="relative h-screen">
                 <Title
                     className="mb-[34px]"

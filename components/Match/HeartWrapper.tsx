@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Heart from './heart';
-import LittleHeart from './little-heart';
+import BigHeart from './BigHeart';
+import SmallHeart from './SmallHeart';
 
 export interface IHeart {
     top?: number;
@@ -66,10 +66,10 @@ const HeartContainer = ({ matchedFriend }: IProps) => {
     return (
         <div className="heart-container h-[40%] flex-center relative ">
             <div className="icon left h-[60%] fill-transparent stroke-main-pink stroke-[8px] cursor-pointer">
-                <Heart imgUrl={firstImgUrl} />
+                <BigHeart imgUrl={firstImgUrl} />
             </div>
             <div className="icon right h-[60%] fill-transparent stroke-main-pink stroke-[8px] cursor-pointer">
-                <Heart imgUrl={friendImg} />
+                <BigHeart imgUrl={friendImg} />
             </div>
             <div className="icon pop-up">
         <svg className="heart-secondary" viewBox="0 0 512 512">
@@ -90,7 +90,7 @@ const HeartContainer = ({ matchedFriend }: IProps) => {
         </svg>
       </div>
             {littleHearts?.map((littleHeart, index) => {
-                return <LittleHeart key={`heart-${index}`} data={littleHeart} />;
+                return <SmallHeart key={`heart-${index}`} data={littleHeart} />;
             })}
         </div>
     );
