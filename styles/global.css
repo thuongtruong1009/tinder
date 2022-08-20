@@ -156,6 +156,7 @@
 }
 @import './datepicker.css';
 @import './input-otp.css';
+@import './match.css';
 .animate-up {
     animation: animate-up 0.7s ease-in-out;
 }
