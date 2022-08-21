@@ -30,7 +30,7 @@ const Matching: NextPageWithLayout = () => {
     const handleSkip = () => {
         const arr = [...matchedFriends];
 
-        if (arr.length < 1) {
+        if (arr.length === 0) {
             router.push('/chat');
             return;
         }
