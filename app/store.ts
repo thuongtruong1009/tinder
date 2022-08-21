@@ -3,6 +3,8 @@ import user from '../redux/reducers/userSlice';
 import notification from '../redux/reducers/notificationSlice';
 import hobby from '../redux/reducers/hobbySlice';
 import gender from '../redux/reducers/genderSlice';
+import education from '../redux/reducers/educationSlice';
+import beer from '../redux/reducers/beerSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +12,8 @@ export const store = configureStore({
         notification,
         hobby,
         gender,
+        education,
+        beer,
     },
 });
 

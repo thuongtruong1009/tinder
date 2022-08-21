@@ -25,5 +25,24 @@ const userApi = {
         }),
     firstUpdate: (body: IFirstUpdateUser) =>
         axiosService.put<IFirstUpdateUserResponse>(`${URL}/first-update-profile`, body),
+    updateBio: (body: IUpdateBio) => axiosService.put<IUpdateBioResponse>(`${URL}/bio`, body),
+    updateReligion: (body: IUpdateReligion) => axiosService.put<IUpdateReligionResponse>(`${URL}/religion`, body),
+    updateEducation: (id: string) =>
+        axiosService.put<IUpdateUserEducationsResponse>(`${URL}/education`, {
+            id,
+        }),
+    updateGender: (id: string) =>
+        axiosService.put<IUpdateUserGenderResponse>(`${URL}/gender`, {
+            id,
+        }),
+    updateBeer: (id: string) =>
+        axiosService.put<IUpdateUserBeerResponse>(`${URL}/beer`, {
+            id,
+        }),
+    updateReason: (reason: string) =>
+        axiosService.put<IUpdateUserReasonResponse>(`${URL}/reason`, {
+            reason,
+        }),
 };
+
 export default userApi;

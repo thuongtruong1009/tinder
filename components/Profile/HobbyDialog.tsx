@@ -18,16 +18,23 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
     const dispatch = useAppDispatch();
     const sHobby = useAppSelector(selectHobby);
     const sUser = useAppSelector(selectUser);
+
     const [hobbies, setHobbies] = useState<IHobby[]>(sUser.data?.hobbies || []);
     const [hobbyOptions, setHobbyOptions] = useState<IHobby[]>(
         sHobby.data.filter((hobby) => !hobbies.some((h) => h._id === hobby._id)),
     );
+
+    console.log('hobbies: ', hobbies);
+    console.log('hobbyOptions: ', hobbyOptions);
+
     const handleClick = (hobby: IHobby) => () => {
         const newHobbys = [...hobbies, hobby];
         setHobbies(newHobbys);
+
         const newHobbyOptions = hobbyOptions.filter((hobbyOption) => hobbyOption._id !== hobby._id);
         setHobbyOptions(newHobbyOptions);
     };
+
     const handleRemove = (hobby: IHobby) => () => {
         const newHobbys = hobbies.filter((hobbyItem) => hobbyItem._id !== hobby._id);
         setHobbies(newHobbys);
@@ -46,10 +53,14 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
 
     useEffect(() => {
         async function getAllHobbies() {
-            const response = await dispatch(hobbyGetAllHobbies()).unwrap();
-            let results = response;
-            results = results.filter((hobby) => !hobbies.some((hobbyItem) => hobbyItem._id === hobby._id));
-            setHobbyOptions(results);
+            try {
+                const response = await dispatch(hobbyGetAllHobbies()).unwrap();
+                let results = response;
+                results = results.filter((hobby) => !hobbies.some((hobbyItem) => hobbyItem._id === hobby._id));
+                setHobbyOptions(results);
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
         }
         if (sHobby.data.length === 0) {
             getAllHobbies();
@@ -63,8 +74,8 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
                 <div className="space-y-2">
                     <div>
                         <h5>Sở thích của bạn</h5>
-                        {sUser.data && sUser.data.hobbies.length > 0 ? (
-                            <div className="flex flex-wrap gap-2 p-2 overflow-auto rounded-md bg-neutral-5 max-h-24">
+                        {hobbies.length > 0 ? (
+                            <div className="flex flex-wrap gap-2 p-2 overflow-auto rounded-md bg-neutral-5 max-h-32">
                                 {hobbies.map((hobby) => (
                                     <button
                                         key={hobby._id}
@@ -83,7 +94,7 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
                     <div>
                         <h5>Chọn sở thích</h5>
                         {sHobby.data.length > 0 ? (
-                            <div className="flex flex-wrap gap-2 p-2 overflow-auto rounded-md bg-neutral-5 max-h-24">
+                            <div className="flex flex-wrap gap-2 p-2 overflow-auto rounded-md bg-neutral-5 max-h-32">
                                 {hobbyOptions.map((hobby) => (
                                     <button
                                         key={hobby._id}

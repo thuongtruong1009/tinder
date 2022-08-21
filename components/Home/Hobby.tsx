@@ -3,7 +3,7 @@ interface Props {
 }
 
 export default function Hobby({ title }: Props) {
-    const random = Math.floor(Math.random() * 3);
+    const random = Math.floor(Math.random() * 8);
 
     let bgColor = '';
     switch (random) {
@@ -18,6 +18,21 @@ export default function Hobby({ title }: Props) {
             break;
         case 3:
             bgColor = 'bg-emerald-100';
+            break;
+        case 4:
+            bgColor = 'bg-thirdth-30';
+            break;
+        case 5:
+            bgColor = 'bg-thirdth-40';
+            break;
+        case 6:
+            bgColor = 'bg-thirdth-50';
+            break;
+        case 7:
+            bgColor = 'bg-thirdth-60';
+            break;
+        case 8:
+            bgColor = 'bg-thirdth-70';
             break;
     }
 

@@ -7,6 +7,12 @@ import {
     userUpdateLocation,
     userUpdateHobbies,
     userFirstUpdate,
+    userUpdateBio,
+    userUpdateReligion,
+    userUpdateEducation,
+    userUpdateGender,
+    userUpdateBeer,
+    userUpdateReason,
 } from '../actions/userActions';
 
 interface UserState {
@@ -63,6 +69,36 @@ export const userSlice = createSlice({
                 state.data.email = payload.email;
                 state.data.gender = payload.gender;
                 state.data.birthday = payload.birthday;
+            }
+        });
+        builder.addCase(userUpdateBio.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.profile.bio = payload;
+            }
+        });
+        builder.addCase(userUpdateReligion.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.info.religion = payload;
+            }
+        });
+        builder.addCase(userUpdateEducation.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.info.education = payload;
+            }
+        });
+        builder.addCase(userUpdateGender.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.gender = payload;
+            }
+        });
+        builder.addCase(userUpdateBeer.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.info.beer = payload;
+            }
+        });
+        builder.addCase(userUpdateReason.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.info.reason = payload;
             }
         });
     },

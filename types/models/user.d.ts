@@ -70,4 +70,10 @@ declare interface IUser {
     transactions: any[];
     bag: IUserBagItem[];
     lastLocation: IUserLocation;
+    info: {
+        reason: string;
+        beer: IBeer;
+        religion: boolean;
+        education: IEducation;
+    };
 }
