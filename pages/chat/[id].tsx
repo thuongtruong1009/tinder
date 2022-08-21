@@ -153,7 +153,7 @@ const Room: NextPageWithLayout = () => {
         }
     };
     return (
-        <section className="container relative flex flex-col">
+        <section className="container relative flex flex-col bg-white">
             <input
                 multiple
                 className="hidden"
@@ -239,7 +239,7 @@ const Room: NextPageWithLayout = () => {
                     <input type="text" className="bg-neutral-5 body-2 px-2 w-[94%] h-full" autoFocus placeholder="Aa" />
                     <IconSetIcon />
                 </div>
-                <div className="rounded-full cursor-pointer bg-main-purple flex-center w-9 h-9">
+                <div className="text-white rounded-full cursor-pointer bg-main-purple flex-center w-9 h-9">
                     <SendIcon />
                 </div>
             </div>

@@ -17,7 +17,7 @@ const Index: NextPageWithLayout = () => {
         router.push(`/chat/${index}`);
     };
     return (
-        <section className="container">
+        <section className="container bg-white">
             <Title
                 className="py-2.75"
                 content={
