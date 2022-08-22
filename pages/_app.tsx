@@ -14,20 +14,20 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const [loading, setLoading] = useState(true);
     const getLayout = Component.getLayout ?? ((page) => page);
 
-    // useEffect(() => {
-    //     async function getCurrentUser() {
-    //         if (localStorage.getItem('token') && !store.getState().user.isLogin) {
-    //             await store.dispatch(userCurrentUser());
-    //         }
-    //         window.setTimeout(() => {
-    //             setLoading(false);
-    //         }, 1000);
-    //     }
-    //     getCurrentUser();
-    //     return () => {
-    //         setLoading(true);
-    //     };
-    // }, []);
+    useEffect(() => {
+        async function getCurrentUser() {
+            if (localStorage.getItem('token') && !store.getState().user.isLogin) {
+                await store.dispatch(userCurrentUser());
+            }
+            window.setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        }
+        getCurrentUser();
+        return () => {
+            setLoading(true);
+        };
+    }, []);
     return (
         <UserProvider>
             <Head>
