@@ -1,11 +1,16 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import CloseIcon from '../components/Icons/CloseIcon';
 import MatchTitleIcon from '../components/Icons/match/MathTitleIcon';
 import SendIcon from '../components/Icons/match/SendIcon';
 import HeartContainer from '../components/Match/HeartWrapper';
+import { Popover } from '@headlessui/react';
 import { NextPageWithLayout } from '../types/global';
+import BellIcon from '../components/Icons/BellIcon';
+import dynamic from 'next/dynamic';
+
+const Portal = dynamic(() => import('../HOC/Portal'), { ssr: false });
 
 const Matching: NextPageWithLayout = () => {
     const router = useRouter();
@@ -39,40 +44,45 @@ const Matching: NextPageWithLayout = () => {
         setMatchedFriends(arr);
     };
     return (
-        <section className="container flex flex-col justify-between text-white matchingFrame p-6.5 h-screen min-h-screen w-screen overflow-hidden overflow-y-auto bg-main-purple">
-            <a className="flex flex-row justify-end p-4 text-white cursor-pointer">
-                <CloseIcon />
-            </a>
-            <HeartContainer matchedFriend={matchedFriends && matchedFriends[0]} />
-            <div className="flex-center flex-col gap-[1.6rem]">
-                {/* <h2 className="text-3xl match-title text-neutral-100">IT'S A MATCH</h2> */}
-                <MatchTitleIcon className="text-3xl match-title text-neutral-100" />
-                <p className="text-base font-normal text-center">
-                    Đừng để người ấy phải đợi, <br />
-                    gửi lời chào ngay!
-                </p>
-            </div>
-            <div className="w-full flex flex-col mb-4 gap-[2.2rem]">
-                <form
-                    onSubmit={handleSend}
-                    className="relative flex flex-row justify-between w-full p-2.5 bg-white rounded-3xl text-main-purple"
-                >
-                    <input
-                        className="w-[90%] px-2.5 text-base font-bold rounded-4xl placeholder:text-main-purple"
-                        type="text"
-                        onChange={handleInput}
-                        value={greetMessage}
-                        placeholder="Gửi lời chào"
-                    />
-                    <button type="submit" onClick={handleSend} className="bg-white">
-                        <SendIcon />
+        <Portal
+            id="navbar"
+            className="fixed bottom-0 z-[1000] -translate-x-1/2 left-1/2 max-w-[377px] w-full "
+            section="section"
+        >
+            <section className="container flex flex-col justify-between text-white matchingFrame p-6.5 h-screen min-h-screen w-screen overflow-hidden overflow-y-auto bg-main-purple">
+                <a className="flex flex-row justify-end p-4 text-white cursor-pointer">
+                    <CloseIcon />
+                </a>
+                <HeartContainer matchedFriend={matchedFriends && matchedFriends[0]} />
+                <div className="flex-center flex-col gap-[1.6rem]">
+                    <MatchTitleIcon className="text-3xl match-title text-neutral-100" />
+                    <p className="text-base font-normal text-center">
+                        Đừng để người ấy phải đợi, <br />
+                        gửi lời chào ngay!
+                    </p>
+                </div>
+                <div className="w-full flex flex-col mb-4 gap-[2.2rem]">
+                    <form
+                        onSubmit={handleSend}
+                        className="relative flex flex-row justify-between w-full p-2.5 bg-white rounded-3xl text-main-purple"
+                    >
+                        <input
+                            className="w-[90%] px-2.5 text-base font-bold rounded-4xl placeholder:text-main-purple"
+                            type="text"
+                            onChange={handleInput}
+                            value={greetMessage}
+                            placeholder="Gửi lời chào"
+                        />
+                        <button type="submit" onClick={handleSend} className="bg-white">
+                            <SendIcon />
+                        </button>
+                    </form>
+                    <button onClick={handleSkip} className="font-normal bg-main-purple">
+                        Skip
                     </button>
-                </form>
-                <button onClick={handleSkip} className="font-normal bg-main-purple">
-                    Skip
-                </button>
-            </div>
-        </section>
+                </div>
+            </section>
+        </Portal>
     );
 };
 

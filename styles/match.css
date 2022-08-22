@@ -6,13 +6,6 @@
     font-family: 'DynaPuff', sans-serif;
 }
 
-/* .matchingFrame .heart-container .icon {
-    fill: transparent;
-    stroke: var(--pink);
-    stroke-width: 8;
-    cursor: pointer;
-    height: 60%;
-} */
 .matchingFrame .heart-container .icon.pop-up {
     fill: var(--pink);
     position: absolute;
