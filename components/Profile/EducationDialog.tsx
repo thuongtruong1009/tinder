@@ -1,9 +1,8 @@
 import { RadioGroup } from '@headlessui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { educationGetAllEducations } from '../../redux/actions/educationAction';
 import { userUpdateEducation } from '../../redux/actions/userActions';
-import { selectEducation } from '../../redux/reducers/educationSlice';
+import { selectInfo } from '../../redux/reducers/infoSlice';
 import { selectUser } from '../../redux/reducers/userSlice';
 import { toastError } from '../../utils/toast';
 import Dialog from '../Dialog';
@@ -17,9 +16,9 @@ interface Props {
 export default function EducationDialog({ isOpen, onClose, educationId }: Props) {
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
-    const sEducation = useAppSelector(selectEducation);
+    const sInfo = useAppSelector(selectInfo);
 
-    const [educationOptions, setEducationOptions] = useState<IEducation[]>(sEducation.data);
+    const [educationOptions, setEducationOptions] = useState<IEducation[]>(sInfo.educations);
     const [value, setValue] = useState<IEducation>(
         educationOptions.find((item) => item._id === educationId) || educationOptions[0],
     );

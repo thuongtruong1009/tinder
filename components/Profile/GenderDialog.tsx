@@ -1,10 +1,8 @@
 import { RadioGroup } from '@headlessui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { educationGetAllEducations } from '../../redux/actions/educationAction';
-import { genderGetAllGenders } from '../../redux/actions/genderAction';
-import { userUpdateEducation, userUpdateGender } from '../../redux/actions/userActions';
-import { selectGender } from '../../redux/reducers/genderSlice';
+import { userUpdateGender } from '../../redux/actions/userActions';
+import { selectInfo } from '../../redux/reducers/infoSlice';
 import { selectUser } from '../../redux/reducers/userSlice';
 import { toastError } from '../../utils/toast';
 import Dialog from '../Dialog';
@@ -18,9 +16,9 @@ interface Props {
 export default function GenderDialog({ isOpen, onClose, genderId }: Props) {
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
-    const sGender = useAppSelector(selectGender);
+    const sInfo = useAppSelector(selectInfo);
 
-    const [genderOptions, setGenderOptions] = useState<IGender[]>(sGender.data);
+    const [genderOptions, setGenderOptions] = useState<IGender[]>(sInfo.genders);
     const [value, setValue] = useState(genderOptions.find((item) => item._id === genderId) || genderOptions[0]);
 
     const handleClose = () => {

@@ -1,19 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import user from '../redux/reducers/userSlice';
 import notification from '../redux/reducers/notificationSlice';
-import hobby from '../redux/reducers/hobbySlice';
-import gender from '../redux/reducers/genderSlice';
-import education from '../redux/reducers/educationSlice';
-import beer from '../redux/reducers/beerSlice';
+import info from '../redux/reducers/infoSlice';
 
 export const store = configureStore({
     reducer: {
         user,
         notification,
-        hobby,
-        gender,
-        education,
-        beer,
+        info,
     },
 });
 

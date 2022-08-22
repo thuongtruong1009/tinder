@@ -1,10 +1,8 @@
 import Title from '../../components/Home/Title';
 import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
-import Tag from '../../components/Home/Tag';
 import DoubleGroup from '../../components/Home/DoubleGroup';
 import SingleGroup from '../../components/Home/SingleGroup';
-import ChildrenIcon from '../../components/Icons/profile/ChildrenIcon';
 import AncoholIcon from '../../components/Icons/profile/AncoholIcon';
 import GenderIcon from '../../components/Icons/profile/GenderIcon';
 import ReligionIcon from '../../components/Icons/profile/ReligionIcon';
@@ -23,20 +21,19 @@ import EducationDialog from '../../components/Profile/EducationDialog';
 import GenderDialog from '../../components/Profile/GenderDialog';
 import BeerDialog from '../../components/Profile/BeerDialog';
 import Hobby from '../../components/Home/Hobby';
-import { genderGetAllGenders } from '../../redux/actions/genderAction';
-import { selectGender } from '../../redux/reducers/genderSlice';
 import { toastError } from '../../utils/toast';
-import { selectEducation } from '../../redux/reducers/educationSlice';
-import { educationGetAllEducations } from '../../redux/actions/educationAction';
-import { selectBeer } from '../../redux/reducers/beerSlice';
-import { beerGetAllBeers } from '../../redux/actions/beerAction';
+import UploadImageIcon from '../../components/Icons/UploadImageIcon';
+import { useRouter } from 'next/router';
+import APP_PATH from '../../constant/appPath';
+import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
+import { selectInfo } from '../../redux/reducers/infoSlice';
 
 const Profile: NextPageWithLayout = () => {
+    const router = useRouter();
+
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
-    const sGender = useAppSelector(selectGender);
-    const sEducation = useAppSelector(selectEducation);
-    const sBeer = useAppSelector(selectBeer);
+    const sInfo = useAppSelector(selectInfo);
 
     const [isOpenWhyDialog, setIsOpenWhyDialog] = useState(false);
     const [isOpenBioDialog, setIsOpenBioDialog] = useState(false);
@@ -101,10 +98,14 @@ const Profile: NextPageWithLayout = () => {
         setIsOpenBeerDialog(false);
     };
 
+    const handleUploadFile = () => {
+        router.push(APP_PATH.UPLOAD_ALBUMS);
+    };
+
     useEffect(() => {
         async function handleGetGenders() {
             try {
-                await dispatch(genderGetAllGenders()).unwrap();
+                await dispatch(infoGetAllGenders()).unwrap();
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
@@ -112,7 +113,7 @@ const Profile: NextPageWithLayout = () => {
 
         async function handleGetEducations() {
             try {
-                await dispatch(educationGetAllEducations()).unwrap();
+                await dispatch(infoGetAllEducations()).unwrap();
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
@@ -120,21 +121,21 @@ const Profile: NextPageWithLayout = () => {
 
         async function handleGetBeers() {
             try {
-                await dispatch(beerGetAllBeers()).unwrap();
+                await dispatch(infoGetAllBeers()).unwrap();
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
         }
 
-        if (sGender.data.length === 0) {
+        if (sInfo.genders.length === 0) {
             handleGetGenders();
         }
 
-        if (sEducation.data.length === 0) {
+        if (sInfo.educations.length === 0) {
             handleGetEducations();
         }
 
-        if (sBeer.data.length === 0) {
+        if (sInfo.beers.length === 0) {
             handleGetBeers();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +151,7 @@ const Profile: NextPageWithLayout = () => {
                 onClose={handleCloseReligionDialog}
                 religion={sUser.data?.info.religion}
             />
-            {sEducation.data.length > 0 && (
+            {sInfo.educations.length > 0 && (
                 <EducationDialog
                     isOpen={isOpenEducationDialog}
                     onClose={handleCloseEducationDialog}
@@ -158,7 +159,7 @@ const Profile: NextPageWithLayout = () => {
                 />
             )}
 
-            {sGender.data.length > 0 && (
+            {sInfo.genders.length > 0 && (
                 <GenderDialog
                     isOpen={isOpenGenderDialog}
                     onClose={handleCloseGenderDialog}
@@ -166,7 +167,7 @@ const Profile: NextPageWithLayout = () => {
                 />
             )}
 
-            {sBeer.data.length > 0 && (
+            {sInfo.beers.length > 0 && (
                 <BeerDialog
                     isOpen={isOpenBeerDialog}
                     onClose={handleCloseBeerDialog}
@@ -221,9 +222,70 @@ const Profile: NextPageWithLayout = () => {
                     </div>
                 </div>
 
-                <div className="my-8">
-                    <div className="image-container">
-                        <Image className="image" alt="post_image" layout="fill" src={'/assets/images/post.png'} />
+                <div className="grid grid-cols-3 my-8 gap-2.5">
+                    <div className="w-full col-span-2 row-span-2 overflow-hidden aspect-square rounded-xl">
+                        <div className="image-container">
+                            <Image
+                                className="image"
+                                alt="post_image"
+                                layout="fill"
+                                src={'/assets/images/avatar1.png'}
+                            />
+                        </div>
+                    </div>
+                    <div className="w-full overflow-hidden rounded-xl aspect-square">
+                        <div className="image-container">
+                            <Image
+                                className="image"
+                                alt="post_image"
+                                layout="fill"
+                                src={'/assets/images/avatar1.png'}
+                            />
+                        </div>
+                    </div>
+                    <div className="w-full overflow-hidden rounded-xl aspect-square">
+                        <div className="image-container">
+                            <Image
+                                className="image"
+                                alt="post_image"
+                                layout="fill"
+                                src={'/assets/images/avatar1.png'}
+                            />
+                        </div>
+                    </div>
+                    <div className="w-full overflow-hidden rounded-xl aspect-square">
+                        <div className="image-container">
+                            <Image
+                                className="image"
+                                alt="post_image"
+                                layout="fill"
+                                src={'/assets/images/avatar1.png'}
+                            />
+                        </div>
+                    </div>
+
+                    {/* more image +... */}
+                    <div className="relative overflow-hidden rounded-xl aspect-square">
+                        <div className="absolute z-10 w-full h-full text-white bg-neutral-80/50 flex-center">
+                            <span>+3</span>
+                        </div>
+                        <div className="image-container">
+                            <Image
+                                className="image"
+                                alt="post_image"
+                                layout="fill"
+                                src={'/assets/images/avatar1.png'}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Upload image */}
+                    <div
+                        onClick={handleUploadFile}
+                        className="flex-col w-full overflow-hidden border-2 border-dashed cursor-pointer text-neutral-100 border-sky-400 rounded-xl aspect-square flex-center gap-y-1"
+                    >
+                        <UploadImageIcon />
+                        <span>Tải ảnh lên</span>
                     </div>
                 </div>
 

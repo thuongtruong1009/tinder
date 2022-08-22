@@ -3,11 +3,11 @@ import Dialog from '../Dialog';
 import { IoMdClose } from 'react-icons/io';
 import Button from '../Button';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { hobbyGetAllHobbies } from '../../redux/actions/hobbyAction';
-import { selectHobby } from '../../redux/reducers/hobbySlice';
 import { userUpdateHobbies } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import { selectUser } from '../../redux/reducers/userSlice';
+import { infoGetAllHobbies } from '../../redux/actions/infoAction';
+import { selectInfo } from '../../redux/reducers/infoSlice';
 
 interface Props {
     isOpen: boolean;
@@ -16,12 +16,12 @@ interface Props {
 
 export default function HobbyDialog({ isOpen, onClose }: Props) {
     const dispatch = useAppDispatch();
-    const sHobby = useAppSelector(selectHobby);
+    const sInfo = useAppSelector(selectInfo);
     const sUser = useAppSelector(selectUser);
 
     const [hobbies, setHobbies] = useState<IHobby[]>(sUser.data?.hobbies || []);
     const [hobbyOptions, setHobbyOptions] = useState<IHobby[]>(
-        sHobby.data.filter((hobby) => !hobbies.some((h) => h._id === hobby._id)),
+        sInfo.hobbies.filter((hobby) => !hobbies.some((h) => h._id === hobby._id)),
     );
 
     console.log('hobbies: ', hobbies);
@@ -54,7 +54,7 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
     useEffect(() => {
         async function getAllHobbies() {
             try {
-                const response = await dispatch(hobbyGetAllHobbies()).unwrap();
+                const response = await dispatch(infoGetAllHobbies()).unwrap();
                 let results = response;
                 results = results.filter((hobby) => !hobbies.some((hobbyItem) => hobbyItem._id === hobby._id));
                 setHobbyOptions(results);
@@ -62,7 +62,7 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
                 toastError((error as IResponseError).error);
             }
         }
-        if (sHobby.data.length === 0) {
+        if (sInfo.hobbies.length === 0) {
             getAllHobbies();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +70,7 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
 
     return (
         <>
-            <Dialog title="Sở thích" isOpen={isOpen} onClose={handleSubmit}>
+            <Dialog title="Sở thích" isOpen={isOpen} onClose={onClose}>
                 <div className="space-y-2">
                     <div>
                         <h5>Sở thích của bạn</h5>
@@ -93,7 +93,7 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
                     </div>
                     <div>
                         <h5>Chọn sở thích</h5>
-                        {sHobby.data.length > 0 ? (
+                        {sInfo.hobbies.length > 0 ? (
                             <div className="flex flex-wrap gap-2 p-2 overflow-auto rounded-md bg-neutral-5 max-h-32">
                                 {hobbyOptions.map((hobby) => (
                                     <button

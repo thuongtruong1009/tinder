@@ -1,9 +1,8 @@
 import { RadioGroup } from '@headlessui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { beerGetAllBeers } from '../../redux/actions/beerAction';
 import { userUpdateBeer } from '../../redux/actions/userActions';
-import { selectBeer } from '../../redux/reducers/beerSlice';
+import { selectInfo } from '../../redux/reducers/infoSlice';
 import { selectUser } from '../../redux/reducers/userSlice';
 import { toastError } from '../../utils/toast';
 import Dialog from '../Dialog';
@@ -17,9 +16,9 @@ interface Props {
 export default function BeerDialog({ isOpen, onClose, beerId }: Props) {
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
-    const sBeer = useAppSelector(selectBeer);
+    const sInfo = useAppSelector(selectInfo);
 
-    const [beerOptions, setBeerOptions] = useState<IBeer[]>(sBeer.data);
+    const [beerOptions, setBeerOptions] = useState<IBeer[]>(sInfo.beers);
     const [value, setValue] = useState(beerOptions.find((item) => item._id === beerId) || beerOptions[0]);
 
     const handleClose = () => {
