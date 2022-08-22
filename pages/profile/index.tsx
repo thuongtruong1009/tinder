@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import Title from '../../components/Home/Title';
 import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
+import { RiLogoutCircleRLine } from 'react-icons/ri';
+import { BsCoin } from 'react-icons/bs';
 import Tag from '../../components/Home/Tag';
 import DoubleGroup from '../../components/Home/DoubleGroup';
 import SingleGroup from '../../components/Home/SingleGroup';
@@ -18,8 +21,11 @@ import HobbyDialog from '../../components/Profile/HobbyDialog';
 import { Popover } from '@headlessui/react';
 import { useAppDispatch } from '../../hooks/redux';
 import { userLogOut } from '../../redux/reducers/userSlice';
+import { Router } from 'next/router';
+import APP_PATH from '../../constant/appPath';
 
 const Profile: NextPageWithLayout = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const [isOpenWhyDialog, setIsOpenWhyDialog] = useState(false);
     const [isOpenBioDialog, setIsOpenBioDialog] = useState(false);
@@ -27,6 +33,10 @@ const Profile: NextPageWithLayout = () => {
 
     const handleLogOut = () => {
         dispatch(userLogOut());
+    };
+
+    const handleOutstanding = () => {
+        router.push(APP_PATH.GIFT);
     };
 
     const handleOpenHobbyialog = () => {
@@ -52,7 +62,7 @@ const Profile: NextPageWithLayout = () => {
             <HobbyDialog isOpen={isOpenHobbyDialog} onClose={handleCloseHobbyDialog} />
             <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} />
             <BioDialog isOpen={isOpenBioDialog} onClose={handleCloseBioDialog} />
-            <section className="container bg-white with-navbar">
+            <section className="container bg-white with-navbar relative">
                 <Title
                     className="mb-2"
                     content={
@@ -66,13 +76,23 @@ const Profile: NextPageWithLayout = () => {
                                 </Popover.Button>
 
                                 <Popover.Panel className="absolute right-0 z-10 top-full">
-                                    <ul className="flex flex-col gap-1 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
+                                    <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
                                         <li>
                                             <button
-                                                className="w-full py-1 text-center rounded-md text-primary-50 button-2 bg-slate-100"
+                                                className="w-full py-1 pl-2 flex justify-start items-center gap-3 rounded-md text-primary-50 button-2 bg-slate-100"
                                                 onClick={handleLogOut}
                                             >
-                                                Đăng xuất
+                                                <RiLogoutCircleRLine />
+                                                <p>Đăng xuất</p>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button
+                                                className="w-full py-1 pl-2 flex justify-start items-center gap-3  rounded-md text-primary-50 button-2 bg-slate-100"
+                                                onClick={handleOutstanding}
+                                            >
+                                                <BsCoin />
+                                                <p>Coins package</p>
                                             </button>
                                         </li>
                                     </ul>
@@ -126,6 +146,6 @@ const Profile: NextPageWithLayout = () => {
         </>
     );
 };
-Profile.protected = true;
+// Profile.protected = true;
 Profile.getLayout = (page) => <NavbarLayout>{page}</NavbarLayout>;
 export default Profile;

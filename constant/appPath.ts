@@ -8,5 +8,6 @@ const APP_PATH = {
     MAP: '/map',
     CHAT: '/chat',
     PROFILE: '/profile',
+    GIFT: '/gift',
 };
 export default APP_PATH;
