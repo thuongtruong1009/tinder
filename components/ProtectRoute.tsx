@@ -1,47 +1,69 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import APP_PATH from '../constant/appPath';
-import { useAppSelector } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { selectUser } from '../redux/reducers/userSlice';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import UpdateInfo from './UpdateInfo';
+import { addMessage } from '../redux/reducers/conversationSlice';
+import ToastMessage from './ToastMessage';
+import { useSocket } from '../context/SocketContext';
 
 interface Props {
     children: React.ReactNode;
 }
 
+// let socket: any;
+// const ISSERVER = typeof window === 'undefined';
+// if (!ISSERVER) {
+//     socket = io((process.env.API_HOST as string) + '/notifications', {
+//         extraHeaders: {
+//             Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         },
+//     });
+// }
 export default function ProtectRoute({ children }: Props) {
-    const socket = io((process.env.API_HOST as string) + '/notifications', {
-        extraHeaders: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-    });
+    const socket = useSocket();
+    const dispatch = useAppDispatch();
     const router = useRouter();
-    const sUser = useAppSelector(selectUser);
+    const [routerAsPath, setRouterAsPath] = useState(router.asPath);
     useEffect(() => {
-        const user = sUser.data?._id || '';
-        if (sUser.isLogin) {
-            socket.connect();
-            socket.emit('addUser');
-            socket.on(user, function (data) {
-                console.log('data: ', data);
-                toast(data.message, {
+        setRouterAsPath(router.asPath);
+    }, [router]);
+
+    const sUser = useAppSelector(selectUser);
+    async function handleResponseSocket(data: any) {
+        switch (data.type) {
+            case 'notification':
+                toast(data.data.message, {
                     icon: '❤️',
                 });
-            });
-            // socket.emit('identity', 0, (response: any) => console.log('Identity:', response));
+                break;
+            case 'message':
+                dispatch(addMessage(data.data));
+                if (!(routerAsPath === APP_PATH.CHAT + '/' + data.data.conversationId)) {
+                    toast.custom((t) => <ToastMessage t={t} data={data.data} />);
+                }
+                break;
+            default:
+                break;
         }
-        // socket.on('exception', function (data) {
-        //     console.log('event', data);
-        // });s
+    }
+    useEffect(() => {
+        const user = sUser.data?._id || '';
+        if (sUser.isLogin && user) {
+            socket.emit('addUser');
+            socket.on(user, function (data: any) {
+                handleResponseSocket(data);
+            });
+        }
         return () => {
-            socket.emit('removeUser');
             socket.off(user);
-            socket.disconnect();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sUser.isLogin]);
+    }, [sUser.isLogin, routerAsPath]);
+
     function render() {
         if (!sUser.isLogin) {
             router.push(APP_PATH.ROOT);

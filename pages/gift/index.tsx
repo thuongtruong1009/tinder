@@ -3,9 +3,9 @@ import { BsCoin } from 'react-icons/bs';
 import { VscDebugContinueSmall } from 'react-icons/vsc';
 import CloseIcon from '../../components/Icons/CloseIcon';
 import { NextPageWithLayout } from '../../types/global';
-import CoinOption from '../../components/Gift/CoinOption';
 import { useCallback, useEffect, useState } from 'react';
 import giftApi from '../../apis/giftApi';
+import GiftOption from '../../components/Gift/GiftOption';
 
 const GiftPackage: NextPageWithLayout = () => {
     const [choiced, setChoiced] = useState<string>('normal');
@@ -33,14 +33,16 @@ const GiftPackage: NextPageWithLayout = () => {
                     </button>
                 </nav>
                 <div className="flex flex-col gap-5 py-6 text-center">
-                    <h2 className="font-medium">Gift package</h2>
+                    <h2 className="font-medium" style={{ textShadow: '1px 3px 3px black' }}>
+                        Gift package
+                    </h2>
                     <p className="body-3">See who's already interested in you!</p>
                 </div>
             </div>
             <div className="bg-white p-4">
                 <div className="grid grid-cols-2 p gap-4">
                     {res?.map((item) => (
-                        <CoinOption
+                        <GiftOption
                             id={item._id}
                             name={item.name}
                             price={item.price}
