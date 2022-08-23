@@ -4,10 +4,22 @@ import { VscDebugContinueSmall } from 'react-icons/vsc';
 import CloseIcon from '../../components/Icons/CloseIcon';
 import { NextPageWithLayout } from '../../types/global';
 import CoinOption from '../../components/Gift/CoinOption';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import giftApi from '../../apis/giftApi';
 
 const GiftPackage: NextPageWithLayout = () => {
     const [choiced, setChoiced] = useState<string>('normal');
+    const [res, setRes] = useState<IGift[] | null>(null);
+
+    const fetchData = useCallback(async () => {
+        const data = await giftApi.getAllGifts();
+        setRes((data.data as IGetAllGiftResponse).data.gifts);
+    }, []);
+
+    useEffect(() => {
+        fetchData().catch(console.error);
+    }, [fetchData]);
+
     return (
         <section className="container-np bg-white min-h-screen relative">
             <div className="bg-main-purple text-white">
@@ -15,44 +27,27 @@ const GiftPackage: NextPageWithLayout = () => {
                     <button>
                         <CloseIcon />
                     </button>
-                    <p className="body-1 font-medium translate-x-5">Gift package</p>
                     <button className="flex-center gap-1.5 rounded-2xl border-2 border-neutral-50 px-2 bg-yellow-500 shadow-md">
                         <BsCoin />
                         <p>200</p>
                     </button>
                 </nav>
-                <div className="flex flex-col gap-5 py-10">
-                    <div className="flex justify-center -space-x-3.5">
-                        <div className="image-container w-10 h-10 rounded-full border-2 border-white z-10">
-                            <Image className="image" src="/assets/images/post.png" alt="gifter_avatar" layout="fill" />
-                        </div>
-                        <div className="image-container w-10 h-10 rounded-full border-2 border-white z-20">
-                            <Image
-                                className="image"
-                                src="/assets/images/avatar.png"
-                                alt="gifter_avatar"
-                                layout="fill"
-                            />
-                        </div>
-                        <a
-                            className="flex justify-center items-center w-10 h-10 text-xs font-medium text-white bg-gray-600 rounded-full border-2 border-white hover:bg-gray-500 z-30"
-                            href="#"
-                        >
-                            +10
-                        </a>
-                    </div>
-                    <p className="text-center body-3">See who's already interested in you!</p>
+                <div className="flex flex-col gap-5 py-6 text-center">
+                    <h2 className="font-medium">Gift package</h2>
+                    <p className="body-3">See who's already interested in you!</p>
                 </div>
             </div>
             <div className="bg-white p-4">
                 <div className="grid grid-cols-2 p gap-4">
-                    {['normal', 'premium', 'pro', 'vip'].map((item, index) => (
+                    {res?.map((item) => (
                         <CoinOption
-                            type={item}
-                            price={index}
+                            id={item._id}
+                            name={item.name}
+                            price={item.price}
                             choiced={choiced}
-                            key={index}
-                            onClick={() => setChoiced(item)}
+                            image={item.image}
+                            key={item._id}
+                            onClick={() => setChoiced(item._id)}
                         />
                     ))}
                 </div>
