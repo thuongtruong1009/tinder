@@ -162,7 +162,7 @@ const Profile: NextPageWithLayout = () => {
                 <EducationDialog
                     isOpen={isOpenEducationDialog}
                     onClose={handleCloseEducationDialog}
-                    educationId={sUser.data?.info.education._id}
+                    educationId={sUser.data?.info?.education?._id}
                 />
             )}
 
@@ -170,7 +170,7 @@ const Profile: NextPageWithLayout = () => {
                 <GenderDialog
                     isOpen={isOpenGenderDialog}
                     onClose={handleCloseGenderDialog}
-                    genderId={sUser.data?.gender._id}
+                    genderId={sUser.data?.gender?._id}
                 />
             )}
 
@@ -178,7 +178,7 @@ const Profile: NextPageWithLayout = () => {
                 <BeerDialog
                     isOpen={isOpenBeerDialog}
                     onClose={handleCloseBeerDialog}
-                    beerId={sUser.data?.info.beer._id}
+                    beerId={sUser.data?.info?.beer?._id}
                 />
             )}
 
