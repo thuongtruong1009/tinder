@@ -81,7 +81,7 @@ const Room: NextPageWithLayout = () => {
     };
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        if (!message) toastError('Vui lòng nhập tin nhắn');
         try {
             if (conversationInfo) {
                 await dispatch(
@@ -106,10 +106,11 @@ const Room: NextPageWithLayout = () => {
         async function fetchConversation(id: string) {
             await dispatch(conversationGet({ id }));
         }
-        if (id && typeof id === 'string') {
+        if (id && typeof id === 'string' && !conversationInfo) {
             fetchConversation(id);
         }
-    }, [dispatch, id]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
     useEffect(() => {
         if (conversationInfo?.conversation) {
             !lastLogin && setLastLogin(conversationInfo.conversation.users[0].lastLogin);
@@ -141,9 +142,15 @@ const Room: NextPageWithLayout = () => {
                 }
             });
         }
+        return () => {
+            conversationInfo && socket.off(`online/${conversationInfo.conversation.users[0]._id}`);
+            socket.off(`online`);
+            setFiles([]);
+            setMessage('');
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [conversationInfo, isFriendOnline]);
-    if (!conversationInfo?.conversation) return <Loading />;
+    if (!conversationInfo) return <Loading />;
 
     return (
         <section className="container relative flex flex-col bg-white">
@@ -204,7 +211,7 @@ const Room: NextPageWithLayout = () => {
                 <ListMessage
                     className={`${files.length !== 0 ? 'h-[calc(100vh-275px)]' : 'h-[calc(100vh-208px)]'}`}
                     userId={sUser.data?._id}
-                    data={conversationInfo}
+                    conversationId={conversationInfo.conversation._id}
                 />
             )}
 
@@ -247,6 +254,7 @@ const Room: NextPageWithLayout = () => {
                         placeholder="Aa"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        required
                     />
                     <Popover className="relative flex-center">
                         {({ open }) => (
@@ -254,8 +262,23 @@ const Room: NextPageWithLayout = () => {
                                 <Popover.Button>
                                     <IconSetIcon />
                                 </Popover.Button>
-
-                                <Popover.Panel
+                                {open && (
+                                    <Popover.Panel
+                                        className={`${
+                                            open ? 'block' : 'hidden'
+                                        } absolute right-0 z-10 bottom-[calc(100%+1rem)]`}
+                                        static
+                                    >
+                                        <Picker
+                                            preload
+                                            onEmojiClick={onEmojiClick}
+                                            disableSearchBar
+                                            disableSkinTonePicker
+                                            disableAutoFocus
+                                        />
+                                    </Popover.Panel>
+                                )}
+                                {/* <Popover.Panel
                                     className={`${
                                         open ? 'block' : 'hidden'
                                     } absolute right-0 z-10 bottom-[calc(100%+1rem)]`}
@@ -268,7 +291,7 @@ const Room: NextPageWithLayout = () => {
                                         disableSkinTonePicker
                                         disableAutoFocus
                                     />
-                                </Popover.Panel>
+                                </Popover.Panel> */}
                             </>
                         )}
                     </Popover>

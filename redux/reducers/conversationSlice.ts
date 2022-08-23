@@ -46,15 +46,25 @@ export const conversationSlice = createSlice({
         builder.addCase(conversationGet.fulfilled, (state, { payload }) => {
             const isExist = state.data.find((item) => item.conversation._id === payload.conversation._id);
             if (isExist) {
-                state.data = state.data.map((item) => {
-                    if (item.conversation._id === payload.conversation._id) {
-                        return {
-                            ...item,
-                            conversation: payload.conversation,
-                        };
-                    }
-                    return item;
-                });
+                if (isExist.conversation.messages.length !== 0) {
+                    isExist.conversation.messages = [
+                        ...isExist.conversation.messages,
+                        ...payload.conversation.messages,
+                    ];
+                    isExist.limit = payload.limit;
+                    isExist.page = payload.page;
+                } else {
+                    isExist.conversation = payload.conversation;
+                }
+                // state.data = state.data.map((item) => {
+                //     if (item.conversation._id === payload.conversation._id) {
+                //         return {
+                //             ...item,
+                //             conversation: payload.conversation,
+                //         };
+                //     }
+                //     return item;
+                // });
             } else {
                 state.data.push(payload);
             }

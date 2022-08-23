@@ -1,54 +1,55 @@
 import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { conversationGet } from '../../redux/actions/conversationActions';
+import { selectConversation } from '../../redux/reducers/conversationSlice';
 import { toastError } from '../../utils/toast';
 import MessageItem from './MessageItem';
 
 interface Props {
     userId?: string;
     className: string;
-    data: IConversationPagination;
+    conversationId: string;
 }
 
-export default function ListMessage({ userId, className, data }: Props) {
+export default function ListMessage({ userId, className, conversationId }: Props) {
+    const data = useAppSelector(selectConversation).data.find(
+        (conversation) => conversation.conversation._id === conversationId,
+    );
     const dispatch = useAppDispatch();
-    const [pagination, setPagination] = useState({
-        page: data.page,
-        limit: data.limit,
-    });
-    useEffect(() => {
-        async function fetchConversation() {
+    const [hasMore, setHasMore] = useState(true);
+
+    async function fetchConversation(page: number, limit: number) {
+        if (data)
             try {
-                const { page, limit } = await dispatch(
-                    conversationGet({ id: data.conversation._id, limit: pagination.limit, page: pagination.page }),
-                ).unwrap();
-                setPagination({
-                    page,
-                    limit,
-                });
+                const response = await dispatch(conversationGet({ id: conversationId, limit, page })).unwrap();
+                setHasMore(response.conversation.messages.length === limit);
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
-        }
-        if (!pagination.page && !pagination.limit) {
-            fetchConversation();
+    }
+    useEffect(() => {
+        if (!data?.page && !data?.limit) {
+            fetchConversation(
+                +(process.env.MESSAGE_PAGE_DEFAULT as string),
+                +(process.env.MESSAGE_LIMIT_DEFAULT as string),
+            );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
     return (
         <>
             <div id="scrollableDiv" className={`${className} flex flex-col-reverse overflow-auto `}>
-                {data.conversation.messages && (
+                {data?.conversation.messages && (
                     <InfiniteScroll
                         dataLength={data.conversation.messages.length}
                         next={() => {
-                            console.log('next');
+                            fetchConversation(data.page + 1, data.limit);
                         }}
                         className="gap-4 px-4 py-2"
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
                         inverse={true} //
-                        hasMore={true}
+                        hasMore={hasMore}
                         loader={<p className="text-sm font-semibold text-center">Đang tải...</p>}
                         scrollableTarget="scrollableDiv"
                     >

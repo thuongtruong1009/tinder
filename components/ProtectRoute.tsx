@@ -27,31 +27,43 @@ export default function ProtectRoute({ children }: Props) {
     const socket = useSocket();
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const [routerAsPath, setRouterAsPath] = useState(router.asPath);
+    useEffect(() => {
+        setRouterAsPath(router.asPath);
+    }, [router]);
+
     const sUser = useAppSelector(selectUser);
+    async function handleResponseSocket(data: any) {
+        switch (data.type) {
+            case 'notification':
+                toast(data.data.message, {
+                    icon: '❤️',
+                });
+                break;
+            case 'message':
+                dispatch(addMessage(data.data));
+                if (!(routerAsPath === APP_PATH.CHAT + '/' + data.data.conversationId)) {
+                    toast.custom((t) => <ToastMessage t={t} data={data.data} />);
+                }
+                break;
+            default:
+                break;
+        }
+    }
     useEffect(() => {
         const user = sUser.data?._id || '';
-        if (sUser.isLogin) {
+        if (sUser.isLogin && user) {
             socket.emit('addUser');
-            socket.once(user, function (data: any) {
-                switch (data.type) {
-                    case 'notification':
-                        toast(data.data.message, {
-                            icon: '❤️',
-                        });
-                        break;
-                    case 'message':
-                        dispatch(addMessage(data.data));
-                        if (!(router.asPath === APP_PATH.CHAT + '/' + data.data.conversationId)) {
-                            toast.custom((t) => <ToastMessage t={t} data={data.data} />);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+            socket.on(user, function (data: any) {
+                handleResponseSocket(data);
             });
         }
+        return () => {
+            socket.off(user);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sUser.isLogin]);
+    }, [sUser.isLogin, routerAsPath]);
+
     function render() {
         if (!sUser.isLogin) {
             router.push(APP_PATH.ROOT);
