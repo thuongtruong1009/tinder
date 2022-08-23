@@ -59,7 +59,7 @@ const OTP: NextPage = () => {
 
     return (
         <>
-            <section className="container">
+            <section className="container bg-white">
                 <div className="relative min-h-screen with-button">
                     <Title
                         className="mb-8"

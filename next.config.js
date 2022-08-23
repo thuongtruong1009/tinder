@@ -11,13 +11,15 @@ const nextConfig = {
         LOGIN_WITH_PHONE_REGISTER: process.env.API_URL + process.env.LOGIN_WITH_PHONE_REGISTER,
         SEND_OTP_REGISTER: process.env.API_URL + process.env.SEND_OTP_REGISTER,
         VERIFY_OTP_LOGIN: process.env.API_URL + process.env.VERIFY_OTP_LOGIN,
+        MESSAGE_LIMIT_DEFAULT: process.env.MESSAGE_LIMIT_DEFAULT,
+        MESSAGE_PAGE_DEFAULT: process.env.MESSAGE_PAGE_DEFAULT,
     },
     images: {
         domains: [
+            'southcloud.herokuapp.com',
             'lh3.googleusercontent.com',
             'platform-lookaside.fbsbx.com',
             'res.cloudinary.com',
-            'southcloud.herokuapp.com',
         ],
     },
 };
