@@ -67,3 +67,19 @@ declare interface IUpdateUserBeerResponse extends IResponseSuccess {
 declare interface IUpdateUserReasonResponse extends IResponseSuccess {
     data: string;
 }
+
+declare interface IUploadUserAlbumsResponse extends IResponseSuccess {
+    data: IAlbums[];
+}
+
+declare interface IUpdateFavoriteResponse extends IResponseSuccess {
+    data: IAlbums;
+}
+
+declare interface IUpdateDefaultResponse extends IResponseSuccess {
+    data: IAlbums;
+}
+
+declare interface IDeleteImageResponse extends IResponseSuccess {
+    data: string;
+}

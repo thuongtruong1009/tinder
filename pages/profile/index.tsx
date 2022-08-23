@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import APP_PATH from '../../constant/appPath';
 import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
 import { selectInfo } from '../../redux/reducers/infoSlice';
+import AlbumsItem from '../../components/Profile/AlbumsItem';
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter();
@@ -42,6 +43,8 @@ const Profile: NextPageWithLayout = () => {
     const [isOpenEducationDialog, setIsOpenEducationDialog] = useState(false);
     const [isOpenGenderDialog, setIsOpenGenderDialog] = useState(false);
     const [isOpenBeerDialog, setIsOpenBeerDialog] = useState(false);
+
+    const lengthAlbums = sUser.data?.profile.albums.length;
 
     const handleLogOut = () => {
         dispatch(userLogOut());
@@ -100,6 +103,10 @@ const Profile: NextPageWithLayout = () => {
 
     const handleUploadFile = () => {
         router.push(APP_PATH.UPLOAD_ALBUMS);
+    };
+
+    const handleViewAlbums = () => {
+        router.push(APP_PATH.ALBUMS);
     };
 
     useEffect(() => {
@@ -223,63 +230,34 @@ const Profile: NextPageWithLayout = () => {
                 </div>
 
                 <div className="grid grid-cols-3 my-8 gap-2.5">
-                    <div className="w-full col-span-2 row-span-2 overflow-hidden aspect-square rounded-xl">
-                        <div className="image-container">
-                            <Image
-                                className="image"
-                                alt="post_image"
-                                layout="fill"
-                                src={'/assets/images/avatar1.png'}
-                            />
-                        </div>
-                    </div>
-                    <div className="w-full overflow-hidden rounded-xl aspect-square">
-                        <div className="image-container">
-                            <Image
-                                className="image"
-                                alt="post_image"
-                                layout="fill"
-                                src={'/assets/images/avatar1.png'}
-                            />
-                        </div>
-                    </div>
-                    <div className="w-full overflow-hidden rounded-xl aspect-square">
-                        <div className="image-container">
-                            <Image
-                                className="image"
-                                alt="post_image"
-                                layout="fill"
-                                src={'/assets/images/avatar1.png'}
-                            />
-                        </div>
-                    </div>
-                    <div className="w-full overflow-hidden rounded-xl aspect-square">
-                        <div className="image-container">
-                            <Image
-                                className="image"
-                                alt="post_image"
-                                layout="fill"
-                                src={'/assets/images/avatar1.png'}
-                            />
-                        </div>
-                    </div>
+                    {sUser.data &&
+                        sUser.data.profile.albums.length > 0 &&
+                        sUser.data.profile.albums.map((image, index, albums) => {
+                            if (index === 0) {
+                                return (
+                                    <AlbumsItem key={image.url} url={image.url} firstImage onClick={handleViewAlbums} />
+                                );
+                            } else if (index > 0 && index < 4) {
+                                return (
+                                    <AlbumsItem
+                                        key={image.url}
+                                        url={image.url}
+                                        middleImage
+                                        onClick={handleViewAlbums}
+                                    />
+                                );
+                            } else if (index === 4) {
+                                return (
+                                    <AlbumsItem
+                                        key={image.url}
+                                        url={image.url}
+                                        anotherImages={albums.length - 5}
+                                        onClick={handleViewAlbums}
+                                    />
+                                );
+                            }
+                        })}
 
-                    {/* more image +... */}
-                    <div className="relative overflow-hidden rounded-xl aspect-square">
-                        <div className="absolute z-10 w-full h-full text-white bg-neutral-80/50 flex-center">
-                            <span>+3</span>
-                        </div>
-                        <div className="image-container">
-                            <Image
-                                className="image"
-                                alt="post_image"
-                                layout="fill"
-                                src={'/assets/images/avatar1.png'}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Upload image */}
                     <div
                         onClick={handleUploadFile}
                         className="flex-col w-full overflow-hidden border-2 border-dashed cursor-pointer text-neutral-100 border-sky-400 rounded-xl aspect-square flex-center gap-y-1"

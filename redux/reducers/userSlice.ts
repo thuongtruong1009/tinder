@@ -13,6 +13,10 @@ import {
     userUpdateGender,
     userUpdateBeer,
     userUpdateReason,
+    userUploadAlbums,
+    userUpdateFavorite,
+    userUpdateDefault,
+    userDeleteImage,
 } from '../actions/userActions';
 
 interface UserState {
@@ -99,6 +103,37 @@ export const userSlice = createSlice({
         builder.addCase(userUpdateReason.fulfilled, (state, { payload }) => {
             if (state.data) {
                 state.data.info.reason = payload;
+            }
+        });
+
+        builder.addCase(userUploadAlbums.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.profile.albums = payload;
+            }
+        });
+
+        builder.addCase(userUpdateFavorite.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                const index = state.data.profile.albums.findIndex((image) => image.url === payload.url);
+                state.data.profile.albums[index].isFavorite = payload.isFavorite;
+                state.data.profile.albums[index].isDefault = payload.isDefault;
+            }
+        });
+
+        builder.addCase(userUpdateDefault.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                const index = state.data.profile.albums.findIndex((image) => image.url === payload.url);
+                state.data.profile.albums[index].isDefault = payload.isDefault;
+                state.data.profile.albums[index].isFavorite = payload.isFavorite;
+            }
+        });
+
+        builder.addCase(userDeleteImage.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                const index = state.data.profile.albums.findIndex((image) => image.url === payload);
+                if (index >= 0) {
+                    state.data.profile.albums.splice(index, 1);
+                }
             }
         });
     },

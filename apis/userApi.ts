@@ -43,6 +43,26 @@ const userApi = {
         axiosService.put<IUpdateUserReasonResponse>(`${URL}/reason`, {
             reason,
         }),
+    uploadAlbums: (formData: FormData) =>
+        axiosService.post<IUploadUserAlbumsResponse>(`${URL}/albums`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }),
+    updateFavorite: (url: string) =>
+        axiosService.put<IUpdateFavoriteResponse>(`${URL}/update-favorite-image`, {
+            url,
+        }),
+    updateDefault: (url: string) =>
+        axiosService.put<IUpdateDefaultResponse>(`${URL}/update-default-image`, {
+            url,
+        }),
+    deleteImage: (url: string) =>
+        axiosService.delete<IDeleteImageResponse>(`${URL}/delete-image`, {
+            data: {
+                url,
+            },
+        }),
 };
 
 export default userApi;

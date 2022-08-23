@@ -158,3 +158,43 @@ export const userUpdateReason = createAsyncThunk('user/userUpdateReason', async 
         return thunkAPI.rejectWithValue(error);
     }
 });
+
+export const userUploadAlbums = createAsyncThunk('user/userUploadAlbums', async (data: FormData, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.uploadAlbums(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
+export const userUpdateFavorite = createAsyncThunk('user/userUpdateFavorite', async (data: string, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.updateFavorite(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
+export const userUpdateDefault = createAsyncThunk('user/userUpdateDefault', async (data: string, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.updateDefault(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
+export const userDeleteImage = createAsyncThunk('user/userDeleteImage', async (data: string, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.deleteImage(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
