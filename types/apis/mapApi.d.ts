@@ -21,5 +21,5 @@ declare interface IDataFindFriendsAroundResponse {
     age: number;
 }
 declare interface IFindFriendsAroundResponse extends IResponseSuccess {
-    data: IDataFindFriendsAroundResponse[];
+    data: IStrager[];
 }
