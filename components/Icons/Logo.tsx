@@ -19,7 +19,7 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
             </g>
         </svg>
         <div className="flex-center gap-2 body-2 text-white">
-            <p>Loading</p>
+            <p>Foxy</p>
             <span>. . .</span>
         </div>
     </section>

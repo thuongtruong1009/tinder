@@ -1,20 +1,18 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MdOutlineTravelExplore } from 'react-icons/md';
-import React, { Fragment, useState } from 'react';
-import CloseIcon from '../components/Icons/CloseIcon';
-import MatchTitleIcon from '../components/Icons/match/MathTitleIcon';
-import SendIcon from '../components/Icons/match/SendIcon';
-import HeartContainer from '../components/Match/HeartWrapper';
-import { Popover } from '@headlessui/react';
-import { NextPageWithLayout } from '../types/global';
-import BellIcon from '../components/Icons/BellIcon';
-import dynamic from 'next/dynamic';
-import APP_PATH from '../constant/appPath';
+import React, { useState } from 'react';
+import APP_PATH from '../../constant/appPath';
+import CloseIcon from '../Icons/CloseIcon';
+import HeartContainer from './HeartWrapper';
+import MatchTitleIcon from '../Icons/match/MathTitleIcon';
+import SendIcon from '../Icons/SendIcon';
 
-const Portal = dynamic(() => import('../HOC/Portal'), { ssr: false });
+interface Props {
+    onClose: () => void;
+}
 
-const Matching: NextPageWithLayout = () => {
+export default function Matching({ onClose }: Props) {
     const router = useRouter();
     const [greetMessage, setGreetMessage] = useState('');
     const [matchedFriends, setMatchedFriends] = useState([
@@ -50,15 +48,16 @@ const Matching: NextPageWithLayout = () => {
         router.push(APP_PATH.SURF);
     };
     return (
-        <Portal
+        <section
             id="navbar"
-            className="fixed bottom-0 z-[1000] -translate-x-1/2 left-1/2 max-w-[377px] w-full "
-            section="section"
+            className="fixed bottom-0 left-0 max-w-[385px] w-full animate-up container-np top-0 inset-x-0 h-screen z-[1001] overflow-auto bg-white"
         >
             {matchedFriends.length > 0 && (
-                <section className="container flex flex-col justify-between text-white matchingFrame p-6.5 h-screen min-h-screen w-screen overflow-hidden overflow-y-auto bg-main-purple">
+                <div className="container-np flex flex-col justify-between text-white matchingFrame p-6.5 h-screen min-h-screen w-screen overflow-hidden overflow-y-auto bg-main-purple">
                     <a className="flex flex-row justify-end p-4 text-white cursor-pointer">
-                        <CloseIcon />
+                        <button onClick={onClose}>
+                            <CloseIcon />
+                        </button>
                     </a>
 
                     <div className="flex flex-col gap-20">
@@ -70,13 +69,13 @@ const Matching: NextPageWithLayout = () => {
                                 gửi lời chào ngay!
                             </p>
                         </div>
-                        <div className="w-full flex flex-col mb-4 gap-[2.2rem]">
+                        <div className="w-full flex flex-col mb-4 px-4 gap-[2.2rem]">
                             <form
                                 onSubmit={handleSend}
                                 className="relative flex flex-row justify-between w-full p-2.5 bg-white rounded-3xl text-main-purple"
                             >
                                 <input
-                                    className="w-[90%] px-2.5 text-base font-bold rounded-4xl placeholder:text-main-purple"
+                                    className="w-full px-2.5 text-base font-bold rounded-4xl placeholder:text-main-purple"
                                     type="text"
                                     onChange={handleInput}
                                     value={greetMessage}
@@ -91,10 +90,10 @@ const Matching: NextPageWithLayout = () => {
                             </button>
                         </div>
                     </div>
-                </section>
+                </div>
             )}
-            {matchedFriends < 1 && (
-                <section className="container-np flex flex-col justify-between text-white p-6.5 h-screen min-h-screen w-screen overflow-hidden overflow-y-auto">
+            {matchedFriends.length < 1 && (
+                <div className="container-np flex flex-col justify-between text-white p-6.5 h-screen min-h-screen w-screen overflow-hidden overflow-y-auto">
                     <a className="flex flex-row justify-end p-4 text-neutral-80 cursor-pointer">
                         <CloseIcon />
                     </a>
@@ -107,11 +106,8 @@ const Matching: NextPageWithLayout = () => {
                             Discover new people
                         </button>
                     </div>
-                </section>
+                </div>
             )}
-        </Portal>
+        </section>
     );
-};
-
-// Matching.protected = true;
-export default Matching;
+}

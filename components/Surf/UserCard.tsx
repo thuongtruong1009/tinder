@@ -4,15 +4,17 @@ import HeartIcon from '../Icons/HeartIcon';
 import InformationIcon from '../Icons/InformationIcon';
 import LocationIcon from '../Icons/LocationIcon';
 import CircleButton from '../Home/CircleButton';
+import FavouriteIcon from '../Icons/FavouriteIcon';
 
 type Props = {
     user: IDataFindFriendsAroundResponse;
     onSeen: (user: IDataFindFriendsAroundResponse) => () => void;
-    onLike: (_id: string) => void;
     onBlock: (_id: string) => void;
+    onFavourite: () => void;
+    onLike: (_id: string) => void;
 };
 
-const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
+const UserCard = ({ user, onSeen, onBlock, onFavourite, onLike }: Props) => {
     return (
         <div className="rounded-[40px] h-[70vh] relative before:absolute before:inset-0 before:bg-card before:z-10">
             <div className="w-full h-full image-container">
@@ -47,6 +49,7 @@ const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
                             onBlock(user._id);
                         }}
                     />
+                    <CircleButton Icon={<FavouriteIcon />} onClick={onFavourite} />
                     <CircleButton
                         Icon={<HeartIcon />}
                         onClick={() => {
