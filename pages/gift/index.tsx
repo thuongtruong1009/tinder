@@ -8,12 +8,13 @@ import giftApi from '../../apis/giftApi';
 import GiftOption from '../../components/Gift/GiftOption';
 
 const GiftPackage: NextPageWithLayout = () => {
-    const [choiced, setChoiced] = useState<string>('normal');
+    const [choiced, setChoiced] = useState<string>('');
     const [res, setRes] = useState<IGift[] | null>(null);
 
     const fetchData = useCallback(async () => {
         const data = await giftApi.getAllGifts();
         setRes((data.data as IGetAllGiftResponse).data.gifts);
+        setChoiced((data.data as IGetAllGiftResponse).data.gifts[0]._id);
     }, []);
 
     useEffect(() => {

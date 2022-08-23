@@ -18,8 +18,10 @@ const GiftOption = ({ id, name, price, image, choiced, onClick }: Props) => {
             }
             onClick={() => onClick && onClick(name)}
         >
-            <div className="image-container min-w-12 min-h-12 w-20 h-20">
-                <Image src={`/assets/images/${image}`} alt={`${name}_img`} layout="fill" />
+            <div className="min-w-12 min-h-12 w-20 h-20">
+                <div className="image-container w-full h-full bg-cover rounded-xl">
+                    <Image src={`/assets/images/${image}`} alt={`${name}_img`} layout="fill" />
+                </div>
             </div>
             {/* <div className={'rounded-xl min-w-12 min-h-12 w-20 h-20 bg-cover bg-center bg-[url(' + image + ')]'}></div> */}
             <h5 className="body-1 font-bold text-neutral-100">{name}</h5>

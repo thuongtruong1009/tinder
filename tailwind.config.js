@@ -68,12 +68,19 @@ module.exports = {
                     40: '#5D5FEF',
                     30: '#a48bfe',
                 },
+                thirdth: {
+                    70: '#689f38',
+                    60: '#00d084',
+                    50: '#7bdcb5',
+                    40: '#fcb900',
+                    30: '#ff6900',
+                },
                 danger: '#FE5D5D',
                 main: {
                     purple: '#7A56FE',
                     dark_purple: '#EAEAEA',
                     grey: '#343E58',
-                    pink: '#fd65b7'
+                    pink: '#fd65b7',
                 },
             },
             fontFamily: {

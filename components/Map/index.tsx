@@ -5,6 +5,10 @@ import MapMaker from './MapMaker';
 import { useState } from 'react';
 import LocationIcon from '../Icons/LocationIcon';
 import MapMakerFriend from './MapMakerFriend';
+import SurtItem from '../Surf/SurtItem';
+import { useAppDispatch } from '../../hooks/redux';
+import { userBlockUser, userLikeUser } from '../../redux/actions/userActions';
+import { toastError, toastSuccess } from '../../utils/toast';
 
 type Props = {
     isFocus: boolean;
@@ -14,11 +18,34 @@ type Props = {
 };
 
 export default function Map({ me, isFocus, handleFocus, friends }: Props) {
+    const dispatch = useAppDispatch();
+    const [isOpen, setIsOpen] = useState(false);
     const [userInfo, setUserInfo] = useState<IDataFindFriendsAroundResponse>();
     const saveUserInfo = (user: IDataFindFriendsAroundResponse) => {
         setUserInfo(user);
     };
+    const handleClose = () => {
+        setIsOpen(false);
+    };
+    const handleLike = async (_id: string) => {
+        try {
+            await dispatch(userLikeUser(_id)).unwrap();
+            setUserInfo(undefined);
+            toastSuccess('Bạn đã thích thành công');
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
+    };
 
+    const handleBlock = async (_id: string) => {
+        try {
+            await dispatch(userBlockUser(_id)).unwrap();
+            setUserInfo(undefined);
+            toastSuccess('Bạn đã chặn thành công');
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
+    };
     return (
         <section className="relative container-np">
             {me ? (
@@ -54,7 +81,10 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
                     <MapMakerFriend key={index} info={friend} onClick={saveUserInfo} />
                 ))}
             </MapContainer>
-            {userInfo && <MapUserInfo data={userInfo} />}
+            {userInfo && <MapUserInfo data={userInfo} onClick={() => setIsOpen(true)} />}
+            {isOpen && userInfo && (
+                <SurtItem stranger={userInfo} onClose={handleClose} onLike={handleLike} onBlock={handleBlock} />
+            )}
         </section>
     );
 }

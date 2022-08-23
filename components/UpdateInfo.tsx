@@ -11,11 +11,11 @@ import InputCalendar from './InputCalendar';
 import InputSelect from './InputSelect';
 import APP_PATH from '../constant/appPath';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { genderGetAllGenders } from '../redux/actions/genderAction';
 import { userFirstUpdate } from '../redux/actions/userActions';
 import { selectUser } from '../redux/reducers/userSlice';
 import { NextPageWithLayout } from '../types/global';
 import { toastError } from '../utils/toast';
+import { infoGetAllGenders } from '../redux/actions/infoAction';
 
 interface InputProps {
     email: string;
@@ -65,7 +65,7 @@ const UpdateInfo: NextPageWithLayout = () => {
     useEffect(() => {
         async function getGender() {
             try {
-                const response = await dispatch(genderGetAllGenders()).unwrap();
+                const response = await dispatch(infoGetAllGenders()).unwrap();
                 const result = response.map((gen) => ({ value: gen._id, label: gen.name }));
                 setGenders(result);
             } catch (error) {

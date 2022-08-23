@@ -9,5 +9,7 @@ const APP_PATH = {
     CHAT: '/chat',
     PROFILE: '/profile',
     GIFT: '/gift',
+    UPLOAD_ALBUMS: '/profile/upload-albums',
+    ALBUMS: '/profile/albums',
 };
 export default APP_PATH;

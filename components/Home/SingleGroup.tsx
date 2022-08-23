@@ -5,7 +5,7 @@ interface Props {
     title: React.ReactNode;
     desc: React.ReactNode;
     icon: React.ReactNode;
-    onClick?: () => Function;
+    onClick?: () => void;
 }
 export default function SingleGroup({ icon, className = '', title, desc, onClick }: Props) {
     return (

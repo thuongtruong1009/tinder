@@ -29,11 +29,13 @@ export default function ListMessage({ userId, className, conversationId }: Props
             }
     }
     useEffect(() => {
-        if (!data?.page && !data?.limit) {
-            fetchConversation(
-                +(process.env.MESSAGE_PAGE_DEFAULT as string),
-                +(process.env.MESSAGE_LIMIT_DEFAULT as string),
-            );
+        if (data) {
+            if (!data.page && !data.limit) {
+                fetchConversation(
+                    +(process.env.MESSAGE_PAGE_DEFAULT as string),
+                    +(process.env.MESSAGE_LIMIT_DEFAULT as string),
+                );
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
