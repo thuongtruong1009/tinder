@@ -80,7 +80,7 @@ export default function AlbumsImage({
                 </div>
             )}
 
-            <div className="w-full h-full image-container">
+            <div className="w-full aspect-9/16 image-container">
                 <Image className="object-cover image" alt="avatar" objectPosition="top" layout="fill" src={url} />
             </div>
         </div>

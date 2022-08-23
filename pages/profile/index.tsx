@@ -182,7 +182,7 @@ const Profile: NextPageWithLayout = () => {
                 />
             )}
 
-            <section className="container with-navbar">
+            <section className="container bg-white with-navbar">
                 <Title
                     className="mb-2"
                     content={

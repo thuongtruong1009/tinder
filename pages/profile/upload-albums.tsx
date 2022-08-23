@@ -81,7 +81,7 @@ const UpLoadAlbums: NextPageWithLayout = () => {
     };
 
     return (
-        <section className="container with-navbar">
+        <section className="container bg-white with-navbar">
             <Title
                 className="mb-4"
                 content={
@@ -139,7 +139,7 @@ const UpLoadAlbums: NextPageWithLayout = () => {
                 />
             )}
             {isLoading && (
-                <button className="bg-neutral-100 btn-md text-white w-full flex-center">
+                <button className="w-full text-white bg-neutral-100 btn-md flex-center">
                     <VscLoading className="animate-spin" />
                 </button>
             )}
