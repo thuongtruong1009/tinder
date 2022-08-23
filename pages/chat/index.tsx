@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -6,18 +6,40 @@ import Title from '../../components/Home/Title';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import NavbarLayout from '../../components/NavbarLayout';
-import LikeList from '../../components/Chat/LikeList';
+import LikeItem from '../../components/Chat/LikeItem';
 import ChatList from '../../components/Chat/ChatList';
 import { NextPageWithLayout } from '../../types/global';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/reducers/userSlice';
+import { generateFullName } from '../../utils/name';
+import conversationApi from '../../apis/conversationApi';
+import { useAppDispatch } from '../../hooks/redux';
+import { conversationGetAll } from '../../redux/actions/conversationActions';
+import { toastError, toastSuccess } from '../../utils/toast';
+import { selectConversation } from '../../redux/reducers/conversationSlice';
+import APP_PATH from '../../constant/appPath';
 
-const Index: NextPageWithLayout = () => {
+const Chat: NextPageWithLayout = () => {
     const router = useRouter();
-
-    const joinChat = (index: string) => {
-        router.push(`/chat/${index}`);
+    const dispatch = useAppDispatch();
+    const sUser = useSelector(selectUser);
+    const sConversation = useSelector(selectConversation);
+    const handleClick = (_id: string) => () => {
+        router.push(`${APP_PATH.CHAT}/${_id}`);
     };
+    useEffect(() => {
+        async function getAllConversations() {
+            try {
+                await dispatch(conversationGetAll()).unwrap();
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+        }
+        !sConversation.isCalled && getAllConversations();
+    }, [dispatch, sConversation.isCalled]);
+
     return (
-        <section className="container bg-white">
+        <section className="container bg-white with-navbar">
             <Title
                 className="py-2.75"
                 content={
@@ -26,27 +48,27 @@ const Index: NextPageWithLayout = () => {
                     </div>
                 }
             />
-            <p className="my-2 font-bold body-1 text-neutral-100">Danh sách lượt thích</p>
+            <p className="my-2 font-bold body-1 text-neutral-100">Danh sách bạn bè</p>
             <Swiper
                 spaceBetween={16}
                 slidesPerView={3.5}
                 onSlideChange={() => console.log('slide change')}
                 onSwiper={(swiper) => console.log(swiper + 'dùng để scroll infinite')}
             >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-                    <SwiperSlide key={index}>
-                        <LikeList avatar="/assets/images/chat_preview.png" name="Full name" loved={false} />
+                {sUser.data?.friends.map((item: IUserFriend, index) => (
+                    <SwiperSlide className="p-1" key={index}>
+                        <LikeItem avatar={item.avatar} name={generateFullName(item.name)} />
                     </SwiperSlide>
                 ))}
             </Swiper>
             <h5 className="my-4 font-bold body-1 text-neutral-100">Trò chuyện</h5>
-            <ul className="flex flex-col gap-4 max-h-[calc(100vh-303px)] overflow-y-scroll">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
+            <ul className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-357px)] min-h-[200px]">
+                {sConversation.data.map((item) => (
                     <ChatList
-                        name="Cameron Greer"
-                        avatar="/assets/images/chat_avatar.png"
-                        key={index}
-                        onClick={() => joinChat(index.toString())}
+                        name={generateFullName(item.conversation.users[0].name)}
+                        avatar={item.conversation.users[0].avatar}
+                        key={item.conversation._id}
+                        onClick={handleClick(item.conversation._id)}
                     />
                 ))}
             </ul>
@@ -54,6 +76,6 @@ const Index: NextPageWithLayout = () => {
     );
 };
 
-// Index.protected = true;
-Index.getLayout = (page: React.ReactNode) => <NavbarLayout>{page}</NavbarLayout>;
-export default Index;
+Chat.protected = true;
+Chat.getLayout = (page: React.ReactNode) => <NavbarLayout>{page}</NavbarLayout>;
+export default Chat;

@@ -43,6 +43,7 @@ function Navbar(props: Props) {
                     IconActive={<ChatFillIcon />}
                     label="Trò chuyện"
                     active={router.route === APP_PATH.CHAT}
+                    href={APP_PATH.CHAT}
                 />
                 <NavBarItem
                     Icon={<PeopleIcon />}

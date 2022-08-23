@@ -3,6 +3,7 @@ import user from '../redux/reducers/userSlice';
 import notification from '../redux/reducers/notificationSlice';
 import hobby from '../redux/reducers/hobbySlice';
 import gender from '../redux/reducers/genderSlice';
+import conversation from '../redux/reducers/conversationSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         notification,
         hobby,
         gender,
+        conversation,
     },
 });
 

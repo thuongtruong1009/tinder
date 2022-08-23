@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, FormEvent } from 'react';
 import { Popover } from '@headlessui/react';
 import { NextPageWithLayout } from '../../types/global';
 import { useRouter } from 'next/router';
@@ -6,140 +6,53 @@ import Title from '../../components/Home/Title';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ThreeDotIcon from '../../components/Icons/ThreeDotIcon';
 import Image from 'next/image';
-import RightArrowIcon from '../../components/Icons/RightArrowIcon';
 import APP_PATH from '../../constant/appPath';
-import LovedStatusIcon from '../../components/Icons/chat/LovedStatusIcon';
+import dynamic from 'next/dynamic';
+const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 import PlusIcon from '../../components/Icons/PlusIcon';
 import SendIcon from '../../components/Icons/SendIcon';
 import IconSetIcon from '../../components/Icons/chat/IconSetIcon';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import MessageItem from '../../components/Chat/MessageItem';
 import { BsImage } from 'react-icons/bs';
-export enum EMessageType {
-    TEXT = 'text',
-    IMAGE = 'image',
-}
-export interface IMessageItem {
-    value: string;
-    type: EMessageType;
-}
-
-const messages = [
-    {
-        _id: 1,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: 'Chào iem, c đứng đây từ chiều🥰', //Hello
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-    {
-        _id: 2,
-        senderId: 2,
-        receiverId: 1,
-        message: [
-            {
-                value: 'Hello chị Thảo 💖',
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-    {
-        _id: 3,
-        senderId: 2,
-        receiverId: 1,
-        message: [
-            {
-                value: '/assets/images/temp.png', //favoriteImage1.png
-                type: EMessageType.IMAGE,
-            },
-        ],
-    },
-    {
-        _id: 4,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: 'Hello',
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-    {
-        _id: 4,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: '/assets/images/favoriteImage1.png',
-                type: EMessageType.IMAGE,
-            },
-        ],
-    },
-    {
-        _id: 4,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: 'Hello',
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-    {
-        _id: 4,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: 'Hello',
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-    {
-        _id: 4,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: 'Hello',
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-    {
-        _id: 4,
-        senderId: 1,
-        receiverId: 2,
-        message: [
-            {
-                value: 'Hello',
-                type: EMessageType.TEXT,
-            },
-        ],
-    },
-];
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { selectConversation, setLastLoginById } from '../../redux/reducers/conversationSlice';
+import { conversationGet, messageCreate } from '../../redux/actions/conversationActions';
+import { generateFullName } from '../../utils/name';
+import TimeAgo from 'timeago-react';
+import * as timeago from 'timeago.js';
+import vi from 'timeago.js/lib/lang/vi';
+import Loading from '../../components/Loading';
+import { selectUser } from '../../redux/reducers/userSlice';
+import { toastError } from '../../utils/toast';
+import ListMessage from '../../components/Chat/ListMessage';
+import { useSocket } from '../../context/SocketContext';
+import ImageUploadItem from '../../components/Chat/ImageUploadItem';
+timeago.register('vi', vi);
 
 const Room: NextPageWithLayout = () => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [files, setFiles] = useState<File[]>([]);
-    const router = useRouter();
-    const { userId } = router.query;
+    const socket = useSocket();
 
+    const router = useRouter();
+    const { id } = router.query;
+
+    const dispatch = useAppDispatch();
+    const sUser = useAppSelector(selectUser);
+    const conversationInfo = useAppSelector(selectConversation).data.find(
+        (conversation) => conversation.conversation._id === id,
+    );
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const [message, setMessage] = useState('');
+    const [files, setFiles] = useState<File[]>([]);
+    const [isFriendOnline, setIsFriendOnline] = useState<boolean>(false);
+    const [lastLogin, setLastLogin] = useState<string>('');
+
+    const onEmojiClick = (_event: any, emojiObject: any) => {
+        setMessage(message + emojiObject.emoji);
+    };
     const onBack = () => {
         router.push(APP_PATH.CHAT);
     };
-
-    const visitProfile = () => {
-        router.push(APP_PATH.PROFILE);
-    };
-
     const handleUpload = () => {
         const input = inputRef.current;
         if (input) {
@@ -147,11 +60,91 @@ const Room: NextPageWithLayout = () => {
         }
     };
     const handleChangeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const images = e.target.files;
-        if (images) {
-            setFiles([...files, ...images]);
+        // check if not exist before add
+        if (e.target.files) {
+            let pass = true;
+            const files = Array.from(e.target.files);
+            files.forEach((file) => {
+                if (!file.type.includes('image')) {
+                    pass = false;
+                }
+            });
+            if (pass) {
+                setFiles(files);
+            }
         }
     };
+    const handleRemoveImageUpload = (index: number) => () => {
+        const newFiles = [...files];
+        newFiles.splice(index, 1);
+        setFiles(newFiles);
+    };
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            if (conversationInfo) {
+                await dispatch(
+                    messageCreate({
+                        idReceive: conversationInfo.conversation.users[0]._id,
+                        messages: [
+                            {
+                                value: message,
+                                type: 'text',
+                            },
+                        ],
+                    }),
+                );
+                setMessage('');
+                setFiles([]);
+            }
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
+    };
+    useEffect(() => {
+        async function fetchConversation(id: string) {
+            await dispatch(conversationGet({ id }));
+        }
+        if (id && typeof id === 'string') {
+            fetchConversation(id);
+        }
+    }, [dispatch, id]);
+    useEffect(() => {
+        if (conversationInfo?.conversation) {
+            !lastLogin && setLastLogin(conversationInfo.conversation.users[0].lastLogin);
+            //* check if friend is online
+            socket.emit(`online`, conversationInfo.conversation.users[0]._id);
+            //* listen event online
+            socket.on(`online`, (data: any) => {
+                //* check status different from current status before set
+                if (data.status !== isFriendOnline && data.userId === conversationInfo.conversation.users[0]._id) {
+                    setIsFriendOnline(data.status);
+                }
+            });
+            socket.on(`online/${conversationInfo.conversation.users[0]._id}`, (data: any) => {
+                //* check status different from current status before set
+                //* if user is offline, set last login time
+                if (!data.status) {
+                    setLastLogin(data.lastLogin);
+                    if (conversationInfo.conversation.users[0].lastLogin !== data.lastLogin) {
+                        dispatch(
+                            setLastLoginById({
+                                id,
+                                lastLogin: data.lastLogin,
+                            }),
+                        );
+                    }
+                }
+                if (data.status !== isFriendOnline) {
+                    setIsFriendOnline(data.status);
+                }
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [conversationInfo, isFriendOnline]);
+    if (!conversationInfo?.conversation) return <Loading />;
+
     return (
         <section className="container relative flex flex-col bg-white">
             <input
@@ -178,74 +171,119 @@ const Room: NextPageWithLayout = () => {
                 }
             />
             <div className="flex items-center justify-between flex-shrink-0 py-4">
-                <div className="relative flex justify-between">
-                    <LovedStatusIcon className="absolute bottom-0 z-20 left-9" />
+                <div className="relative flex-center-y">
+                    {/* <LovedStatusIcon className="absolute bottom-0 z-20 left-9" /> */}
                     <div className="w-12 h-12 mr-5 image-container rounded-2xl">
-                        <Image className="image" src="/assets/images/chat_avatar.png" alt="jdiwed" layout="fill" />
+                        <Image
+                            className="image"
+                            src={conversationInfo?.conversation.users[0].avatar}
+                            alt="avatar"
+                            layout="fill"
+                        />
                     </div>
                     <div className="flex flex-col">
-                        <p className="font-bold body-1 text-neutral-100">Chị Thảo, HR</p>
-                        <span className="text-xs opacity-50">Cô bé ngây thơ</span>
+                        <p className="font-bold body-1 text-neutral-100">
+                            {generateFullName(conversationInfo?.conversation.users[0].name)}
+                        </p>
+                        <span className="text-xs opacity-50">
+                            {isFriendOnline ? (
+                                <span className="text-success">
+                                    <span className="ml-1">Đang trực tuyến</span>
+                                </span>
+                            ) : (
+                                <>
+                                    Hoạt động <TimeAgo datetime={lastLogin} locale="vi" />
+                                </>
+                            )}
+                        </span>
                     </div>
                 </div>
-                <RightArrowIcon onClick={visitProfile} />
+                {/* <RightArrowIcon onClick={visitProfile} /> */}
             </div>
-            <div className=" h-[calc(100vh-208px)] flex gap-4 flex-col-reverse overflow-auto px-4 py-2">
-                {messages.map((message, index) => (
-                    <MessageItem key={index} isMe={message.receiverId === 1} messages={message.message} />
-                ))}
-            </div>
-            {/* <InfiniteScroll
-                dataLength={items.length}
-                next={fetchData}
-                hasMore={true}
-                loader={<h4>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>Yay! You have seen it all</b>
-                    </p>
-                }
-                // below props only if you need pull down functionality
-                refreshFunction={this.refresh}
-                pullDownToRefresh
-                pullDownToRefreshThreshold={50}
-                pullDownToRefreshContent={<h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>}
-                releaseToRefreshContent={<h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>}
-            >
-                {items}
-            </InfiniteScroll> */}
-            <div className="flex gap-4 overflow-auto">
+            {conversationInfo && (
+                <ListMessage
+                    className={`${files.length !== 0 ? 'h-[calc(100vh-275px)]' : 'h-[calc(100vh-208px)]'}`}
+                    userId={sUser.data?._id}
+                    data={conversationInfo}
+                />
+            )}
+
+            <div className="flex gap-4 overflow-x-auto">
                 {files.map((file, index) => (
-                    <div className="flex-shrink-0 h-10 image-container" key={index}>
-                        <Image className="image" src={URL.createObjectURL(file)} alt="demo_img" layout="fill" />
-                    </div>
+                    <ImageUploadItem
+                        key={index}
+                        index={index}
+                        src={URL.createObjectURL(file)}
+                        onRemove={handleRemoveImageUpload}
+                    />
                 ))}
             </div>
-            <div className="flex items-center justify-between flex-shrink-0 w-full gap-2 py-6 mt-auto">
-                <Popover className="relative">
+            <form
+                className="flex items-center justify-between flex-shrink-0 w-full gap-2 py-6 mt-auto"
+                onSubmit={handleSubmit}
+            >
+                <Popover className="relative flex-center">
                     <Popover.Button>
                         <PlusIcon />
                     </Popover.Button>
 
                     <Popover.Panel className="absolute left-0 z-10 bottom-[calc(100%+1rem)]">
-                        <div className="gap-2 p-2 bg-white rounded-md shadow-md flex-center-y">
-                            <Popover.Button className="p-2 border rounded-full border-slate-200" onClick={handleUpload}>
+                        <div className="gap-2 bg-white rounded-md overflow-hidden shadow-md flex-center-y min-w-[150px]">
+                            <Popover.Button
+                                className="w-full gap-4 p-2 border shadow-md flex-center"
+                                onClick={handleUpload}
+                            >
                                 <BsImage />
+                                Tải lên
                             </Popover.Button>
                         </div>
                     </Popover.Panel>
                 </Popover>
-                <div className="w-[267px] h-9 bg-neutral-5 rounded-3xl py-2 px-2 body-2 flex justify-between items-center">
-                    <input type="text" className="bg-neutral-5 body-2 px-2 w-[94%] h-full" autoFocus placeholder="Aa" />
-                    <IconSetIcon />
+                <div className="flex items-center justify-between flex-1 px-2 py-2 h-9 bg-neutral-5 rounded-3xl body-2">
+                    <input
+                        type="text"
+                        className="flex-1 h-full px-2 bg-neutral-5 body-2"
+                        autoFocus
+                        placeholder="Aa"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <Popover className="relative flex-center">
+                        {({ open }) => (
+                            <>
+                                <Popover.Button>
+                                    <IconSetIcon />
+                                </Popover.Button>
+
+                                <Popover.Panel
+                                    className={`${
+                                        open ? 'block' : 'hidden'
+                                    } absolute right-0 z-10 bottom-[calc(100%+1rem)]`}
+                                    static
+                                >
+                                    <Picker
+                                        preload
+                                        onEmojiClick={onEmojiClick}
+                                        disableSearchBar
+                                        disableSkinTonePicker
+                                        disableAutoFocus
+                                    />
+                                </Popover.Panel>
+                            </>
+                        )}
+                    </Popover>
                 </div>
-                <div className="text-white rounded-full cursor-pointer bg-main-purple flex-center w-9 h-9">
+
+                <button
+                    className="text-white rounded-full cursor-pointer bg-main-purple flex-center w-9 h-9"
+                    type="submit"
+                >
                     <SendIcon />
-                </div>
-            </div>
+                </button>
+            </form>
         </section>
     );
 };
 
-// Index.protected = true;
+Room.protected = true;
 export default Room;
