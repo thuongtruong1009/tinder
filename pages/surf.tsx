@@ -27,11 +27,11 @@ const Surf: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
     const sNotification = useSelector(selectNotification).data;
-    const [stranger, setStranger] = useState<IDataFindFriendsAroundResponse>();
-    const [strangers, setStrangers] = useState<IDataFindFriendsAroundResponse[]>([]);
     const [isOpenFavourite, setIsOpenFavourite] = useState(false);
+    const [stranger, setStranger] = useState<IStrager>();
+    const [strangers, setStrangers] = useState<IStrager[]>([]);
 
-    const handleSeenInfo = (stranger: IDataFindFriendsAroundResponse) => () => {
+    const handleSeenInfo = (stranger: IStrager) => () => {
         setStranger(stranger);
     };
 
