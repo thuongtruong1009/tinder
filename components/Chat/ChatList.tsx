@@ -4,7 +4,7 @@ import React from 'react';
 interface Props {
     name: string;
     avatar: string;
-    onClick?: () => Function;
+    onClick?: () => void;
 }
 
 export default function ChatList({ name, avatar, onClick }: Props) {
