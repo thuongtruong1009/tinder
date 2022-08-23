@@ -20,7 +20,6 @@ const nextConfig = {
             'lh3.googleusercontent.com',
             'platform-lookaside.fbsbx.com',
             'res.cloudinary.com',
-            'localhost:5000'
         ],
     },
 };

@@ -35,7 +35,7 @@ const Profile: NextPageWithLayout = () => {
         dispatch(userLogOut());
     };
 
-    const handleOutstanding = () => {
+    const onEnterGift = () => {
         router.push(APP_PATH.GIFT);
     };
 
@@ -89,7 +89,7 @@ const Profile: NextPageWithLayout = () => {
                                         <li>
                                             <button
                                                 className="w-full py-1 pl-2 flex justify-start items-center gap-3  rounded-md text-primary-50 button-2 bg-slate-100"
-                                                onClick={handleOutstanding}
+                                                onClick={onEnterGift}
                                             >
                                                 <BsCoin />
                                                 <p>Coins package</p>
