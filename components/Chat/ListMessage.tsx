@@ -52,7 +52,7 @@ export default function ListMessage({ userId, className, conversationId }: Props
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
                         inverse={true} //
                         hasMore={hasMore}
-                        loader={<p className="text-sm font-semibold text-center">Đang tải...</p>}
+                        loader={<></>}
                         scrollableTarget="scrollableDiv"
                     >
                         {data.conversation.messages?.map((message) => (

@@ -14,7 +14,7 @@ const MessageItem = ({ messages, isMe }: Props) => {
                     if (message.type === 'text') {
                         return (
                             <div className="ml-auto" key={index}>
-                                <p className="bg-main-purple max-w-[250px] py-2.5 px-4 rounded-3xl rounded-tr-none body-2 text-white text-justify">
+                                <p className="bg-main-purple max-w-[250px] py-2.5 px-4 rounded-3xl rounded-tr-none body-2 text-white text-justify break-words">
                                     {message.value}
                                 </p>
                             </div>
@@ -37,7 +37,7 @@ const MessageItem = ({ messages, isMe }: Props) => {
                 if (message.type === 'text') {
                     return (
                         <div className="mr-auto" key={index}>
-                            <p className="bg-neutral-5 max-w-[250px] py-2.5 px-4 rounded-3xl rounded-tl-none body-2 text-left text-main-grey">
+                            <p className="bg-neutral-5 max-w-[250px] py-2.5 px-4 rounded-3xl rounded-tl-none body-2 text-left text-main-grey break-words">
                                 {message.value}
                             </p>
                         </div>

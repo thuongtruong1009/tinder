@@ -30,10 +30,7 @@ export default function AlbumsImage({
     };
 
     return (
-        <div
-            onClick={handleShowLayout}
-            className="relative overflow-hidden drop-shadow-md rounded-xl before:absolute before:inset-0 before:bg-card before:z-10"
-        >
+        <div onClick={handleShowLayout} className="relative overflow-hidden drop-shadow-md rounded-xl">
             {isFavorite && (
                 <div className="absolute z-10 p-2 rounded-br-md bg-white/60">
                     <FaHeart fill="#FF5206" />

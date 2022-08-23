@@ -22,40 +22,46 @@ export default function AlbumsItem({ firstImage, anotherImages, middleImage, upL
     const handleClick = () => {
         setIsShow(!isShow);
     };
-
-    return (
-        <>
-            {(firstImage || middleImage) && (
-                <div className={classCSS} onClick={onClick}>
-                    <div className="image-container">
-                        <Image className="image" alt="post_image" layout="fill" src={url} />
+    if (upLoad)
+        return (
+            <div className="relative overflow-hidden rounded-xl aspect-square" onClick={handleClick}>
+                {isShow && (
+                    <div className="absolute z-10 w-full h-full bg-neutral-80/50 flex-center">
+                        <button onClick={onClick}>
+                            <FaTrash size={24} fill="#fff" />
+                        </button>
                     </div>
+                )}
+                <div className="h-full image-container">
+                    <Image className="object-cover image" alt="post_image" layout="fill" src={url} />
                 </div>
-            )}
-            {anotherImages && (
-                <div className="relative overflow-hidden rounded-xl aspect-square" onClick={onClick}>
-                    <div className="absolute z-10 w-full h-full text-white bg-neutral-80/50 flex-center">
-                        <span>+{anotherImages}</span>
-                    </div>
-                    <div className="image-container">
-                        <Image className="image" alt="post_image" layout="fill" src={url} />
-                    </div>
+            </div>
+        );
+    if (firstImage || middleImage)
+        return (
+            <div className={classCSS} onClick={onClick}>
+                <div className="h-full image-container">
+                    <Image className="object-cover image" alt="post_image" layout="fill" src={url} />
                 </div>
-            )}
-            {upLoad && (
-                <div className="relative overflow-hidden rounded-xl aspect-square" onClick={handleClick}>
-                    {isShow && (
-                        <div className="absolute z-10 w-full h-full bg-neutral-80/50 flex-center">
-                            <button onClick={onClick}>
-                                <FaTrash size={24} fill="#fff" />
-                            </button>
-                        </div>
-                    )}
-                    <div className="image-container">
-                        <Image className="image" alt="post_image" layout="fill" src={url} />
-                    </div>
+            </div>
+        );
+    if (anotherImages)
+        return (
+            <div className="relative overflow-hidden rounded-xl aspect-square" onClick={onClick}>
+                <div className="absolute z-10 w-full h-full text-white bg-neutral-80/50 flex-center">
+                    <span>+{anotherImages}</span>
                 </div>
-            )}
-        </>
-    );
+                <div className="h-full image-container">
+                    <Image className="object-cover image" alt="post_image" layout="fill" src={url} />
+                </div>
+            </div>
+        );
+    else
+        return (
+            <div className="relative overflow-hidden rounded-xl aspect-square" onClick={onClick}>
+                <div className="h-full image-container">
+                    <Image className="object-cover image" alt="post_image" layout="fill" src={url} />
+                </div>
+            </div>
+        );
 }
