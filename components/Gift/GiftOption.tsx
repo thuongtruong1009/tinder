@@ -20,7 +20,7 @@ const GiftOption = ({ id, name, price, image, choiced, onClick }: Props) => {
         >
             <div className="min-w-12 min-h-12 w-20 h-20">
                 <div className="image-container w-full h-full bg-cover rounded-xl">
-                    <Image src={`/assets/images/${image}`} alt={`${name}_img`} layout="fill" />
+                    <Image src={image} alt={`${name}_img`} layout="fill" />
                 </div>
             </div>
             {/* <div className={'rounded-xl min-w-12 min-h-12 w-20 h-20 bg-cover bg-center bg-[url(' + image + ')]'}></div> */}

@@ -65,7 +65,7 @@ const Albums: NextPageWithLayout = () => {
     }, [sUser, numFavorite, numDefault]);
 
     return (
-        <section className="container pb-24 with-layout">
+        <section className="container pb-24 bg-white with-layout">
             <Title
                 className="mb-4"
                 content={

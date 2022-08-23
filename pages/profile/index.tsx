@@ -152,7 +152,6 @@ const Profile: NextPageWithLayout = () => {
         if (sInfo.beers.length === 0) {
             handleGetBeers();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -160,38 +159,35 @@ const Profile: NextPageWithLayout = () => {
             <HobbyDialog isOpen={isOpenHobbyDialog} onClose={handleCloseHobbyDialog} />
             <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} reason={sUser.data?.info.reason} />
             <BioDialog isOpen={isOpenBioDialog} onClose={handleCloseBioDialog} />
-            <section className="container bg-white with-navbar relative">
-                <ReligionDialog
-                    isOpen={isOpenReligionDialog}
-                    onClose={handleCloseReligionDialog}
-                    religion={sUser.data?.info.religion}
+            <ReligionDialog
+                isOpen={isOpenReligionDialog}
+                onClose={handleCloseReligionDialog}
+                religion={sUser.data?.info?.religion}
+            />
+            {sInfo.educations.length > 0 && (
+                <EducationDialog
+                    isOpen={isOpenEducationDialog}
+                    onClose={handleCloseEducationDialog}
+                    educationId={sUser.data?.info?.education?._id}
                 />
-                {sInfo.educations.length > 0 && (
-                    <EducationDialog
-                        isOpen={isOpenEducationDialog}
-                        onClose={handleCloseEducationDialog}
-                        educationId={sUser.data?.info.education._id}
-                    />
-                )}
+            )}
+            {sInfo.genders.length > 0 && (
+                <GenderDialog
+                    isOpen={isOpenGenderDialog}
+                    onClose={handleCloseGenderDialog}
+                    genderId={sUser.data?.gender?._id}
+                />
+            )}
 
-                {sInfo.genders.length > 0 && (
-                    <GenderDialog
-                        isOpen={isOpenGenderDialog}
-                        onClose={handleCloseGenderDialog}
-                        genderId={sUser.data?.gender._id}
-                    />
-                )}
+            {sInfo.beers.length > 0 && (
+                <BeerDialog
+                    isOpen={isOpenBeerDialog}
+                    onClose={handleCloseBeerDialog}
+                    beerId={sUser.data?.info?.beer?._id}
+                />
+            )}
 
-                {sInfo.beers.length > 0 && (
-                    <BeerDialog
-                        isOpen={isOpenBeerDialog}
-                        onClose={handleCloseBeerDialog}
-                        beerId={sUser.data?.info.beer._id}
-                    />
-                )}
-            </section>
-
-            <section className="container with-navbar">
+            <section className="container bg-white with-navbar">
                 <Title
                     className="mb-2"
                     content={
