@@ -262,6 +262,7 @@ const Profile: NextPageWithLayout = () => {
                                     />
                                 );
                             } else if (index === 4) {
+                                console.log('image-----', image.url);
                                 return (
                                     <AlbumsItem
                                         key={image.url}
