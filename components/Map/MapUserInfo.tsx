@@ -4,9 +4,10 @@ import LocationIcon from '../Icons/LocationIcon';
 
 interface Props {
     data: IDataFindFriendsAroundResponse;
+    onClick: () => void;
 }
 
-export default function MapUserInfo({ data }: Props) {
+export default function MapUserInfo({ data, onClick }: Props) {
     return (
         <div className="absolute z-[400] flex-center-y bottom-[120px] inset-x-4 bg-white p-2 rounded-3xl gap-2">
             <div className="image-container w-[84px] aspect-square flex-shrink-0">
@@ -24,7 +25,7 @@ export default function MapUserInfo({ data }: Props) {
                         <span className="body-2">Cách {data.distance}m</span>
                     </div>
                 </div>
-                <button className="absolute p-1 rounded-lg top-4 right-4 ">
+                <button className="absolute p-1 rounded-lg top-4 right-4" onClick={onClick}>
                     <InformationIcon fill="#F4F5F5" />
                 </button>
             </div>
