@@ -26,16 +26,13 @@ export const conversationSlice = createSlice({
             const isExist = state.data.find((item) => item.conversation._id === payload.conversationId);
             if (isExist) {
                 isExist.conversation.messages?.unshift(payload.message);
-                isExist.conversation.updatedAt = payload.message.createdAt;
+                isExist.conversation.updatedAt = payload.message.updatedAt;
                 //* remove duplicate message by _id
-                isExist.conversation.messages = getUniqueListBy(
-                    [...isExist.conversation.messages, ...payload.conversation.messages],
-                    '_id',
-                );
+                isExist.conversation.messages = getUniqueListBy([...isExist.conversation.messages], '_id');
             }
             //* sort by createdAt
             state.data.sort((a, b) => {
-                return new Date(a.conversation.updatedAt).getTime() - new Date(b.conversation.updatedAt).getTime();
+                return new Date(b.conversation.updatedAt).getTime() - new Date(a.conversation.updatedAt).getTime();
             });
         },
         setLastLoginById: (state, { payload }) => {
@@ -54,6 +51,9 @@ export const conversationSlice = createSlice({
             );
             state.data = uniqueData;
             state.isCalled = true;
+            state.data.sort((a, b) => {
+                return new Date(b.conversation.updatedAt).getTime() - new Date(a.conversation.updatedAt).getTime();
+            });
         });
         builder.addCase(conversationGet.fulfilled, (state, { payload }) => {
             const isExist = state.data.find((item) => item.conversation._id === payload.conversation._id);
@@ -91,6 +91,10 @@ export const conversationSlice = createSlice({
             if (isExist) {
                 isExist.conversation.messages.unshift(payload.message);
             }
+            //* sort by createdAt
+            state.data.sort((a, b) => {
+                return new Date(b.conversation.updatedAt).getTime() - new Date(a.conversation.updatedAt).getTime();
+            });
         });
     },
 });

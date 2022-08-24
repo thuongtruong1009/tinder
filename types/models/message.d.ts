@@ -1,8 +1,8 @@
 declare interface IMessageItem {
     type: 'text' | 'image';
     value: string | [];
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 declare interface IMessage {
     messages: IMessageItem[];

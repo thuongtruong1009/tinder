@@ -18,6 +18,7 @@ import { conversationGetAll } from '../../redux/actions/conversationActions';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { selectConversation } from '../../redux/reducers/conversationSlice';
 import APP_PATH from '../../constant/appPath';
+import Button from '../../components/Button';
 
 const Chat: NextPageWithLayout = () => {
     const router = useRouter();
@@ -48,31 +49,48 @@ const Chat: NextPageWithLayout = () => {
                     </div>
                 }
             />
-            <p className="my-2 font-bold body-1 text-neutral-100">Danh sách bạn bè</p>
-            <Swiper
-                spaceBetween={16}
-                slidesPerView={3.5}
-                onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper + 'dùng để scroll infinite')}
-            >
-                {sUser.data?.friends.map((item: IUserFriend, index) => (
-                    <SwiperSlide className="p-1" key={index}>
-                        <LikeItem avatar={item.avatar} name={generateFullName(item.name)} />
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-            <h5 className="my-4 font-bold body-1 text-neutral-100">Trò chuyện</h5>
-            <ul className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-357px)] min-h-[200px]">
-                {sConversation.data.map((item) => (
-                    <ChatListItem
-                        name={generateFullName(item.conversation.users[0].name)}
-                        avatar={item.conversation.users[0].avatar}
-                        key={item.conversation._id}
-                        onClick={handleClick(item.conversation._id)}
-                        lastMessage={item.conversation.messages[0] || undefined}
-                    />
-                ))}
-            </ul>
+            {sUser.data && sUser.data.friends.length > 0 ? (
+                <>
+                    <p className="my-2 font-bold body-1 text-neutral-100">Danh sách bạn bè</p>
+                    <Swiper
+                        spaceBetween={16}
+                        slidesPerView={3.5}
+                        onSlideChange={() => console.log('slide change')}
+                        onSwiper={(swiper) => console.log(swiper + 'dùng để scroll infinite')}
+                    >
+                        {sUser.data?.friends.map((item: IUserFriend, index) => (
+                            <SwiperSlide className="p-1" key={index}>
+                                <LikeItem avatar={item.avatar} name={generateFullName(item.name)} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+
+                    <h5 className="my-4 font-bold body-1 text-neutral-100">Trò chuyện</h5>
+                    <ul className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-357px)] min-h-[200px]">
+                        {sConversation.data.map((item) => {
+                            if (item.conversation.messages.length > 0) {
+                                return (
+                                    <ChatListItem
+                                        name={generateFullName(item.conversation.users[0].name)}
+                                        avatar={item.conversation.users[0].avatar}
+                                        key={item.conversation._id}
+                                        onClick={handleClick(item.conversation._id)}
+                                        lastMessage={item.conversation.messages[0] || undefined}
+                                    />
+                                );
+                            }
+                        })}
+                    </ul>
+                </>
+            ) : (
+                <div className="flex flex-col justify-center gap-4 mt-32">
+                    <div className="text-center">
+                        <Image src="/assets/images/no-friends.svg" width={200} height={200} alt="no-friend" />
+                        <p className="font-bold text-neutral-100 body-1">Chưa có bạn bè nào</p>
+                    </div>
+                    <Button title="Tìm bạn ngay" onClick={() => router.push(APP_PATH.SURF)} />
+                </div>
+            )}
         </section>
     );
 };
