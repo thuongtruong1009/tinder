@@ -130,6 +130,13 @@ const Profile: NextPageWithLayout = () => {
         router.push(APP_PATH.UPDATE_COMMON_INFO);
     };
 
+    const handleAge = (birthday: string | undefined) => {
+        if (!birthday) return 0;
+        const newBirthday = new Date(birthday);
+        const now = new Date();
+        return now.getFullYear() - newBirthday.getFullYear();
+    };
+
     useEffect(() => {
         async function handleGetGenders() {
             try {
@@ -252,7 +259,8 @@ const Profile: NextPageWithLayout = () => {
                         />
                         <div>
                             <h3 className="text-neutral-100">
-                                {sUser.data?.name.firstName} {sUser.data?.name.lastName},30t
+                                {sUser.data?.name.firstName} {sUser.data?.name.lastName},{' '}
+                                {handleAge(sUser.data?.birthday)}t
                             </h3>
                             <span className="opacity-50 body-2">
                                 {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
