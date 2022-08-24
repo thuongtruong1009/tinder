@@ -79,12 +79,6 @@ const OTP: NextPage = () => {
                                 Vui lòng nhập mã OTP được gửi về số điện thoại của bạn, để hoàn thành đăng nhập.
                             </p>
                             <InputOTP onChange={handleChangeOtp} />
-
-                            <div className="flex justify-end">
-                                <button className="font-normal underline text-primary-40 text-caption-1 leading-caption-1 hover:cursor-pointer">
-                                    Gửi lại OTP
-                                </button>
-                            </div>
                         </div>
                     </div>
                     <Button
