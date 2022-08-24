@@ -85,3 +85,11 @@ declare interface IUpdateDefaultResponse extends IResponseSuccess {
 declare interface IDeleteImageResponse extends IResponseSuccess {
     data: string;
 }
+
+declare interface IUpdateUserCommonInfoResponse extends IResponseSuccess {
+    data: ICommonInfo;
+}
+
+declare interface IUpdateUserHeightResponse extends IResponseSuccess {
+    data: number;
+}

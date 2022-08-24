@@ -4,7 +4,6 @@ import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
 import { RiLogoutCircleRLine } from 'react-icons/ri';
 import { BsCoin } from 'react-icons/bs';
-import Tag from '../../components/Home/Tag';
 import DoubleGroup from '../../components/Home/DoubleGroup';
 import SingleGroup from '../../components/Home/SingleGroup';
 import AncoholIcon from '../../components/Icons/profile/AncoholIcon';
@@ -20,18 +19,20 @@ import HobbyDialog from '../../components/Profile/HobbyDialog';
 import { Popover } from '@headlessui/react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { selectUser, userLogOut } from '../../redux/reducers/userSlice';
-import { Router } from 'next/router';
-import APP_PATH from '../../constant/appPath';
-import { selectInfo } from '../../redux/reducers/infoSlice';
-import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
-import { toastError } from '../../utils/toast';
 import ReligionDialog from '../../components/Profile/ReligionDialog';
 import EducationDialog from '../../components/Profile/EducationDialog';
 import GenderDialog from '../../components/Profile/GenderDialog';
-import AlbumsItem from '../../components/Profile/AlbumsItem';
-import UploadImageIcon from '../../components/Icons/UploadImageIcon';
 import BeerDialog from '../../components/Profile/BeerDialog';
 import Hobby from '../../components/Home/Hobby';
+import { toastError } from '../../utils/toast';
+import UploadImageIcon from '../../components/Icons/UploadImageIcon';
+import APP_PATH from '../../constant/appPath';
+import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
+import { selectInfo } from '../../redux/reducers/infoSlice';
+import AlbumsItem from '../../components/Profile/AlbumsItem';
+import { HiPencil } from 'react-icons/hi';
+import HeightIcon from '../../components/Icons/HeightIcon';
+import HeightDialog from '../../components/Profile/HeightDialog';
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter();
@@ -46,6 +47,7 @@ const Profile: NextPageWithLayout = () => {
     const [isOpenEducationDialog, setIsOpenEducationDialog] = useState(false);
     const [isOpenGenderDialog, setIsOpenGenderDialog] = useState(false);
     const [isOpenBeerDialog, setIsOpenBeerDialog] = useState(false);
+    const [isOpenHeightDialog, setIsOpenHeightDialog] = useState(false);
 
     const lengthAlbums = sUser.data?.profile.albums.length;
 
@@ -108,12 +110,31 @@ const Profile: NextPageWithLayout = () => {
         setIsOpenBeerDialog(false);
     };
 
+    const handleOpenHeightDialog = () => {
+        setIsOpenHeightDialog(true);
+    };
+
+    const handleCloseHeightDialog = () => {
+        setIsOpenHeightDialog(false);
+    };
+
     const handleUploadFile = () => {
         router.push(APP_PATH.UPLOAD_ALBUMS);
     };
 
     const handleViewAlbums = () => {
         router.push(APP_PATH.ALBUMS);
+    };
+
+    const handleUpdateCommonInfo = () => {
+        router.push(APP_PATH.UPDATE_COMMON_INFO);
+    };
+
+    const handleAge = (birthday: string | undefined) => {
+        if (!birthday) return 0;
+        const newBirthday = new Date(birthday);
+        const now = new Date();
+        return now.getFullYear() - newBirthday.getFullYear();
     };
 
     useEffect(() => {
@@ -159,6 +180,7 @@ const Profile: NextPageWithLayout = () => {
             <HobbyDialog isOpen={isOpenHobbyDialog} onClose={handleCloseHobbyDialog} />
             <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} reason={sUser.data?.info.reason} />
             <BioDialog isOpen={isOpenBioDialog} onClose={handleCloseBioDialog} />
+            <HeightDialog isOpen={isOpenHeightDialog} onClose={handleCloseHeightDialog} />
             <ReligionDialog
                 isOpen={isOpenReligionDialog}
                 onClose={handleCloseReligionDialog}
@@ -204,7 +226,7 @@ const Profile: NextPageWithLayout = () => {
                                     <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
                                         <li>
                                             <button
-                                                className="w-full py-1 pl-2 flex justify-start items-center gap-3 rounded-md text-primary-50 button-2 bg-slate-100"
+                                                className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-100"
                                                 onClick={handleLogOut}
                                             >
                                                 <RiLogoutCircleRLine />
@@ -213,7 +235,7 @@ const Profile: NextPageWithLayout = () => {
                                         </li>
                                         <li>
                                             <button
-                                                className="w-full py-1 pl-2 flex justify-start items-center gap-3  rounded-md text-primary-50 button-2 bg-slate-100"
+                                                className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-100"
                                                 onClick={onEnterGift}
                                             >
                                                 <BsCoin />
@@ -226,22 +248,29 @@ const Profile: NextPageWithLayout = () => {
                         </div>
                     }
                 />
-                <div className="gap-4 flex-center-y">
-                    <Image
-                        className="rounded-xl"
-                        src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
-                        alt="avatar"
-                        height={40}
-                        width={40}
-                    />
-                    <div>
-                        <h3 className="text-neutral-100">
-                            {sUser.data?.name.firstName} {sUser.data?.name.lastName},30t
-                        </h3>
-                        <span className="opacity-50 body-2">
-                            {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
-                        </span>
+                <div className="justify-between flex-center-y">
+                    <div className="flex gap-4 flex-center-y">
+                        <Image
+                            className="rounded-xl"
+                            src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
+                            alt="avatar"
+                            height={40}
+                            width={40}
+                        />
+                        <div>
+                            <h3 className="text-neutral-100">
+                                {sUser.data?.name.firstName} {sUser.data?.name.lastName},{' '}
+                                {handleAge(sUser.data?.birthday)}t
+                            </h3>
+                            <span className="opacity-50 body-2">
+                                {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
+                            </span>
+                        </div>
                     </div>
+
+                    <button className="p-2 rounded-xl bg-primary-20" onClick={handleUpdateCommonInfo}>
+                        <HiPencil fill="#7a56fe" size={24} />
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-3 my-8 gap-2.5">
@@ -262,7 +291,6 @@ const Profile: NextPageWithLayout = () => {
                                     />
                                 );
                             } else if (index === 4) {
-                                console.log('image-----', image.url);
                                 return (
                                     <AlbumsItem
                                         key={image.url}
@@ -320,6 +348,12 @@ const Profile: NextPageWithLayout = () => {
                         title="Học vấn"
                         desc={sUser.data?.info.education ? sUser.data.info.education.name : 'Không'}
                         onClick={handleOpenEducationDialog}
+                    />
+                    <SingleGroup
+                        icon={<HeightIcon />}
+                        title="Chiều cao"
+                        desc={sUser.data?.info.height ? sUser.data.info.height + 'm' : 'Cập nhập chiều cao'}
+                        onClick={handleOpenHeightDialog}
                     />
                 </div>
 

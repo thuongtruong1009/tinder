@@ -13,6 +13,7 @@ const nextConfig = {
         VERIFY_OTP_LOGIN: process.env.API_URL + process.env.VERIFY_OTP_LOGIN,
         MESSAGE_LIMIT_DEFAULT: process.env.MESSAGE_LIMIT_DEFAULT,
         MESSAGE_PAGE_DEFAULT: process.env.MESSAGE_PAGE_DEFAULT,
+        MAX_IMAGES_ALBUMS: process.env.MAX_IMAGES_ALBUMS,
     },
     images: {
         domains: [

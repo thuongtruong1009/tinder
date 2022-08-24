@@ -10,9 +10,20 @@ interface Props {
     register: UseFormRegister<any>;
     option?: RegisterOptions;
     error?: string;
+    defaultValue?: string;
 }
 
-export default function Input({ name, label, placeholder, type = 'text', register, option, disabled, error }: Props) {
+export default function Input({
+    name,
+    label,
+    placeholder,
+    type = 'text',
+    register,
+    option,
+    disabled,
+    error,
+    defaultValue,
+}: Props) {
     return (
         <div className="space-y-1">
             <div className="flex flex-col gap-1 bg-neutral-5 py-2 px-[10px] rounded-lg">
@@ -25,6 +36,7 @@ export default function Input({ name, label, placeholder, type = 'text', registe
                     type={type}
                     placeholder={placeholder}
                     disabled={disabled}
+                    defaultValue={defaultValue}
                     {...register(name, { ...option })}
                 />
             </div>

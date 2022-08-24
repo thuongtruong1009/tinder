@@ -111,6 +111,9 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                                 {stranger.info.beer && (
                                     <InfoComponent title={stranger.info.beer.name} Icon={<AncoholIcon />} />
                                 )}
+                                {stranger.info.height && (
+                                    <InfoComponent title={stranger.info.height.toString()} Icon={<HeightIcon />} />
+                                )}
                                 <InfoComponent
                                     title={stranger.info.religion ? 'Có' : 'Không'}
                                     Icon={<ReligionIcon />}
