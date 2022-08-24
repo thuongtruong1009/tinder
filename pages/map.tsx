@@ -16,7 +16,7 @@ const MapContainer: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
     const [isFocus, setIsFocus] = useState(false);
-    const [friends, setFriends] = useState<IStrager[] | any>([]);
+    const [friends, setFriends] = useState<IStranger[] | any>([]);
     const handlePermission = async () => {
         navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
             if (result.state === 'granted') {

@@ -86,7 +86,7 @@ declare interface IUser {
     };
 }
 
-declare interface IStrager {
+declare interface IStranger {
     _id: string;
     name: IUserName;
     avatar: string;

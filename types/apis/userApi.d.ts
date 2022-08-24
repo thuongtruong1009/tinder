@@ -5,7 +5,7 @@ declare interface IResponseUserHobby {
     hobbies: string[];
 }
 declare interface IFindStrangeFriendsAroundResponse {
-    data: IStrager[];
+    data: IStranger[];
 }
 
 declare interface IDataGetNotificationResponse {

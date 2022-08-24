@@ -21,7 +21,7 @@ import SexIcon from '../Icons/SexIcon';
 import SportIcon from '../Icons/SportIcon';
 
 interface Props {
-    stranger: IStrager;
+    stranger: IStranger;
     onClose: () => void;
     onLike: (_id: string) => void;
     onBlock: (_id: string) => void;

@@ -28,10 +28,10 @@ const Surf: NextPageWithLayout = () => {
     const sUser = useSelector(selectUser);
     const sNotification = useSelector(selectNotification).data;
     const [isOpenFavourite, setIsOpenFavourite] = useState(false);
-    const [stranger, setStranger] = useState<IStrager>();
-    const [strangers, setStrangers] = useState<IStrager[]>([]);
+    const [stranger, setStranger] = useState<IStranger>();
+    const [strangers, setStrangers] = useState<IStranger[]>([]);
 
-    const handleSeenInfo = (stranger: IStrager) => () => {
+    const handleSeenInfo = (stranger: IStranger) => () => {
         setStranger(stranger);
     };
 

@@ -9,11 +9,12 @@ import SurtItem from '../Surf/SurtItem';
 import { useAppDispatch } from '../../hooks/redux';
 import { userBlockUser, userLikeUser } from '../../redux/actions/userActions';
 import { toastError, toastSuccess } from '../../utils/toast';
+import { BiSkipNext, BiSkipPrevious } from 'react-icons/bi';
 
 type Props = {
     isFocus: boolean;
     me?: IUserLocation;
-    friends: IStrager[];
+    friends: IStranger[];
     handleFocus: () => void;
     setFriends: Dispatch<any>;
 };
@@ -21,8 +22,8 @@ type Props = {
 export default function Map({ me, isFocus, handleFocus, friends, setFriends }: Props) {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
-    const [userInfo, setUserInfo] = useState<IStrager>();
-    const saveUserInfo = (user: IStrager) => {
+    const [userInfo, setUserInfo] = useState<IStranger>();
+    const saveUserInfo = (user: IStranger) => {
         setUserInfo(user);
     };
     const handleClose = () => {
@@ -49,15 +50,62 @@ export default function Map({ me, isFocus, handleFocus, friends, setFriends }: P
             toastError((error as IResponseError).error);
         }
     };
+
+    const handleNext = (currentPerson: IStranger | undefined) => () => {
+        if (!currentPerson) {
+            setUserInfo(friends[0]);
+        } else {
+            const personIndex = friends.findIndex((person) => person._id === currentPerson._id);
+            if (personIndex >= 0) {
+                if (personIndex === friends.length - 1) {
+                    setUserInfo(friends[0]);
+                } else {
+                    setUserInfo(friends[personIndex + 1]);
+                }
+            }
+        }
+    };
+
+    const handlePrevious = (currentPerson: IStranger | undefined) => () => {
+        if (!currentPerson) {
+            setUserInfo(friends[friends.length - 1]);
+        } else {
+            const personIndex = friends.findIndex((person) => person._id === currentPerson._id);
+            if (personIndex >= 0) {
+                if (personIndex === 0) {
+                    setUserInfo(friends[friends.length - 1]);
+                } else {
+                    setUserInfo(friends[personIndex - 1]);
+                }
+            }
+        }
+    };
+
     return (
         <section className="relative bg-white container-np">
             {me ? (
-                <button
-                    className="absolute z-[500] top-4 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"
-                    onClick={handleFocus}
-                >
-                    <LocationIcon />
-                </button>
+                <>
+                    <button
+                        className="absolute z-[500] top-4 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"
+                        onClick={handleFocus}
+                    >
+                        <LocationIcon />
+                    </button>
+
+                    <button
+                        className="absolute z-[500] top-16 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"
+                        onClick={handleNext(userInfo)}
+                    >
+                        <BiSkipNext />
+                    </button>
+
+                    <button
+                        className="absolute z-[500] top-24 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"
+                        onClick={handlePrevious(userInfo)}
+                    >
+                        <BiSkipPrevious />
+                    </button>
+                </>
             ) : (
                 <div className="absolute-center z-[500] text-center p-2 bg-white rounded-md shadow-md text-red-600">
                     Vui lòng cấp quyền truy cập vị trí

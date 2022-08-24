@@ -6,8 +6,8 @@ import LocationIcon from '../Icons/LocationIcon';
 import CircleButton from '../Home/CircleButton';
 
 type Props = {
-    user: IStrager;
-    onSeen: (user: IStrager) => () => void;
+    user: IStranger;
+    onSeen: (user: IStranger) => () => void;
     onLike: (_id: string) => void;
     onBlock: (_id: string) => void;
 };
