@@ -173,6 +173,7 @@ const Profile: NextPageWithLayout = () => {
         if (sInfo.beers.length === 0) {
             handleGetBeers();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -352,7 +353,7 @@ const Profile: NextPageWithLayout = () => {
                     <SingleGroup
                         icon={<HeightIcon />}
                         title="Chiều cao"
-                        desc={sUser.data?.info.height ? sUser.data.info.height + 'm' : 'Cập nhập chiều cao'}
+                        desc={sUser.data?.info.height ? sUser.data.info.height + 'm' : 'Cập nhật chiều cao'}
                         onClick={handleOpenHeightDialog}
                     />
                 </div>

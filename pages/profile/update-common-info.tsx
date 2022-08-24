@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { VscLoading } from 'react-icons/vsc';
 import Button from '../../components/Button';
 import Title from '../../components/Home/Title';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
-import ProfileIcon from '../../components/Icons/ProfileIcon';
 import UploadImageIcon from '../../components/Icons/UploadImageIcon';
 import Input from '../../components/Input';
 import InputCalendar from '../../components/InputCalendar';
@@ -58,30 +57,26 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
 
     const onSubmit: SubmitHandler<InputProps> = async (data) => {
         try {
-            //submit
             if (imgUrl && data.name && birthday) {
                 const formData = new FormData();
                 if (imageFile) {
-                    // console.log('Có up ảnh mới');
                     formData.append('avatar', imageFile);
                 }
                 if (data.name !== sUser.data?.name.firstName + ' ' + sUser.data?.name.lastName) {
-                    // console.log('Có thay đổi tên');
                     formData.append('name', data.name);
                 }
                 if (birthday.toISOString() !== sUser.data?.birthday) {
-                    // console.log('Có thay đổi ngày sinh');
-                    // console.log(birthday.toISOString());
                     formData.append('birthday', birthday.toISOString());
                 }
 
                 //Check formData has value
                 if (formData.has('avatar') || formData.has('name') || formData.has('birthday')) {
                     setIsLoading(true);
-                    // console.log('formData có dữ liệu');
                     await dispatch(userUpdateCommonInfo(formData)).unwrap();
-                    router.push(APP_PATH.PROFILE);
+                } else {
+                    toastError('Bạn chưa cập nhật gì');
                 }
+                router.push(APP_PATH.PROFILE);
             }
         } catch (error) {
             toastError((error as IResponseError).error);
@@ -94,7 +89,7 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
                 <Title
                     className="mb-[34px]"
                     content={
-                        <button className="p-2">
+                        <button className="p-2" onClick={() => router.push(APP_PATH.PROFILE)}>
                             <ArrowLeft />
                         </button>
                     }
