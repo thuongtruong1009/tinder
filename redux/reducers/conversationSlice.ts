@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
+import { getUniqueListBy } from '../../utils/array';
 import { conversationGet, conversationGetAll, messageCreate } from '../actions/conversationActions';
 
 interface ConversationState {
@@ -25,7 +26,17 @@ export const conversationSlice = createSlice({
             const isExist = state.data.find((item) => item.conversation._id === payload.conversationId);
             if (isExist) {
                 isExist.conversation.messages?.unshift(payload.message);
+                isExist.conversation.updatedAt = payload.message.createdAt;
+                //* remove duplicate message by _id
+                isExist.conversation.messages = getUniqueListBy(
+                    [...isExist.conversation.messages, ...payload.conversation.messages],
+                    '_id',
+                );
             }
+            //* sort by createdAt
+            state.data.sort((a, b) => {
+                return new Date(a.conversation.updatedAt).getTime() - new Date(b.conversation.updatedAt).getTime();
+            });
         },
         setLastLoginById: (state, { payload }) => {
             const isExist = state.data.find((item) => item.conversation._id === payload.conversationId);
@@ -49,15 +60,17 @@ export const conversationSlice = createSlice({
             if (isExist) {
                 if (isExist.conversation.messages.length !== 0) {
                     //* Remove duplicate message
-                    isExist.conversation.messages = [
-                        ...new Set([...isExist.conversation.messages, ...payload.conversation.messages]),
-                    ];
+                    isExist.conversation.messages = getUniqueListBy(
+                        [...isExist.conversation.messages, ...payload.conversation.messages],
+                        '_id',
+                    );
+
                     isExist.limit = payload.limit;
                     isExist.page = payload.page;
                     isExist.next = payload.next;
                 } else {
                     isExist.conversation = payload.conversation;
-                    //* Remove duplicate message
+                    //* Remove duplicate mesasge
                     isExist.conversation.messages = [
                         ...new Set([...isExist.conversation.messages, ...payload.conversation.messages]),
                     ];
@@ -65,18 +78,13 @@ export const conversationSlice = createSlice({
                     isExist.page = payload.page;
                     isExist.next = payload.next;
                 }
-                // state.data = state.data.map((item) => {
-                //     if (item.conversation._id === payload.conversation._id) {
-                //         return {
-                //             ...item,
-                //             conversation: payload.conversation,
-                //         };
-                //     }
-                //     return item;
-                // });
             } else {
                 state.data.push(payload);
             }
+            //* sort by createdAt
+            state.data.sort((a, b) => {
+                return new Date(b.conversation.updatedAt).getTime() - new Date(a.conversation.updatedAt).getTime();
+            });
         });
         builder.addCase(messageCreate.fulfilled, (state, { payload }) => {
             const isExist = state.data.find((item) => item.conversation._id === payload.conversationId);

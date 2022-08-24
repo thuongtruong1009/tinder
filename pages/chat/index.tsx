@@ -13,7 +13,6 @@ import { NextPageWithLayout } from '../../types/global';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/reducers/userSlice';
 import { generateFullName } from '../../utils/name';
-import conversationApi from '../../apis/conversationApi';
 import { useAppDispatch } from '../../hooks/redux';
 import { conversationGetAll } from '../../redux/actions/conversationActions';
 import { toastError, toastSuccess } from '../../utils/toast';
@@ -70,6 +69,7 @@ const Chat: NextPageWithLayout = () => {
                         avatar={item.conversation.users[0].avatar}
                         key={item.conversation._id}
                         onClick={handleClick(item.conversation._id)}
+                        lastMessage={item.conversation.messages[0] || undefined}
                     />
                 ))}
             </ul>
