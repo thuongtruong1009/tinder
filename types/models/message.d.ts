@@ -1,6 +1,6 @@
 declare interface IMessageItem {
     type: 'text' | 'image';
-    value: string;
+    value: string | [];
 }
 declare interface IMessage {
     messages: IMessageItem[];

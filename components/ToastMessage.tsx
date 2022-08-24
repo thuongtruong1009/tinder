@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { Toast } from 'react-hot-toast';
+import APP_PATH from '../constant/appPath';
 import { generateFullName } from '../utils/name';
 
 interface Props {
@@ -9,11 +11,15 @@ interface Props {
 }
 
 function ToastMessage({ t, data }: Props) {
+    const router = useRouter();
     return (
         <div
             className={`${
                 t.visible ? 'animate-enter' : 'animate-leave'
             } max-w-[345px] w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+            onClick={() => {
+                router.push(APP_PATH.CHAT + '/' + data.conversationId);
+            }}
         >
             <div className="flex-1 w-0 p-4">
                 <div className="flex items-start">
@@ -26,7 +32,9 @@ function ToastMessage({ t, data }: Props) {
                         <p className="text-sm font-medium text-gray-900">
                             {generateFullName(data.message.senderId.name)}
                         </p>
-                        <p className="mt-1 text-sm text-gray-500">{data.message.messages[0].value}</p>
+                        <p className="mt-1 text-sm text-gray-500">
+                            {data.message.messages[0].type === 'text' ? data.message.messages[0].value : 'Đã gửi ảnh'}
+                        </p>
                     </div>
                 </div>
             </div>

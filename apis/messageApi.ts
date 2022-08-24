@@ -5,6 +5,11 @@ const ENDPOINT = 'message';
 const URL = `${API}/${ENDPOINT}`;
 
 const messageApi = {
-    create: (body: IDataCreateMessage) => axiosService.post<ICreateMessageResponse>(URL, body),
+    create: (body: FormData) =>
+        axiosService.post<ICreateMessageResponse>(URL, body, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }),
 };
 export default messageApi;

@@ -47,7 +47,7 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
         }
     };
     return (
-        <section className="relative container-np">
+        <section className="relative container-np bg-white">
             {me ? (
                 <button
                     className="absolute z-[500] top-4 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"

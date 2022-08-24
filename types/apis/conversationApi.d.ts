@@ -2,6 +2,7 @@ declare interface IConversationPagination {
     conversation: IConversation;
     limit: number;
     page: number;
+    next: boolean;
 }
 declare interface IGetAllConversationsResponse extends IResponseSuccess {
     data: IConversationPagination[];
