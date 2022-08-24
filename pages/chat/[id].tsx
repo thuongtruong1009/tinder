@@ -29,6 +29,7 @@ import ImageUploadItem from '../../components/Chat/ImageUploadItem';
 timeago.register('vi', vi);
 
 const Room: NextPageWithLayout = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const socket = useSocket();
 
     const router = useRouter();
@@ -54,15 +55,18 @@ const Room: NextPageWithLayout = () => {
         router.push(APP_PATH.CHAT);
     };
     const handleUpload = () => {
-        const input = inputRef.current;
-        if (input) {
-            input.click();
+        if (inputRef.current) {
+            inputRef.current.click();
         }
     };
     const handleChangeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         // check if not exist before add
         if (e.target.files) {
             let pass = true;
+            if (e.target.files.length > 5) {
+                pass = false;
+                toastError('Bạn chỉ được upload tối đa 5 file');
+            }
             const files = Array.from(e.target.files);
             files.forEach((file) => {
                 if (!file.type.includes('image')) {
@@ -81,26 +85,37 @@ const Room: NextPageWithLayout = () => {
     };
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!message) toastError('Vui lòng nhập tin nhắn');
+        if ((!message && !files.length) || isLoading) return;
+        if (!message && !files.length) {
+            toastError('Vui lòng nhập tin nhắn');
+            return;
+        }
         try {
             if (conversationInfo) {
-                await dispatch(
-                    messageCreate({
-                        idReceive: conversationInfo.conversation.users[0]._id,
-                        messages: [
-                            {
-                                value: message,
-                                type: 'text',
-                            },
-                        ],
-                    }),
-                );
-                setMessage('');
-                setFiles([]);
+                const formData = new FormData();
+                let messages: IMessageItem[] = [];
+                if (message) {
+                    messages.push({
+                        value: message,
+                        type: 'text',
+                    });
+                }
+                if (files.length) {
+                    for (let image of files) {
+                        formData.append('images', image);
+                    }
+                }
+                formData.append('idReceive', conversationInfo.conversation.users[0]._id);
+                formData.append('messages', JSON.stringify(messages));
+                setIsLoading(true);
+                await dispatch(messageCreate(formData));
             }
         } catch (error) {
             toastError((error as IResponseError).error);
         }
+        setIsLoading(false);
+        setMessage('');
+        setFiles([]);
     };
     useEffect(() => {
         async function fetchConversation(id: string) {
@@ -254,7 +269,7 @@ const Room: NextPageWithLayout = () => {
                         placeholder="Aa"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        required
+                        required={files.length === 0}
                     />
                     <Popover className="relative flex-center">
                         {({ open }) => (
@@ -298,8 +313,9 @@ const Room: NextPageWithLayout = () => {
                 </div>
 
                 <button
-                    className="text-white rounded-full cursor-pointer bg-main-purple flex-center w-9 h-9"
+                    className="text-white transition-all rounded-full cursor-pointer bg-main-purple flex-center w-9 h-9 disabled:cursor-not-allowed disabled:opacity-50"
                     type="submit"
+                    disabled={(!message && !files.length) || isLoading}
                 >
                     <SendIcon />
                 </button>

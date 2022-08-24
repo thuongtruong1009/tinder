@@ -22,6 +22,7 @@ export default function ListMessage({ userId, className, conversationId }: Props
         if (data)
             try {
                 await dispatch(conversationGet({ id: conversationId, limit, page })).unwrap();
+                console.log('zo day');
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
@@ -44,7 +45,12 @@ export default function ListMessage({ userId, className, conversationId }: Props
                     <InfiniteScroll
                         dataLength={data.conversation.messages.length}
                         next={() => {
-                            fetchConversation(data.page + 1, data.limit);
+                            if (data.next) {
+                                fetchConversation(
+                                    data.page ? data.page + 1 : +(process.env.MESSAGE_PAGE_DEFAULT as string),
+                                    data.limit ? data.limit : +(process.env.MESSAGE_LIMIT_DEFAULT as string),
+                                );
+                            }
                         }}
                         className="gap-4 px-4 py-2"
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
