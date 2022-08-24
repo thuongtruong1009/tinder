@@ -10,5 +10,6 @@ const APP_PATH = {
     PROFILE: '/profile',
     UPLOAD_ALBUMS: '/profile/upload-albums',
     ALBUMS: '/profile/albums',
+    UPDATE_COMMON_INFO: '/profile/update-common-info',
 };
 export default APP_PATH;

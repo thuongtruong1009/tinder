@@ -24,9 +24,6 @@ export default function HobbyDialog({ isOpen, onClose }: Props) {
         sInfo.hobbies.filter((hobby) => !hobbies.some((h) => h._id === hobby._id)),
     );
 
-    console.log('hobbies: ', hobbies);
-    console.log('hobbyOptions: ', hobbyOptions);
-
     const handleClick = (hobby: IHobby) => () => {
         const newHobbys = [...hobbies, hobby];
         setHobbies(newHobbys);

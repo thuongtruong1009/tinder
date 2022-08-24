@@ -1,7 +1,8 @@
 import { RadioGroup } from '@headlessui/react';
 import { useState } from 'react';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { userUpdateBio } from '../../redux/actions/userActions';
+import { selectUser } from '../../redux/reducers/userSlice';
 import { toastError } from '../../utils/toast';
 import Button from '../Button';
 import Dialog from '../Dialog';
@@ -16,7 +17,8 @@ interface Props {
 
 export default function BioDialog({ isOpen, onClose }: Props) {
     const dispatch = useAppDispatch();
-    const [value, setValue] = useState('');
+    const sUser = useAppSelector(selectUser);
+    const [value, setValue] = useState(sUser.data ? sUser.data.profile.bio : '');
     const handleClose = () => {
         try {
             onClose();
@@ -33,6 +35,7 @@ export default function BioDialog({ isOpen, onClose }: Props) {
                     rows={4}
                     placeholder="Ví dụ: Quan trọng là important"
                     maxLength={200}
+                    defaultValue={value}
                     onChange={(e) => setValue(e.target.value)}
                 ></textarea>
                 <Button block title="Lưu" type="secondary" className="mt-auto" onClick={handleClose} />

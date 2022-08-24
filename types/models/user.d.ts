@@ -44,6 +44,7 @@ declare interface IUserBagItem {
 }
 
 declare interface IUserInfo {
+    height: number;
     reason: string;
     beer: IBeer;
     religion: boolean;
@@ -77,6 +78,7 @@ declare interface IUser {
     bag: IUserBagItem[];
     lastLocation: IUserLocation;
     info: {
+        height: Number;
         reason: string;
         beer: IBeer;
         religion: boolean;
@@ -95,4 +97,10 @@ declare interface IStrager {
     info: IUserInfo;
     hobbies: IUserHobby[];
     profile: IProfile;
+}
+
+declare interface ICommonInfo {
+    name?: IUserName;
+    birthday?: string;
+    avatar?: string;
 }

@@ -70,6 +70,7 @@ module.exports = {
                     50: '#7a56fe',
                     40: '#5D5FEF',
                     30: '#a48bfe',
+                    20: '#F2EEFF',
                 },
                 thirdth: {
                     70: '#689f38',
