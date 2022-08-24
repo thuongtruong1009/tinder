@@ -7,9 +7,9 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 import NavbarLayout from '../../components/NavbarLayout';
 import LikeItem from '../../components/Chat/LikeItem';
-import ChatList from '../../components/Chat/ChatList';
+import ChatListItem from '../../components/Chat/ChatListItem';
 import { NextPageWithLayout } from '../../types/global';
-import Matching from '../match';
+// import Matching from '../match';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/reducers/userSlice';
 import { generateFullName } from '../../utils/name';
@@ -65,7 +65,7 @@ const Chat: NextPageWithLayout = () => {
             <h5 className="my-4 font-bold body-1 text-neutral-100">Trò chuyện</h5>
             <ul className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-357px)] min-h-[200px]">
                 {sConversation.data.map((item) => (
-                    <ChatList
+                    <ChatListItem
                         name={generateFullName(item.conversation.users[0].name)}
                         avatar={item.conversation.users[0].avatar}
                         key={item.conversation._id}

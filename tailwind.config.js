@@ -84,7 +84,7 @@ module.exports = {
                     dark_purple: '#EAEAEA',
                     grey: '#343E58',
                     pink: '#fd65b7',
-                    blue: '07C6FD'
+                    blue: '07C6FD',
                 },
             },
             fontFamily: {
@@ -93,5 +93,5 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    plugins: [require('@tailwindcss/line-clamp')],
 };

@@ -27,7 +27,7 @@ const MessageItem = ({ messages, isMe }: Props) => {
                                         key={image}
                                         className="image-container max-w-[200px] rounded-xl overflow-hidden w-full"
                                     >
-                                        <Image className="image" src={image} alt="img" layout="fill" />
+                                        <Image className="image" src={image} alt="img" layout="fill" priority />
                                     </div>
                                 ))}
                             </div>
@@ -51,7 +51,7 @@ const MessageItem = ({ messages, isMe }: Props) => {
                     return (message.value as []).map((image, index) => (
                         <div className="flex flex-wrap justify-start" key={index}>
                             <div className="image-container max-w-[200px] rounded-xl overflow-hidden w-full">
-                                <Image className="image" src={image} alt="img" layout="fill" />
+                                <Image className="image" src={image} alt="img" layout="fill" priority />
                             </div>
                         </div>
                     ));
