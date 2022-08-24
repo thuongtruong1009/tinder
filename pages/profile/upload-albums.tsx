@@ -42,15 +42,23 @@ const UpLoadAlbums: NextPageWithLayout = () => {
 
         if (remainingImages < filesLength) {
             for (let index = 0; index < remainingImages; index++) {
-                const image = e.target.files[index];
-                newAlbums.push(image);
+                const file: File = e.target.files[index];
+                if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+                    toastError(file.name + ' không phải kiểu ảnh được phép tải lên.');
+                } else {
+                    newAlbums.push(file);
+                }
             }
 
             setRemainingImages(0);
         } else {
             for (let index = 0; index < filesLength; index++) {
-                const image = e.target.files[index];
-                newAlbums.push(image);
+                const file: File = e.target.files[index];
+                if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+                    toastError(file.name + ' không phải kiểu ảnh được phép tải lên.');
+                } else {
+                    newAlbums.push(file);
+                }
             }
 
             setRemainingImages(remainingImages - filesLength);
@@ -80,6 +88,7 @@ const UpLoadAlbums: NextPageWithLayout = () => {
             await dispatch(userUploadAlbums(formData)).unwrap();
             router.push(APP_PATH.PROFILE);
         } catch (error) {
+            console.log(error);
             toastError((error as IResponseError).error);
         }
     };

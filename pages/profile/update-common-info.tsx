@@ -46,8 +46,13 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
     };
 
     const handleFileInput = (e: any) => {
-        setImageFile(e.target.files[0]);
-        setImgUrl(URL.createObjectURL(e.target.files[0]));
+        const file: File = e.target.files[0];
+        if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+            toastError(file.name + ' không phải kiểu ảnh được phép tải lên.');
+        } else {
+            setImageFile(file);
+            setImgUrl(URL.createObjectURL(file));
+        }
     };
 
     const handleRemove = () => {
