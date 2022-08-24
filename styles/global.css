@@ -116,7 +116,7 @@
         @apply w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
     }
     .container-np {
-        @apply bg-white w-full mx-auto max-w-[377px] min-h-screen shadow-md;
+        @apply w-full mx-auto max-w-[377px] min-h-screen shadow-md;
     }
     .flex-center {
         @apply flex items-center justify-center;

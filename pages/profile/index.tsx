@@ -1,6 +1,10 @@
+import { useRouter } from 'next/router';
 import Title from '../../components/Home/Title';
 import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
+import { RiLogoutCircleRLine } from 'react-icons/ri';
+import { BsCoin } from 'react-icons/bs';
+import Tag from '../../components/Home/Tag';
 import DoubleGroup from '../../components/Home/DoubleGroup';
 import SingleGroup from '../../components/Home/SingleGroup';
 import AncoholIcon from '../../components/Icons/profile/AncoholIcon';
@@ -16,22 +20,21 @@ import HobbyDialog from '../../components/Profile/HobbyDialog';
 import { Popover } from '@headlessui/react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { selectUser, userLogOut } from '../../redux/reducers/userSlice';
+import { Router } from 'next/router';
+import APP_PATH from '../../constant/appPath';
+import { selectInfo } from '../../redux/reducers/infoSlice';
+import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
+import { toastError } from '../../utils/toast';
 import ReligionDialog from '../../components/Profile/ReligionDialog';
 import EducationDialog from '../../components/Profile/EducationDialog';
 import GenderDialog from '../../components/Profile/GenderDialog';
+import AlbumsItem from '../../components/Profile/AlbumsItem';
+import UploadImageIcon from '../../components/Icons/UploadImageIcon';
 import BeerDialog from '../../components/Profile/BeerDialog';
 import Hobby from '../../components/Home/Hobby';
-import { toastError } from '../../utils/toast';
-import UploadImageIcon from '../../components/Icons/UploadImageIcon';
-import { useRouter } from 'next/router';
-import APP_PATH from '../../constant/appPath';
-import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
-import { selectInfo } from '../../redux/reducers/infoSlice';
-import AlbumsItem from '../../components/Profile/AlbumsItem';
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter();
-
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
     const sInfo = useAppSelector(selectInfo);
@@ -48,6 +51,10 @@ const Profile: NextPageWithLayout = () => {
 
     const handleLogOut = () => {
         dispatch(userLogOut());
+    };
+
+    const onEnterGift = () => {
+        router.push(APP_PATH.GIFT);
     };
 
     const handleOpenHobbyialog = () => {
@@ -145,7 +152,6 @@ const Profile: NextPageWithLayout = () => {
         if (sInfo.beers.length === 0) {
             handleGetBeers();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -156,7 +162,7 @@ const Profile: NextPageWithLayout = () => {
             <ReligionDialog
                 isOpen={isOpenReligionDialog}
                 onClose={handleCloseReligionDialog}
-                religion={sUser.data?.info.religion}
+                religion={sUser.data?.info?.religion}
             />
             {sInfo.educations.length > 0 && (
                 <EducationDialog
@@ -165,7 +171,6 @@ const Profile: NextPageWithLayout = () => {
                     educationId={sUser.data?.info?.education?._id}
                 />
             )}
-
             {sInfo.genders.length > 0 && (
                 <GenderDialog
                     isOpen={isOpenGenderDialog}
@@ -196,13 +201,23 @@ const Profile: NextPageWithLayout = () => {
                                 </Popover.Button>
 
                                 <Popover.Panel className="absolute right-0 z-10 top-full">
-                                    <ul className="flex flex-col gap-1 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
+                                    <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
                                         <li>
                                             <button
-                                                className="w-full py-1 text-center rounded-md text-primary-50 button-2 bg-slate-100"
+                                                className="w-full py-1 pl-2 flex justify-start items-center gap-3 rounded-md text-primary-50 button-2 bg-slate-100"
                                                 onClick={handleLogOut}
                                             >
-                                                Đăng xuất
+                                                <RiLogoutCircleRLine />
+                                                <p>Đăng xuất</p>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button
+                                                className="w-full py-1 pl-2 flex justify-start items-center gap-3  rounded-md text-primary-50 button-2 bg-slate-100"
+                                                onClick={onEnterGift}
+                                            >
+                                                <BsCoin />
+                                                <p>Coins package</p>
                                             </button>
                                         </li>
                                     </ul>

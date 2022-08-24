@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SVGProps } from 'react';
 
 const Logo = (props: SVGProps<SVGSVGElement>) => (
-    <section className="">
+    <section className="flex-center flex-col gap-10">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={90}
@@ -18,6 +18,10 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
                 <path d="M140.6 216.6c-5.9 5.9-2 15.4 6.4 15.4 5.5 0 9-3.4 9-8.8 0-8.3-9.6-12.4-15.4-6.6z" />
             </g>
         </svg>
+        <div className="flex-center gap-2 body-2 text-white">
+            <p>Foxy</p>
+            <span>. . .</span>
+        </div>
     </section>
 );
 
