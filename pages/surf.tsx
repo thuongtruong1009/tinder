@@ -35,11 +35,6 @@ const Surf: NextPageWithLayout = () => {
         setStranger(stranger);
     };
 
-    const handleFavourite = () => {
-        console.log('Get matching list at here');
-        setIsOpenFavourite(true);
-    };
-
     const handleClose = () => {
         setIsOpenFavourite(false);
         setStranger(undefined);
@@ -141,7 +136,6 @@ const Surf: NextPageWithLayout = () => {
                                     onSeen={handleSeenInfo}
                                     user={strange}
                                     onBlock={handleBlock}
-                                    onFavourite={handleFavourite}
                                     onLike={handleLike}
                                 />
                             </SwiperSlide>
