@@ -7,13 +7,13 @@ import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import PhoneOtpIcon from '../../components/Icons/PhoneOtpIcon';
 import VNFlagIcon from '../../components/Icons/VietNamFlagIcon';
 import APP_PATH from '../../constant/appPath';
-import { UserContext } from '../../context/userContext';
 import { UserContextType } from '../../types/context/user';
 import Cookies from 'js-cookie';
 import { toastError, toastSuccess } from '../../utils/toast';
 import authApi from '../../apis/authApi';
 import { useAppDispatch } from '../../hooks/redux';
 import { userSendOTPRegister } from '../../redux/actions/userActions';
+import { UserContext } from '../../context/userContext';
 
 interface Props {}
 

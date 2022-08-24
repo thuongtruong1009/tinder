@@ -8,6 +8,7 @@ interface ConversationState {
         conversation: IConversation;
         limit: number;
         page: number;
+        next: boolean;
     }[];
 }
 
