@@ -56,6 +56,7 @@ const MapContainer: NextPageWithLayout = () => {
                 isFocus={isFocus}
                 handleFocus={handleFocus}
                 friends={friends}
+                setFriends={setFriends}
             />
         </>
     );

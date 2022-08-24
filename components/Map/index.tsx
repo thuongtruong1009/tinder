@@ -2,7 +2,7 @@ import { Circle, MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapUserInfo from './MapUserInfo';
 import MapMaker from './MapMaker';
-import { useState } from 'react';
+import { Dispatch, useState } from 'react';
 import LocationIcon from '../Icons/LocationIcon';
 import MapMakerFriend from './MapMakerFriend';
 import SurtItem from '../Surf/SurtItem';
@@ -15,9 +15,10 @@ type Props = {
     me?: IUserLocation;
     friends: IStrager[];
     handleFocus: () => void;
+    setFriends: Dispatch<any>;
 };
 
-export default function Map({ me, isFocus, handleFocus, friends }: Props) {
+export default function Map({ me, isFocus, handleFocus, friends, setFriends }: Props) {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [userInfo, setUserInfo] = useState<IStrager>();
@@ -30,6 +31,7 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
     const handleLike = async (_id: string) => {
         try {
             await dispatch(userLikeUser(_id)).unwrap();
+            setFriends([...friends.filter((user) => user._id !== _id)]);
             setUserInfo(undefined);
             toastSuccess('Bạn đã thích thành công');
         } catch (error) {
@@ -40,6 +42,7 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
     const handleBlock = async (_id: string) => {
         try {
             await dispatch(userBlockUser(_id)).unwrap();
+            setFriends([...friends.filter((user) => user._id !== _id)]);
             setUserInfo(undefined);
             toastSuccess('Bạn đã chặn thành công');
         } catch (error) {
@@ -47,7 +50,7 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
         }
     };
     return (
-        <section className="relative container-np bg-white">
+        <section className="relative bg-white container-np">
             {me ? (
                 <button
                     className="absolute z-[500] top-4 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"
