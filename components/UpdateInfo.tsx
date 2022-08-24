@@ -51,6 +51,9 @@ const UpdateInfo: NextPageWithLayout = () => {
                     userFirstUpdate({ name, birthday: birthday.toISOString(), gender: gender.value }),
                 ).unwrap();
             } else {
+                if (!birthday) {
+                    return;
+                }
                 const { name, email } = data;
                 await dispatch(
                     userFirstUpdate({ email, name, birthday: birthday.toISOString(), gender: gender.value }),
@@ -75,7 +78,7 @@ const UpdateInfo: NextPageWithLayout = () => {
         getGender();
     }, [dispatch]);
     return (
-        <section className="container">
+        <section className="container bg-white">
             <div className="relative h-screen with-navbar">
                 <Title
                     className="mb-[34px]"
@@ -91,9 +94,6 @@ const UpdateInfo: NextPageWithLayout = () => {
                     </div>
                     <div className="mb-6 space-y-1">
                         <h4 className="text-neutral-100">Thông tin cá nhân</h4>
-                        {/* <p className="text-neutral-40 text-sm leading-[18px]">
-                            Vui lòng nhập mã OTP được gửi về số điện thoại của bạn, để hoàn thành đăng nhập.
-                        </p> */}
                     </div>
                     <form className="flex flex-col gap-4" id="first-update" onSubmit={handleSubmit(onSubmit)}>
                         <Input
@@ -129,7 +129,10 @@ const UpdateInfo: NextPageWithLayout = () => {
                                     value: /\S+@\S+\.\S+/,
                                     message: 'Email không hợp lệ',
                                 },
-                                required: true,
+                                required: {
+                                    value: true,
+                                    message: 'Vui lòng nhập email',
+                                },
                             }}
                             error={errors.email?.message}
                         />

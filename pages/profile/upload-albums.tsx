@@ -130,16 +130,18 @@ const UpLoadAlbums: NextPageWithLayout = () => {
                     </div>
                 )}
             </div>
-            {!isLoading && (
-                <Button
-                    onClick={handleSubmit}
-                    block
-                    disabled={sUser.data && sUser.data.profile.albums.length === 10 ? true : false}
-                    title="Lưu"
-                    type="secondary"
-                    className="mt-auto"
-                />
-            )}
+            {!isLoading &&
+                sUser.data &&
+                sUser.data.profile.albums.length < +(process.env.MAX_IMAGES_ALBUMS as string) && (
+                    <Button
+                        onClick={handleSubmit}
+                        block
+                        disabled={sUser.data && sUser.data.profile.albums.length === 10 ? true : false}
+                        title="Lưu"
+                        type="secondary"
+                        className="mt-auto"
+                    />
+                )}
             {isLoading && (
                 <button className="w-full text-white bg-neutral-100 btn-md flex-center">
                     <VscLoading className="animate-spin" />
