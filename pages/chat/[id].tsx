@@ -63,18 +63,18 @@ const Room: NextPageWithLayout = () => {
         // check if not exist before add
         if (e.target.files) {
             let pass = true;
-            if (e.target.files.length > 5) {
+            if (e.target.files.length + files.length > 5) {
                 pass = false;
                 toastError('Bạn chỉ được upload tối đa 5 file');
             }
-            const files = Array.from(e.target.files);
-            files.forEach((file) => {
+            const newFiles = Array.from(e.target.files);
+            newFiles.forEach((file) => {
                 if (!file.type.includes('image')) {
                     pass = false;
                 }
             });
             if (pass) {
-                setFiles(files);
+                setFiles([...files, ...newFiles]);
             }
         }
     };
@@ -224,7 +224,7 @@ const Room: NextPageWithLayout = () => {
             </div>
             {conversationInfo && (
                 <ListMessage
-                    className={`${files.length !== 0 ? 'h-[calc(100vh-275px)]' : 'h-[calc(100vh-208px)]'}`}
+                    className={`${files.length !== 0 ? 'h-[calc(100vh-280px)]' : 'h-[calc(100vh-216px)]'}`}
                     userId={sUser.data?._id}
                     conversationId={conversationInfo.conversation._id}
                 />
