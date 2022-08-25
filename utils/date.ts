@@ -8,3 +8,9 @@ export const compareDateToMinutes = (date1: Date, date2: Date) => {
         date1.getMinutes() === date2.getMinutes()
     );
 };
+export const formatDatetime = (date: Date) => {
+    return `${date.getHours().toString().padStart(2, '0')}:${date
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}, ${date.getDate()} tháng ${date.getMonth() + 1} năm ${date.getFullYear()}`;
+};

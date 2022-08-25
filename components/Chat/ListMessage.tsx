@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { conversationGet } from '../../redux/actions/conversationActions';
 import { selectConversation } from '../../redux/reducers/conversationSlice';
-import { compareDateToMinutes } from '../../utils/date';
+import { compareDateToMinutes, formatDatetime } from '../../utils/date';
 import { toastError } from '../../utils/toast';
 import MessageItem from './MessageItem';
 
@@ -74,7 +74,7 @@ export default function ListMessage({ userId, className, conversationId }: Props
                                             messages={message.messages}
                                         />
                                         <p className="text-xs text-center">
-                                            {new Date(message.createdAt).toLocaleString()}
+                                            {formatDatetime(new Date(message.createdAt))}
                                         </p>
                                     </Fragment>
                                 );

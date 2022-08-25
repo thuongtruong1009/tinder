@@ -15,7 +15,11 @@ const initialState: NotificationState = {
 export const notificationSlice = createSlice({
     name: 'notification',
     initialState,
-    reducers: {},
+    reducers: {
+        addNotification: (state, { payload }) => {
+            state.data.unshift(payload);
+        },
+    },
     extraReducers(builder) {
         builder.addCase(notificationGetNotifications.fulfilled, (state, { payload }) => {
             state.data = payload;
@@ -23,7 +27,7 @@ export const notificationSlice = createSlice({
     },
 });
 
-// export const {} = userSlice.actions;
+export const { addNotification } = notificationSlice.actions;
 
 export const selectNotification = (state: RootState) => state.notification;
 

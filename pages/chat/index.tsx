@@ -28,6 +28,11 @@ const Chat: NextPageWithLayout = () => {
     const handleClick = (_id: string) => () => {
         router.push(`${APP_PATH.CHAT}/${_id}`);
     };
+    const handleClickLikeItem = (_id: string) => {
+        const conversationId = sConversation.data.find((item) => item.conversation.users[0]._id === _id)?.conversation
+            ._id;
+        conversationId && router.push(`${APP_PATH.CHAT}/${conversationId}`);
+    };
     useEffect(() => {
         async function getAllConversations() {
             try {
@@ -60,7 +65,11 @@ const Chat: NextPageWithLayout = () => {
                     >
                         {sUser.data?.friends.map((item: IUserFriend, index) => (
                             <SwiperSlide className="p-1" key={index}>
-                                <LikeItem avatar={item.avatar} name={generateFullName(item.name)} />
+                                <LikeItem
+                                    avatar={item.avatar}
+                                    name={generateFullName(item.name)}
+                                    onClick={() => handleClickLikeItem(item._id)}
+                                />
                             </SwiperSlide>
                         ))}
                     </Swiper>

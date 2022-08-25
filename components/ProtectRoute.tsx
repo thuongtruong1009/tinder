@@ -9,6 +9,9 @@ import UpdateInfo from './UpdateInfo';
 import { addMessage } from '../redux/reducers/conversationSlice';
 import ToastMessage from './ToastMessage';
 import { useSocket } from '../context/SocketContext';
+import { addNotification } from '../redux/reducers/notificationSlice';
+import { conversationGetAll } from '../redux/actions/conversationActions';
+import { toastError } from '../utils/toast';
 
 interface Props {
     children: React.ReactNode;
@@ -32,10 +35,21 @@ export default function ProtectRoute({ children }: Props) {
         setRouterAsPath(router.asPath);
     }, [router]);
 
+    async function getAllConversations() {
+        try {
+            await dispatch(conversationGetAll()).unwrap();
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
+    }
     const sUser = useAppSelector(selectUser);
     async function handleResponseSocket(data: any) {
         switch (data.type) {
             case 'notification':
+                if (data.data.type === 'match') {
+                    await getAllConversations();
+                }
+                dispatch(addNotification(data.data));
                 toast(data.data.message, {
                     icon: '❤️',
                 });
