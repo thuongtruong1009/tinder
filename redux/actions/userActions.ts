@@ -205,3 +205,12 @@ export const userUpdateHeight = createAsyncThunk('user/userUpdateHeight', async 
         return thunkAPI.rejectWithValue(error);
     }
 });
+
+export const userGetFriends = createAsyncThunk('user/userGetFriends', async (_data, thunkAPI) => {
+    try {
+        const response = await userApi.getFriends();
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});

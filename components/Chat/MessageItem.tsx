@@ -48,13 +48,18 @@ const MessageItem = ({ messages, isMe }: Props) => {
                         </div>
                     );
                 } else if (message.type === 'image') {
-                    return (message.value as []).map((image, index) => (
+                    return (
                         <div className="flex flex-wrap justify-start" key={index}>
-                            <div className="image-container max-w-[200px] rounded-xl overflow-hidden w-full">
-                                <Image className="image" src={image} alt="img" layout="fill" priority />
-                            </div>
+                            {(message.value as []).map((image) => (
+                                <div
+                                    key={image}
+                                    className="image-container max-w-[200px] rounded-xl overflow-hidden w-full"
+                                >
+                                    <Image className="image" src={image} alt="img" layout="fill" priority />
+                                </div>
+                            ))}
                         </div>
-                    ));
+                    );
                 }
             })}
         </>

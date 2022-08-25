@@ -19,6 +19,7 @@ import {
     userDeleteImage,
     userUpdateCommonInfo,
     userUpdateHeight,
+    userGetFriends,
 } from '../actions/userActions';
 
 interface UserState {
@@ -156,6 +157,12 @@ export const userSlice = createSlice({
         builder.addCase(userUpdateHeight.fulfilled, (state, { payload }) => {
             if (state.data) {
                 state.data.info.height = payload;
+            }
+        });
+
+        builder.addCase(userGetFriends.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.friends = payload;
             }
         });
     },

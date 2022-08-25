@@ -12,6 +12,7 @@ import { useSocket } from '../context/SocketContext';
 import { addNotification } from '../redux/reducers/notificationSlice';
 import { conversationGetAll } from '../redux/actions/conversationActions';
 import { toastError } from '../utils/toast';
+import { userGetFriends } from '../redux/actions/userActions';
 
 interface Props {
     children: React.ReactNode;
@@ -48,6 +49,7 @@ export default function ProtectRoute({ children }: Props) {
             case 'notification':
                 if (data.data.type === 'match') {
                     await getAllConversations();
+                    await dispatch(userGetFriends());
                 }
                 dispatch(addNotification(data.data));
                 toast(data.data.message, {

@@ -116,7 +116,7 @@ const Surf: NextPageWithLayout = () => {
                                                 </button>
                                             </Popover.Button>
                                         </div>
-                                        <div className="flex flex-col gap-1 overflow-y-auto bg-white rounded-md max-h-60 min-w-[320px]">
+                                        <div className="flex flex-col gap-1 overflow-y-auto bg-white rounded-md min-w-[320px]">
                                             {sNotification.length > 0 ? (
                                                 sNotification.map((notification) => (
                                                     <NotificationItem key={notification._id} data={notification} />

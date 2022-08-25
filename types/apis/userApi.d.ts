@@ -93,3 +93,7 @@ declare interface IUpdateUserCommonInfoResponse extends IResponseSuccess {
 declare interface IUpdateUserHeightResponse extends IResponseSuccess {
     data: number;
 }
+
+declare interface IGetFriendResponse extends IResponseSuccess {
+    data: IUserFriend[];
+}
