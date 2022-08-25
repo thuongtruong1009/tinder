@@ -16,7 +16,7 @@ export default function NavBarItem({ Icon, label, IconActive, active, href }: Pr
         else toastError('Chức năng này chưa được phát triển');
     };
     return (
-        <button className="flex-col-center gap-y-1 aspect-square" onClick={handleClick}>
+        <button className="flex-1 py-2 flex-col-center gap-y-2" onClick={handleClick}>
             {active ? IconActive : Icon}
             <p className={`text-xs leading-4 ${active ? 'text-primary-50' : 'text-neutral-40'}`}>{label}</p>
         </button>

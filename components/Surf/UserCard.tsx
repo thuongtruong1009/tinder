@@ -24,12 +24,12 @@ const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
         return user.avatar;
     };
     return (
-        <div className="rounded-[40px] h-[70vh] relative before:absolute before:inset-0 before:bg-card before:z-10">
+        <div className="rounded-[40px] h-[calc(100vh-172px)] relative before:absolute before:inset-0 before:bg-card before:z-10">
             <div className="w-full h-full image-container">
                 <Image
                     className="object-cover image"
                     alt="avatar"
-                    objectPosition="top"
+                    objectPosition="center"
                     layout="fill"
                     src={handleGetDefault()}
                 />

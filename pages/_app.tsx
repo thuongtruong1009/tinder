@@ -11,11 +11,16 @@ import 'swiper/css/bundle';
 import ProtectRoute from '../components/ProtectRoute';
 import { SocketProvider } from '../context/SocketContext';
 import UserProvider from '../context/UserContext';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import APP_PATH from '../constant/appPath';
+import NotSupport from '../components/NotSupport';
+import ScreenRoute from '../components/ScreenRoute';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const getLayout = Component.getLayout ?? ((page) => page);
-
     useEffect(() => {
         async function getCurrentUser() {
             if (localStorage.getItem('token') && !store.getState().user.isLogin) {
@@ -30,6 +35,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             setLoading(true);
         };
     }, []);
+
     return (
         <UserProvider>
             <Head>
@@ -41,7 +47,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             </Head>
             <Provider store={store}>
                 {!loading ? (
-                    <>
+                    <ScreenRoute>
                         {Component.protected ? (
                             <ProtectRoute>
                                 <SocketProvider>{getLayout(<Component {...pageProps} />)}</SocketProvider>
@@ -49,7 +55,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                         ) : (
                             getLayout(<Component {...pageProps} />)
                         )}
-                    </>
+                    </ScreenRoute>
                 ) : (
                     <Loading />
                 )}
