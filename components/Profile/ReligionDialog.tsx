@@ -44,7 +44,7 @@ export default function ReligionDialog({ isOpen, onClose, religion }: Props) {
     };
     return (
         <>
-            <Dialog title="Cho mọi người biết lý do bạn ở đây?" isOpen={isOpen} onClose={handleClose}>
+            <Dialog title="Tôn giáo?" isOpen={isOpen} onClose={handleClose}>
                 <RadioGroup value={value} onChange={setValue} className="space-y-4">
                     {ReligionOptions.map((item) => (
                         <RadioGroup.Option

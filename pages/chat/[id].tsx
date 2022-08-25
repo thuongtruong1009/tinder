@@ -139,8 +139,6 @@ const Room: NextPageWithLayout = () => {
                 }
             });
             socket.on(`online/${conversationInfo.conversation.users[0]._id}`, (data: any) => {
-                console.log('data: ', data);
-                console.log(isFriendOnline);
                 //* check status different from current status before set
                 //* if user is offline, set last login time
                 if (!data.status) {

@@ -10,7 +10,7 @@ import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
 import ProtectRoute from '../components/ProtectRoute';
 import { SocketProvider } from '../context/SocketContext';
-import UserProvider from '../context/userContext';
+import UserProvider from '../context/UserContext';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const [loading, setLoading] = useState(true);

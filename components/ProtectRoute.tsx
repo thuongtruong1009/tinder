@@ -36,7 +36,6 @@ export default function ProtectRoute({ children }: Props) {
     async function handleResponseSocket(data: any) {
         switch (data.type) {
             case 'notification':
-                console.log(data.data);
                 toast(data.data.message, {
                     icon: '❤️',
                 });

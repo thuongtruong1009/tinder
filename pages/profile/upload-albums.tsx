@@ -28,7 +28,6 @@ const UpLoadAlbums: NextPageWithLayout = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [albums, setAlbums] = useState<File[]>([]);
-    console.log('albums: ', albums);
 
     const handleClick = () => {
         if (uploadBtnRef.current) {
@@ -88,7 +87,6 @@ const UpLoadAlbums: NextPageWithLayout = () => {
             await dispatch(userUploadAlbums(formData)).unwrap();
             router.push(APP_PATH.PROFILE);
         } catch (error) {
-            console.log(error);
             toastError((error as IResponseError).error);
         }
     };

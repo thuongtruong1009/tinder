@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { UserContextType } from '../../types/context/user';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppDispatch } from '../../hooks/redux';
 import Button from '../../components/Button';
 import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
@@ -13,14 +13,11 @@ import APP_PATH from '../../constant/appPath';
 import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import InputOTP from '../../components/Auth/InputOTP';
-import { selectUser } from '../../redux/reducers/userSlice';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/UserContext';
 
 const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-
-    const sUser = useAppSelector(selectUser);
 
     const cookies = Cookies.get();
     const userEmail = cookies.userEmail;
@@ -43,7 +40,7 @@ const OTP: NextPage = () => {
             email: userEmail || undefined,
         };
         try {
-            const response = await dispatch(
+            await dispatch(
                 userVerifyOTP({
                     ...body,
                     otp,

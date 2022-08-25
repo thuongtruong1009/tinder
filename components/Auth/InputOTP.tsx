@@ -44,7 +44,6 @@ export default function InputOTP({ onChange }: Props) {
                         refs[5].focus();
                     }
                 });
-
                 refs[i].addEventListener('keydown', function (event) {
                     if (event.key === 'Backspace') {
                         refs[i].value = '';

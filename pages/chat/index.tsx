@@ -55,8 +55,8 @@ const Chat: NextPageWithLayout = () => {
                     <Swiper
                         spaceBetween={16}
                         slidesPerView={3.5}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper) => console.log(swiper + 'dùng để scroll infinite')}
+                        // onSlideChange={() => console.log('slide change')}
+                        // onSwiper={(swiper) => console.log(swiper + 'dùng để scroll infinite')}
                     >
                         {sUser.data?.friends.map((item: IUserFriend, index) => (
                             <SwiperSlide className="p-1" key={index}>

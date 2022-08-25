@@ -41,7 +41,6 @@ const Albums: NextPageWithLayout = () => {
         try {
             await dispatch(userDeleteImage(url)).unwrap();
         } catch (error) {
-            console.log(error);
             toastError((error as IResponseError).error);
         }
     };

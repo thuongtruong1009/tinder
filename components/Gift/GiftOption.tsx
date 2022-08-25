@@ -6,7 +6,7 @@ interface Props {
     price: number;
     image: string;
     choiced: string;
-    onClick?: (item: string) => Function;
+    onClick?: (item: string) => void;
 }
 
 const GiftOption = ({ id, name, price, image, choiced, onClick }: Props) => {
@@ -18,13 +18,13 @@ const GiftOption = ({ id, name, price, image, choiced, onClick }: Props) => {
             }
             onClick={() => onClick && onClick(name)}
         >
-            <div className="min-w-12 min-h-12 w-20 h-20">
-                <div className="image-container w-full h-full bg-cover rounded-xl">
+            <div className="w-20 h-20 min-w-12 min-h-12">
+                <div className="w-full h-full bg-cover image-container rounded-xl">
                     <Image src={image} alt={`${name}_img`} layout="fill" />
                 </div>
             </div>
-            <h5 className="body-1 font-bold text-neutral-100">{name}</h5>
-            <p className="body-3 text-red-500 italic">${price}</p>
+            <h5 className="font-bold body-1 text-neutral-100">{name}</h5>
+            <p className="italic text-red-500 body-3">${price}</p>
         </div>
     );
 };

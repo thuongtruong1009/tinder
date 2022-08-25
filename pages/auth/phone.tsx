@@ -13,7 +13,7 @@ import { toastError, toastSuccess } from '../../utils/toast';
 import authApi from '../../apis/authApi';
 import { useAppDispatch } from '../../hooks/redux';
 import { userSendOTPRegister } from '../../redux/actions/userActions';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/UserContext';
 
 interface Props {}
 
