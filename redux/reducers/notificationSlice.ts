@@ -22,6 +22,7 @@ export const notificationSlice = createSlice({
     },
     extraReducers(builder) {
         builder.addCase(notificationGetNotifications.fulfilled, (state, { payload }) => {
+            state.isCalled = true;
             state.data = payload;
         });
         builder.addCase(notificationUpdateSeenNotification.fulfilled, (state, { payload }) => {

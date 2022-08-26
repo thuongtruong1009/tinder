@@ -25,7 +25,7 @@ import { GrClose } from 'react-icons/gr';
 const Surf: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
-    const sNotification = useSelector(selectNotification).data;
+    const sNotification = useSelector(selectNotification);
     const [stranger, setStranger] = useState<IStranger>();
     const [strangers, setStrangers] = useState<IStranger[]>([]);
 
@@ -70,7 +70,7 @@ const Surf: NextPageWithLayout = () => {
             setStrangers(response.data.data);
         }
         try {
-            getNotifications();
+            !sNotification.isCalled && getNotifications();
             if (sUser.data?.lastLocation) findStrangeFriendsAround();
             else toastError('Bạn chưa cập nhật vị trí');
         } catch (error) {
@@ -113,8 +113,8 @@ const Surf: NextPageWithLayout = () => {
                                             </Popover.Button>
                                         </div>
                                         <div className="flex flex-col gap-1 overflow-y-auto bg-white rounded-md min-w-[320px]">
-                                            {sNotification.length > 0 ? (
-                                                sNotification.map((notification) => (
+                                            {sNotification.data.length > 0 ? (
+                                                sNotification.data.map((notification) => (
                                                     <NotificationItem key={notification._id} data={notification} />
                                                 ))
                                             ) : (
