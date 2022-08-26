@@ -79,6 +79,7 @@ const Surf: NextPageWithLayout = () => {
         return () => {
             setStrangers([]);
         };
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
     return (
@@ -91,7 +92,13 @@ const Surf: NextPageWithLayout = () => {
                             <h1 className="font-extrabold leading-10 text-h2 text-primary-50 font-secondary">Foxy</h1>
                             <Popover className="relative">
                                 <Popover.Button as={Fragment}>
-                                    <button className="p-2 -mt-1">
+                                    <button
+                                        className={`relative p-2 -mt-1 ${
+                                            sNotification.data.some((notification) => !notification.hasSeen)
+                                                ? 'after:absolute after:top-1 after:left-1/2 after:w-3 after:h-3 after:rounded-full after:bg-red-500 after:animate-ping'
+                                                : ''
+                                        }`}
+                                    >
                                         <BellIcon />
                                     </button>
                                 </Popover.Button>
