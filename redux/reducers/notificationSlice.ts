@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { notificationGetNotifications } from '../actions/notificationAction';
+import { notificationGetNotifications, notificationUpdateSeenNotification } from '../actions/notificationAction';
 
 interface NotificationState {
     isCalled: boolean;
@@ -23,6 +23,12 @@ export const notificationSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(notificationGetNotifications.fulfilled, (state, { payload }) => {
             state.data = payload;
+        });
+        builder.addCase(notificationUpdateSeenNotification.fulfilled, (state, { payload }) => {
+            const isExist = state.data.find((item) => item._id === payload._id);
+            if (isExist) {
+                isExist.hasSeen = true;
+            }
         });
     },
 });

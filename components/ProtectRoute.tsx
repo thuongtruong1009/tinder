@@ -6,13 +6,15 @@ import { selectUser } from '../redux/reducers/userSlice';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import UpdateInfo from './UpdateInfo';
-import { addMessage } from '../redux/reducers/conversationSlice';
+import { addMessage, selectConversation } from '../redux/reducers/conversationSlice';
 import ToastMessage from './ToastMessage';
 import { useSocket } from '../context/SocketContext';
 import { addNotification } from '../redux/reducers/notificationSlice';
 import { conversationGetAll } from '../redux/actions/conversationActions';
 import { toastError } from '../utils/toast';
 import { userGetFriends } from '../redux/actions/userActions';
+import { addMatch, selectMatch } from '../redux/reducers/matchSlice';
+import Matching from './Match/Matching';
 
 interface Props {
     children: React.ReactNode;
@@ -32,10 +34,11 @@ export default function ProtectRoute({ children }: Props) {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const [routerAsPath, setRouterAsPath] = useState(router.asPath);
+    const sMatch = useAppSelector(selectMatch);
+    const sConversation = useAppSelector(selectConversation);
     useEffect(() => {
         setRouterAsPath(router.asPath);
     }, [router]);
-
     async function getAllConversations() {
         try {
             await dispatch(conversationGetAll()).unwrap();
@@ -43,6 +46,10 @@ export default function ProtectRoute({ children }: Props) {
             toastError((error as IResponseError).error);
         }
     }
+    useEffect(() => {
+        !sConversation.isCalled && getAllConversations();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, sConversation.isCalled]);
     const sUser = useAppSelector(selectUser);
     async function handleResponseSocket(data: any) {
         switch (data.type) {
@@ -50,6 +57,7 @@ export default function ProtectRoute({ children }: Props) {
                 if (data.data.type === 'match') {
                     await getAllConversations();
                     await dispatch(userGetFriends());
+                    dispatch(addMatch(data.data));
                 }
                 dispatch(addNotification(data.data));
                 toast(data.data.message, {
@@ -88,7 +96,12 @@ export default function ProtectRoute({ children }: Props) {
         if (sUser.data?.status.isFirstUpdate) {
             return <UpdateInfo />;
         }
-        return <>{children}</>;
+        return (
+            <>
+                {sMatch.isShow && <Matching />}
+                {children}
+            </>
+        );
     }
     return render();
 }

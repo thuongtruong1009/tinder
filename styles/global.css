@@ -115,9 +115,6 @@
     .container {
         @apply w-full max-w-3xl min-h-screen px-4 pt-2 mx-auto shadow-md;
     }
-    .container-np {
-        @apply w-full max-w-3xl min-h-screen pt-2 mx-auto shadow-md;
-    }
     .flex-center {
         @apply flex items-center justify-center;
     }

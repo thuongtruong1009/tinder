@@ -12,7 +12,6 @@ import userApi from '../apis/userApi';
 import NavbarLayout from '../components/NavbarLayout';
 import SurtItem from '../components/Surf/SurtItem';
 import { Popover, Transition } from '@headlessui/react';
-import notificationApi from '../apis/notificationApi';
 import NotificationItem from '../components/Surf/NotificationItem';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../hooks/redux';
@@ -21,14 +20,12 @@ import { toastError, toastSuccess } from '../utils/toast';
 import { selectNotification } from '../redux/reducers/notificationSlice';
 import { userBlockUser, userLikeUser } from '../redux/actions/userActions';
 import { selectUser } from '../redux/reducers/userSlice';
-import Temp from '../components/Match/Temp';
 import { GrClose } from 'react-icons/gr';
 
 const Surf: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
     const sNotification = useSelector(selectNotification).data;
-    const [isOpenFavourite, setIsOpenFavourite] = useState(false);
     const [stranger, setStranger] = useState<IStranger>();
     const [strangers, setStrangers] = useState<IStranger[]>([]);
 
@@ -37,7 +34,6 @@ const Surf: NextPageWithLayout = () => {
     };
 
     const handleClose = () => {
-        setIsOpenFavourite(false);
         setStranger(undefined);
     };
 
@@ -179,8 +175,6 @@ const Surf: NextPageWithLayout = () => {
                 {stranger && (
                     <SurtItem stranger={stranger} onClose={handleClose} onLike={handleLike} onBlock={handleBlock} />
                 )}
-
-                {isOpenFavourite && <Temp onClose={handleClose} />}
             </section>
 
             {/* User info */}

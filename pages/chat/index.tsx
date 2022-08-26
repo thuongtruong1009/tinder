@@ -13,7 +13,7 @@ import { NextPageWithLayout } from '../../types/global';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/reducers/userSlice';
 import { generateFullName } from '../../utils/name';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { conversationGetAll } from '../../redux/actions/conversationActions';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { selectConversation } from '../../redux/reducers/conversationSlice';
@@ -22,9 +22,8 @@ import Button from '../../components/Button';
 
 const Chat: NextPageWithLayout = () => {
     const router = useRouter();
-    const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
-    const sConversation = useSelector(selectConversation);
+    const sConversation = useAppSelector(selectConversation);
     const handleClick = (_id: string) => () => {
         router.push(`${APP_PATH.CHAT}/${_id}`);
     };
@@ -33,16 +32,6 @@ const Chat: NextPageWithLayout = () => {
             ._id;
         conversationId && router.push(`${APP_PATH.CHAT}/${conversationId}`);
     };
-    useEffect(() => {
-        async function getAllConversations() {
-            try {
-                await dispatch(conversationGetAll()).unwrap();
-            } catch (error) {
-                toastError((error as IResponseError).error);
-            }
-        }
-        !sConversation.isCalled && getAllConversations();
-    }, [dispatch, sConversation.isCalled]);
 
     return (
         <section className="container bg-white with-navbar">

@@ -2,7 +2,7 @@
     --pink: #fd65b7;
     --gap: 1.6rem;
 }
-.match-title{
+.match-title {
     font-family: 'DynaPuff', sans-serif;
 }
 
@@ -54,43 +54,43 @@
 .little-heart {
     fill: #fd79af;
     position: absolute;
-    animation: heart-shake 2s ease-in;
+    @apply animate-bounce;
 }
 @keyframes stroke-animation {
     0% {
         stroke-dashoffset: 0;
-   }
+    }
     30% {
         stroke-dashoffset: 1550;
-   }
+    }
     60% {
         stroke-dashoffset: 3100;
         transform: scale(3);
         opacity: 0.8;
-   }
+    }
     90% {
         transform: scale(3.1);
-   }
+    }
     100% {
         stroke-dashoffset: 3100;
         transform: scale(3);
         opacity: 1;
-   }
+    }
 }
 @keyframes heart-shake {
     0% {
         transform: rotate(-30deg) translateY(6px);
-   }
+    }
     30% {
         transform: rotate(30deg) translateY(-6px);
-   }
+    }
     60% {
         transform: rotate(10deg) translateY(3px);
-   }
+    }
     90% {
         transform: rotate(-15deg) translateY(-6px);
-   }
+    }
     100% {
         transform: rotate(15deg) translateY(6px);
-   }
-} 
+    }
+}
