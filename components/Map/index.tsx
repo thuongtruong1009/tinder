@@ -120,7 +120,7 @@ export default function Map({ me, isFocus, handleFocus, friends, setFriends }: P
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Foxy</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                 />
                 {me && (
                     <>

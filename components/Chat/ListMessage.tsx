@@ -15,10 +15,10 @@ interface Props {
 
 export default function ListMessage({ userId, className, conversationId }: Props) {
     const flag = useRef<boolean>(false);
+    const dispatch = useAppDispatch();
     const data = useAppSelector(selectConversation).data.find(
         (conversation) => conversation.conversation._id === conversationId,
     );
-    const dispatch = useAppDispatch();
 
     async function fetchConversation(page: number, limit: number) {
         if (data)
@@ -30,7 +30,7 @@ export default function ListMessage({ userId, className, conversationId }: Props
     }
     useEffect(() => {
         if (data) {
-            if (!data.page && !data.limit && data.next) {
+            if (!data.page && !data.limit && data.next && data.conversation.messages.length === 1) {
                 fetchConversation(
                     +(process.env.MESSAGE_PAGE_DEFAULT as string),
                     +(process.env.MESSAGE_LIMIT_DEFAULT as string),
@@ -55,7 +55,7 @@ export default function ListMessage({ userId, className, conversationId }: Props
                         }}
                         className="gap-4 px-4 py-2"
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
-                        inverse={true} //
+                        inverse={true}
                         hasMore={data.next}
                         loader={<p className="text-sm font-semibold text-center">Đang tải...</p>}
                         scrollableTarget="scrollableDiv"

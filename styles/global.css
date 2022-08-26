@@ -165,3 +165,17 @@
         transform: translateY(0%);
     }
 }
+.animate-hue {
+    animation: animate-hue 0.2s linear infinite;
+}
+@keyframes animate-hue {
+    0% {
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    50% {
+        filter: hue-rotate(0deg) brightness(0);
+    }
+    100% {
+        filter: hue-rotate(360deg) brightness(1);
+    }
+}
