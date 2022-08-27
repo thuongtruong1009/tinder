@@ -26,7 +26,11 @@ export default function ChatListItem({ name, avatar, onClick, lastMessage }: Pro
                 {lastMessage && (
                     <span className="body-2 text-neutral-40 line-clamp-1">
                         {lastMessage.senderId._id === userId ? 'Bạn: ' : ''}
-                        {lastMessage.messages[0].type === 'text' ? lastMessage.messages[0].value : '📷'}
+                        {lastMessage.messages[0].type === 'text'
+                            ? lastMessage.messages[0].value
+                            : lastMessage.messages[0].type === 'image'
+                            ? '📷'
+                            : '🔊'}
                     </span>
                 )}
             </div>
