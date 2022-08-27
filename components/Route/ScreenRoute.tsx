@@ -1,4 +1,4 @@
-import NotSupport from './NotSupport';
+import NotSupport from '../NotSupport';
 
 interface Props {
     children: React.ReactNode;

@@ -8,14 +8,10 @@ import Loading from '../components/Loading';
 import { useEffect, useState } from 'react';
 import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
-import ProtectRoute from '../components/ProtectRoute';
-import { SocketProvider } from '../context/SocketContext';
 import UserProvider from '../context/UserContext';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import APP_PATH from '../constant/appPath';
-import NotSupport from '../components/NotSupport';
-import ScreenRoute from '../components/ScreenRoute';
+import ScreenRoute from '../components/Route/ScreenRoute';
+import ProtectRoute from '../components/Route/ProtectRoute';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const router = useRouter();
@@ -49,9 +45,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 {!loading ? (
                     <ScreenRoute>
                         {Component.protected ? (
-                            <ProtectRoute>
-                                <SocketProvider>{getLayout(<Component {...pageProps} />)}</SocketProvider>
-                            </ProtectRoute>
+                            <ProtectRoute>{getLayout(<Component {...pageProps} />)}</ProtectRoute>
                         ) : (
                             getLayout(<Component {...pageProps} />)
                         )}

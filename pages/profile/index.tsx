@@ -259,7 +259,7 @@ const Profile: NextPageWithLayout = () => {
                             width={40}
                         />
                         <div>
-                            <h3 className="text-neutral-100">
+                            <h3 className="text-neutral-100 line-clamp-2">
                                 {sUser.data?.name.firstName} {sUser.data?.name.lastName},{' '}
                                 {handleAge(sUser.data?.birthday)}t
                             </h3>

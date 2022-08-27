@@ -16,11 +16,11 @@ export default function Dialog({ title, isOpen, onClose, children }: Props) {
                 <Transition.Child
                     as={Fragment}
                     enter="transition-all duration-500"
-                    enterFrom="top-full opacity-0"
-                    enterTo="top-0 opacity-100"
+                    enterFrom="translate-y-full opacity-0"
+                    enterTo="translate-y-0 opacity-100"
                     leave="transition-all duration-200"
-                    leaveFrom="top-0 opacity-100"
-                    leaveTo="top-full opacity-0"
+                    leaveFrom="translate-y-0 opacity-100"
+                    leaveTo="translate-y-full opacity-0"
                 >
                     <div className="fixed inset-0 overflow-y-auto">
                         <div className="flex items-end justify-center min-h-full px-4 text-center">

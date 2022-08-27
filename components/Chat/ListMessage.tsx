@@ -30,7 +30,7 @@ export default function ListMessage({ userId, className, conversationId }: Props
     }
     useEffect(() => {
         if (data) {
-            if (!data.page && !data.limit && data.next && data.conversation.messages.length === 1) {
+            if (!data.page && !data.limit && data.next) {
                 fetchConversation(
                     +(process.env.MESSAGE_PAGE_DEFAULT as string),
                     +(process.env.MESSAGE_LIMIT_DEFAULT as string),
@@ -46,10 +46,13 @@ export default function ListMessage({ userId, className, conversationId }: Props
                     <InfiniteScroll
                         dataLength={data.conversation.messages.length}
                         next={() => {
+                            const LIMIT = +(process.env.MESSAGE_LIMIT_DEFAULT as string);
+                            // const nextPage = Math.max(Math.round(data.conversation.messages.length / LIMIT), 1);
+                            // const nextLimit = data.limit + 10;
                             if (data.next) {
                                 fetchConversation(
                                     data.page ? data.page + 1 : +(process.env.MESSAGE_PAGE_DEFAULT as string),
-                                    data.limit ? data.limit : +(process.env.MESSAGE_LIMIT_DEFAULT as string),
+                                    data.limit ? data.limit : LIMIT,
                                 );
                             }
                         }}
