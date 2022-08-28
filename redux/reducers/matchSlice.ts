@@ -15,6 +15,9 @@ export const matchSlice = createSlice({
     name: 'match',
     initialState,
     reducers: {
+        clearMatch: () => {
+            return initialState;
+        },
         addMatch: (state, { payload }) => {
             state.data.push(payload);
             state.isShow = true;
@@ -29,7 +32,7 @@ export const matchSlice = createSlice({
     },
 });
 
-export const { addMatch, closeMatch, skipMatch } = matchSlice.actions;
+export const { clearMatch, addMatch, closeMatch, skipMatch } = matchSlice.actions;
 
 export const selectMatch = (state: RootState) => state.match;
 

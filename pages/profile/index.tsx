@@ -34,6 +34,9 @@ import { HiPencil } from 'react-icons/hi';
 import HeightIcon from '../../components/Icons/HeightIcon';
 import HeightDialog from '../../components/Profile/HeightDialog';
 import { useSocket } from '../../context/SocketContext';
+import { clearConversation } from '../../redux/reducers/conversationSlice';
+import { clearNotification } from '../../redux/reducers/notificationSlice';
+import { clearMatch } from '../../redux/reducers/matchSlice';
 
 const Profile: NextPageWithLayout = () => {
     const socket = useSocket();
@@ -55,6 +58,9 @@ const Profile: NextPageWithLayout = () => {
 
     const handleLogOut = () => {
         socket?.disconnect();
+        dispatch(clearConversation());
+        dispatch(clearNotification());
+        dispatch(clearMatch());
         dispatch(userLogOut());
     };
 
@@ -243,7 +249,7 @@ const Profile: NextPageWithLayout = () => {
                                                 onClick={onEnterGift}
                                             >
                                                 <BsCoin />
-                                                <p>Coins package</p>
+                                                <p>Package</p>
                                             </button>
                                         </li>
                                     </ul>
@@ -258,6 +264,7 @@ const Profile: NextPageWithLayout = () => {
                             className="rounded-xl"
                             src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
                             alt="avatar"
+                            objectFit="cover"
                             height={40}
                             width={40}
                         />

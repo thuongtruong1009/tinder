@@ -16,6 +16,9 @@ export const notificationSlice = createSlice({
     name: 'notification',
     initialState,
     reducers: {
+        clearNotification: () => {
+            return initialState;
+        },
         addNotification: (state, { payload }) => {
             state.data.unshift(payload);
         },
@@ -34,7 +37,7 @@ export const notificationSlice = createSlice({
     },
 });
 
-export const { addNotification } = notificationSlice.actions;
+export const { clearNotification, addNotification } = notificationSlice.actions;
 
 export const selectNotification = (state: RootState) => state.notification;
 

@@ -22,6 +22,9 @@ export const conversationSlice = createSlice({
     name: 'conversation',
     initialState,
     reducers: {
+        clearConversation: (state) => {
+            return initialState;
+        },
         addMessage: (state, { payload }) => {
             const isExist = state.data.find((item) => item.conversation._id === payload.conversationId);
             if (isExist) {
@@ -99,7 +102,7 @@ export const conversationSlice = createSlice({
     },
 });
 
-export const { addMessage, setLastLoginById } = conversationSlice.actions;
+export const { clearConversation, addMessage, setLastLoginById } = conversationSlice.actions;
 
 export const selectConversation = (state: RootState) => state.conversation;
 
