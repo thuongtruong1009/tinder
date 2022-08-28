@@ -135,7 +135,7 @@ const Room: NextPageWithLayout = () => {
                 }
 
                 if (audioFile) {
-                    const response = await fetch(`https://southcloud.herokuapp.com/upload?fileName=${audioFile.name}`, {
+                    const response = await fetch(`${process.env.UPLOAD_IMAGE_URL}${audioFile.name}`, {
                         method: 'POST',
                         body: audioFile,
                     });

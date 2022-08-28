@@ -14,6 +14,7 @@ const nextConfig = {
         MESSAGE_LIMIT_DEFAULT: process.env.MESSAGE_LIMIT_DEFAULT,
         MESSAGE_PAGE_DEFAULT: process.env.MESSAGE_PAGE_DEFAULT,
         MAX_IMAGES_ALBUMS: process.env.MAX_IMAGES_ALBUMS,
+        UPLOAD_IMAGE_URL: process.env.UPLOAD_IMAGE_URL,
     },
     images: {
         domains: [
@@ -21,6 +22,7 @@ const nextConfig = {
             'lh3.googleusercontent.com',
             'platform-lookaside.fbsbx.com',
             'res.cloudinary.com',
+            'southcloud.space',
         ],
     },
 };
