@@ -33,8 +33,10 @@ import AlbumsItem from '../../components/Profile/AlbumsItem';
 import { HiPencil } from 'react-icons/hi';
 import HeightIcon from '../../components/Icons/HeightIcon';
 import HeightDialog from '../../components/Profile/HeightDialog';
+import { useSocket } from '../../context/SocketContext';
 
 const Profile: NextPageWithLayout = () => {
+    const socket = useSocket();
     const router = useRouter();
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
@@ -49,9 +51,10 @@ const Profile: NextPageWithLayout = () => {
     const [isOpenBeerDialog, setIsOpenBeerDialog] = useState(false);
     const [isOpenHeightDialog, setIsOpenHeightDialog] = useState(false);
 
-    const lengthAlbums = sUser.data?.profile.albums.length;
+    // const lengthAlbums = sUser.data?.profile.albums.length;
 
     const handleLogOut = () => {
+        socket?.disconnect();
         dispatch(userLogOut());
     };
 
