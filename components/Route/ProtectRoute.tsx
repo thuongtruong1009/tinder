@@ -1,17 +1,13 @@
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { SocketProvider, useSocket } from '../../context/SocketContext';
+import { useEffect } from 'react';
+import { SocketProvider } from '../../context/SocketContext';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { addMessage, selectConversation } from '../../redux/reducers/conversationSlice';
-import { addMatch, selectMatch } from '../../redux/reducers/matchSlice';
+import { selectConversation } from '../../redux/reducers/conversationSlice';
+import { selectMatch } from '../../redux/reducers/matchSlice';
 import { conversationGetAll } from '../../redux/actions/conversationActions';
 import { toastError } from '../../utils/toast';
 import { selectUser } from '../../redux/reducers/userSlice';
-import { userGetFriends } from '../../redux/actions/userActions';
-import { addNotification } from '../../redux/reducers/notificationSlice';
 import APP_PATH from '../../constant/appPath';
-import ToastMessage from '../ToastMessage';
 import Matching from '../Match/Matching';
 import UpdateInfo from '../UpdateInfo';
 import SocketRoute from './SocketRoute';
@@ -19,16 +15,6 @@ import SocketRoute from './SocketRoute';
 interface Props {
     children: React.ReactNode;
 }
-
-// let socket: any;
-// const ISSERVER = typeof window === 'undefined';
-// if (!ISSERVER) {
-//     socket = io((process.env.API_HOST as string) + '/notifications', {
-//         extraHeaders: {
-//             Authorization: `Bearer ${localStorage.getItem('token')}`,
-//         },
-//     });
-// }
 export default function ProtectRoute({ children }: Props) {
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -48,7 +34,6 @@ export default function ProtectRoute({ children }: Props) {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
-
     function render() {
         if (!sUser.isLogin) {
             router.push(APP_PATH.ROOT);

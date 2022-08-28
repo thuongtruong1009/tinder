@@ -20,7 +20,6 @@ interface Props {
 export default function SocketRoute({ children }: Props) {
     const dispatch = useAppDispatch();
     const socket = useSocket();
-    const router = useRouter();
     const sUser = useAppSelector(selectUser);
     async function getAllConversations() {
         try {
@@ -44,7 +43,7 @@ export default function SocketRoute({ children }: Props) {
                 break;
             case 'message':
                 dispatch(addMessage(data.data));
-                if (!(router.asPath === APP_PATH.CHAT + '/' + data.data.conversationId)) {
+                if (!(window.location.pathname === APP_PATH.CHAT + '/' + data.data.conversationId)) {
                     toast.custom((t) => <ToastMessage t={t} data={data.data} />);
                 }
                 break;
@@ -54,17 +53,13 @@ export default function SocketRoute({ children }: Props) {
     }
     useEffect(() => {
         const user = sUser.data?._id || '';
-
         if (sUser.isLogin && user) {
+            socket?.connect();
             socket?.on(user, function (data: any) {
                 handleResponseSocket(data);
             });
         }
-        return () => {
-            socket?.off(user);
-            socket?.disconnect();
-        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router]);
+    }, []);
     return <>{children}</>;
 }
