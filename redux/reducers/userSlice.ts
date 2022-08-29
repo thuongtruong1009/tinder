@@ -20,6 +20,7 @@ import {
     userUpdateCommonInfo,
     userUpdateHeight,
     userGetFriends,
+    userBlockFriend,
 } from '../actions/userActions';
 
 interface UserState {
@@ -39,6 +40,16 @@ export const userSlice = createSlice({
         userLogOut: () => {
             localStorage.removeItem('token');
             return initialState;
+        },
+        userBlock: (state, { payload }: { payload: string }) => {
+            if (state.data) {
+                // * Lấy ra bạn bè sắp bị block
+                const user = state.data.friends.find((friend) => friend._id === payload);
+                if (user) {
+                    // * Xóa bạn bè sắp bị block khỏi danh sách bạn bè và thêm vào danh sách bị block
+                    state.data.block.push(user);
+                }
+            }
         },
     },
     extraReducers(builder) {
@@ -168,7 +179,7 @@ export const userSlice = createSlice({
     },
 });
 
-export const { userLogOut } = userSlice.actions;
+export const { userLogOut, userBlock } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 

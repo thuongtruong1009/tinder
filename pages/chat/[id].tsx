@@ -27,15 +27,12 @@ import ListMessage from '../../components/Chat/ListMessage';
 import { useSocket } from '../../context/SocketContext';
 import ImageUploadItem from '../../components/Chat/ImageUploadItem';
 import { GrClose } from 'react-icons/gr';
-import { AiOutlineLoading, AiOutlineUsergroupDelete } from 'react-icons/ai';
-import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { FaBan, FaUsersSlash } from 'react-icons/fa';
 timeago.register('vi', vi);
 
 const Room: NextPageWithLayout = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingAudio, setIsLoadingAudio] = useState(false);
     const socket = useSocket();
 
     const router = useRouter();
@@ -166,6 +163,27 @@ const Room: NextPageWithLayout = () => {
         setAudioFile(undefined);
         setFiles([]);
     };
+
+    //* user actions
+    const handleBlock = async () => {
+        if (window.confirm('Bạn có chắc chắn muốn chặn người này?')) {
+            setIsLoading(true);
+            // try {
+            //     const userId = conversationInfo?.conversation.users[0]._id;
+            //     if (userId) {
+            //         await dispatch(userBlockFriend(userId)).unwrap();
+            //         toastSuccess('Bạn đã chặn thành công');
+            //         router.push(APP_PATH.CHAT);
+            //     } else {
+            //         toastError('Có lỗi xảy ra');
+            //     }
+            // } catch (error) {
+            //     toastError((error as IResponseError).error);
+            // }
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         async function fetchConversation(id: string) {
             await dispatch(conversationGet({ id }));
@@ -266,18 +284,23 @@ const Room: NextPageWithLayout = () => {
                             <Popover.Panel className="absolute right-0 z-10 overflow-hidden rounded-md top-full">
                                 <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white shadow-md max-h-60 min-w-[150px]">
                                     <li>
-                                        <button className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-50">
+                                        <Popover.Button
+                                            className={`flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-50`}
+                                        >
                                             <FaUsersSlash />
                                             <p>Huỷ kết bạn</p>
-                                        </button>
+                                        </Popover.Button>
                                     </li>
                                 </ul>
                                 <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white shadow-md max-h-60 min-w-[150px]">
                                     <li>
-                                        <button className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-50">
+                                        <Popover.Button
+                                            className={`flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-50`}
+                                            onClick={handleBlock}
+                                        >
                                             <FaBan />
                                             <p>Chặn</p>
-                                        </button>
+                                        </Popover.Button>
                                     </li>
                                 </ul>
                             </Popover.Panel>

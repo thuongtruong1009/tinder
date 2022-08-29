@@ -100,3 +100,9 @@ declare interface IUpdateUserHeightResponse extends IResponseSuccess {
 declare interface IGetFriendResponse extends IResponseSuccess {
     data: IUserFriend[];
 }
+
+declare interface IBlockUserResponse extends IResponseUser {
+    data: {
+        user: string;
+    };
+}

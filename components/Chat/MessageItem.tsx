@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import React from 'react';
 
 type Props = {
     messages: IMessageItem[];
@@ -41,7 +40,7 @@ const MessageItem = ({ messages, isMe }: Props) => {
                     } else if (message.type === 'audio') {
                         return (
                             <div className="flex flex-wrap justify-end" key={index}>
-                                <audio controls className="audio">
+                                <audio controls className="audio max-w-[250px]">
                                     <source src={message.value as string} type="audio/mpeg" />
                                 </audio>
                             </div>
@@ -83,7 +82,7 @@ const MessageItem = ({ messages, isMe }: Props) => {
                 } else if (message.type === 'audio') {
                     return (
                         <div className="flex flex-wrap justify-start" key={index}>
-                            <audio controls className="audio">
+                            <audio controls className="audio max-w-[250px]">
                                 <source src={message.value as string} type="audio/mpeg" />
                             </audio>
                         </div>
