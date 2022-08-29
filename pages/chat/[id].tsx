@@ -27,9 +27,10 @@ import ListMessage from '../../components/Chat/ListMessage';
 import { useSocket } from '../../context/SocketContext';
 import ImageUploadItem from '../../components/Chat/ImageUploadItem';
 import { GrClose } from 'react-icons/gr';
-import { AiOutlineLoading } from 'react-icons/ai';
+import { AiOutlineLoading, AiOutlineUsergroupDelete } from 'react-icons/ai';
 import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
+import { FaBan, FaUsersSlash } from 'react-icons/fa';
 timeago.register('vi', vi);
 
 const Room: NextPageWithLayout = () => {
@@ -215,15 +216,15 @@ const Room: NextPageWithLayout = () => {
     }, [conversationInfo, isFriendOnline]);
     if (!conversationInfo) return <Loading />;
     const classBoxChat = () => {
-        let className = 'h-[calc(100vh-216px)]';
+        let className = 'h-[calc(100vh-223px)]';
         if (files.length !== 0) {
-            className = 'h-[calc(100vh-280px)]';
+            className = 'h-[calc(100vh-287px)]';
         }
         if (audioFile) {
-            className = 'h-[calc(100vh-264px)]';
+            className = 'h-[calc(100vh-271px)]';
         }
         if (files.length !== 0 && audioFile) {
-            className = 'h-[calc(100vh-328px)]';
+            className = 'h-[calc(100vh-335px)]';
         }
         return className;
     };
@@ -256,9 +257,31 @@ const Room: NextPageWithLayout = () => {
                         <div className="p-2 cursor-pointer" onClick={onBack}>
                             <ArrowLeft />
                         </div>
-                        <div className="p-2 cursor-pointer bg-neutral-5 rounded-xl">
-                            <ThreeDotIcon />
-                        </div>
+                        <Popover className="relative">
+                            <Popover.Button>
+                                <div className="p-2 cursor-pointer bg-neutral-5 rounded-xl">
+                                    <ThreeDotIcon />
+                                </div>
+                            </Popover.Button>
+                            <Popover.Panel className="absolute right-0 z-10 overflow-hidden rounded-md top-full">
+                                <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white shadow-md max-h-60 min-w-[150px]">
+                                    <li>
+                                        <button className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-50">
+                                            <FaUsersSlash />
+                                            <p>Huỷ kết bạn</p>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white shadow-md max-h-60 min-w-[150px]">
+                                    <li>
+                                        <button className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-50">
+                                            <FaBan />
+                                            <p>Chặn</p>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </Popover.Panel>
+                        </Popover>
                     </div>
                 }
             />
