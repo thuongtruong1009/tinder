@@ -263,7 +263,7 @@ const Room: NextPageWithLayout = () => {
             />
             <div className="flex items-center justify-between flex-shrink-0 py-4">
                 <div className="relative flex-center-y">
-                    <div className="w-12 h-12 mr-5 image-container rounded-2xl">
+                    <div className="w-12 h-12 mr-5 overflow-hidden image-container rounded-xl">
                         <Image
                             className="image"
                             src={conversationInfo?.conversation.users[0].avatar}
