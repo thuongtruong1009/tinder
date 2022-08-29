@@ -29,6 +29,7 @@ import ImageUploadItem from '../../components/Chat/ImageUploadItem';
 import { GrClose } from 'react-icons/gr';
 import { AiOutlineLoading } from 'react-icons/ai';
 import axios from 'axios';
+import { BiLoaderAlt } from 'react-icons/bi';
 timeago.register('vi', vi);
 
 const Room: NextPageWithLayout = () => {
@@ -391,7 +392,7 @@ const Room: NextPageWithLayout = () => {
                     type="submit"
                     disabled={(!message && !files.length && !audioFile) || isLoading}
                 >
-                    {isLoading ? <AiOutlineLoading className="animate-spin" /> : <SendIcon />}
+                    {isLoading ? <BiLoaderAlt className="animate-spin" /> : <SendIcon />}
                 </button>
             </form>
         </section>
