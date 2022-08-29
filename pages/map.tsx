@@ -17,10 +17,10 @@ const MapContainer: NextPageWithLayout = () => {
     const sUser = useSelector(selectUser);
     const [isFocus, setIsFocus] = useState(false);
     const [friends, setFriends] = useState<IStranger[] | any>([]);
-    const handlePermission = async () => {
-        navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
-            if (result.state === 'granted') {
-                navigator.geolocation.getCurrentPosition(async function (position) {
+    function handlePermission() {
+        if (navigator && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position: any) => {
                     try {
                         await dispatch(
                             userUpdateLocation({
@@ -32,12 +32,13 @@ const MapContainer: NextPageWithLayout = () => {
                     } catch (error: any) {
                         toastError(error.error);
                     }
-                });
-            } else {
-                toastError('Bạn chưa cấp quyền vị trí vì vậy không thể tìm bạn bè xung quanh');
-            }
-        });
-    };
+                },
+                () => {},
+            );
+        } else {
+            toastError('Bạn chưa cấp quyền vị trí vì vậy không thể tìm bạn bè xung quanh');
+        }
+    }
 
     const handleFocus = () => {
         setIsFocus((pre) => !pre);
@@ -48,6 +49,7 @@ const MapContainer: NextPageWithLayout = () => {
         return () => {
             setFriends([]);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <>
