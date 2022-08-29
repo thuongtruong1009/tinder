@@ -19,7 +19,7 @@ interface Props {}
 
 export default function LoginPhone(props: Props) {
     const dispatch = useAppDispatch();
-    const [loading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const inputRef = useRef(null);
     const router = useRouter();
 
@@ -50,7 +50,6 @@ export default function LoginPhone(props: Props) {
                     );
                     setIsLoading(false);
                     Cookies.remove('userEmail');
-                    toastSuccess('Verify phone successfully. Next enter OTP.');
                     router.push(APP_PATH.AUTH_OTP);
                 } catch (error: any) {
                     toastError(error.error);
@@ -60,7 +59,6 @@ export default function LoginPhone(props: Props) {
                 try {
                     await authApi.loginWithPhone({ phone });
                     setIsLoading(false);
-                    toastSuccess('Verify phone successfully. Next enter OTP.');
                     router.push(APP_PATH.AUTH_OTP);
                 } catch (error: any) {
                     toastError(error.error);
@@ -68,7 +66,7 @@ export default function LoginPhone(props: Props) {
                 }
             }
         } else {
-            toastError('Phone is incorrect!');
+            toastError('Số điện thoại không hợp lệ');
         }
     };
 
@@ -112,8 +110,9 @@ export default function LoginPhone(props: Props) {
                     block
                     name="phone"
                     htmlType="submit"
-                    disabled={loading}
+                    disabled={isLoading}
                     form="phone"
+                    loading={isLoading}
                 />
             </div>
         </section>

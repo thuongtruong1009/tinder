@@ -1,5 +1,6 @@
 import { MouseEventHandler } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 interface Props {
     title?: string;
@@ -13,6 +14,7 @@ interface Props {
     name?: string;
     disabled?: boolean;
     form?: string;
+    loading?: boolean;
 }
 
 export default function Button({
@@ -27,6 +29,7 @@ export default function Button({
     name,
     disabled = false,
     form,
+    loading,
 }: Props) {
     const sizeClass = () => {
         switch (size) {
@@ -53,14 +56,17 @@ export default function Button({
     return (
         <button
             type={htmlType}
-            className={`btn ${className} ${block && 'w-full'} ${sizeClass()} ${typeClass()}`}
+            className={`${loading ? 'opacity-70' : ''} btn ${className} ${
+                block && 'w-full'
+            } ${sizeClass()} ${typeClass()}`}
             onClick={onClick}
             name={name}
-            disabled={disabled}
+            disabled={disabled || loading}
             form={form}
         >
             <p className={`${Icon ? '' : 'text-center w-full'}`}>{title}</p>
-            {Icon && Icon}
+            {loading ? <BiLoaderAlt className="animate-spin" /> : Icon && Icon}
+            {/* {Icon && Icon} */}
         </button>
     );
 }

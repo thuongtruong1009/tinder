@@ -29,7 +29,7 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
     const [imageFile, setImageFile] = useState<File>();
     const [isloading, setIsLoading] = useState<boolean>(false);
     const [imgUrl, setImgUrl] = useState<string>(sUser.data?.avatar || '');
-    const [birthday, setBirthday] = useState<Date>(new Date(sUser.data?.birthday || '2001-01-01'));
+    const [birthday, setBirthday] = useState<Date>(new Date(sUser.data?.birthday || '01-01-2001'));
 
     const uploadBtnRef = useRef<HTMLInputElement>(null);
 
@@ -37,7 +37,11 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<InputProps>();
+    } = useForm<InputProps>({
+        defaultValues: {
+            name: sUser.data?.name.firstName + ' ' + sUser.data?.name.lastName,
+        },
+    });
 
     const handleClick = () => {
         if (uploadBtnRef.current) {
@@ -79,7 +83,7 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
                     setIsLoading(true);
                     await dispatch(userUpdateCommonInfo(formData)).unwrap();
                 } else {
-                    toastError('Bạn chưa cập nhật gì');
+                    toastError('Bạn chưa cập nhật gì.');
                 }
                 router.push(APP_PATH.PROFILE);
             }
@@ -132,7 +136,6 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
                             placeholder="Ví dụ: Trần Ngọc Tâm"
                             name="name"
                             register={register}
-                            defaultValue={sUser.data?.name.firstName + ' ' + sUser.data?.name.lastName}
                             option={{
                                 maxLength: {
                                     value: 30,
@@ -157,13 +160,7 @@ const UpdateCommonInfo: NextPageWithLayout = () => {
                             placeholder="Ví dụ: 20/11/1980"
                         />
                     </form>
-                    {isloading ? (
-                        <button className="w-full btn btn-md btn-primary flex-center">
-                            <VscLoading className="animate-spin" />
-                        </button>
-                    ) : (
-                        <Button form="first-update" title="Xong" block htmlType="submit" />
-                    )}
+                    <Button form="first-update" title="Xong" block htmlType="submit" loading={isloading} />
                 </div>
             </div>
         </section>

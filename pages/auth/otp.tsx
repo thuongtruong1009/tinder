@@ -19,6 +19,7 @@ const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
 
+    const [isLoading, setIsLoading] = useState(false);
     const cookies = Cookies.get();
     const userEmail = cookies.userEmail;
 
@@ -40,6 +41,7 @@ const OTP: NextPage = () => {
             email: userEmail || undefined,
         };
         try {
+            setIsLoading(true);
             await dispatch(
                 userVerifyOTP({
                     ...body,
@@ -52,6 +54,7 @@ const OTP: NextPage = () => {
         } catch (error: any) {
             toastError(error.error);
         }
+        setIsLoading(false);
     };
 
     return (
@@ -84,6 +87,7 @@ const OTP: NextPage = () => {
                         Icon={<ArrowRightCircleIcon />}
                         block
                         onClick={handleSubmit}
+                        loading={isLoading}
                     />
                 </div>
             </section>

@@ -22,6 +22,7 @@ type Props = {
 export default function Map({ me, isFocus, handleFocus, friends, setFriends }: Props) {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IStranger>();
     const saveUserInfo = (user: IStranger) => {
         setUserInfo(user);
@@ -30,6 +31,7 @@ export default function Map({ me, isFocus, handleFocus, friends, setFriends }: P
         setIsOpen(false);
     };
     const handleLike = async (_id: string) => {
+        setIsLoading(true);
         try {
             await dispatch(userLikeUser(_id)).unwrap();
             setFriends([...friends.filter((user) => user._id !== _id)]);
@@ -38,16 +40,21 @@ export default function Map({ me, isFocus, handleFocus, friends, setFriends }: P
         } catch (error) {
             toastError((error as IResponseError).error);
         }
+        setIsLoading(false);
     };
 
     const handleBlock = async (_id: string) => {
-        try {
-            await dispatch(userBlockUser(_id)).unwrap();
-            setFriends([...friends.filter((user) => user._id !== _id)]);
-            setUserInfo(undefined);
-            toastSuccess('Bạn đã chặn thành công');
-        } catch (error) {
-            toastError((error as IResponseError).error);
+        if (window.confirm('Bạn có chắc chắn muốn chặn người này?')) {
+            setIsLoading(true);
+            try {
+                await dispatch(userBlockUser(_id)).unwrap();
+                setFriends([...friends.filter((user) => user._id !== _id)]);
+                setUserInfo(undefined);
+                toastSuccess('Bạn đã chặn thành công');
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+            setIsLoading(false);
         }
     };
 
@@ -134,7 +141,13 @@ export default function Map({ me, isFocus, handleFocus, friends, setFriends }: P
             </MapContainer>
             {userInfo && <MapUserInfo data={userInfo} onClick={() => setIsOpen(true)} />}
             {isOpen && userInfo && (
-                <SurtItem stranger={userInfo} onClose={handleClose} onLike={handleLike} onBlock={handleBlock} />
+                <SurtItem
+                    isLoading={isLoading}
+                    user={userInfo}
+                    onClose={handleClose}
+                    onLike={handleLike}
+                    onBlock={handleBlock}
+                />
             )}
         </section>
     );

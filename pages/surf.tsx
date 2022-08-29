@@ -26,6 +26,8 @@ const Surf: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
     const sNotification = useSelector(selectNotification);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [stranger, setStranger] = useState<IStranger>();
     const [strangers, setStrangers] = useState<IStranger[]>([]);
 
@@ -42,16 +44,21 @@ const Surf: NextPageWithLayout = () => {
     };
 
     const handleBlock = async (_id: string) => {
-        try {
-            await dispatch(userBlockUser(_id)).unwrap();
-            handleRemove(_id);
-            toastSuccess('Bạn đã chặn thành công');
-        } catch (error) {
-            toastError((error as IResponseError).error);
+        if (window.confirm('Bạn có chắc chắn muốn chặn người này?')) {
+            setIsLoading(true);
+            try {
+                await dispatch(userBlockUser(_id)).unwrap();
+                handleRemove(_id);
+                toastSuccess('Bạn đã chặn thành công');
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+            setIsLoading(false);
         }
     };
 
     const handleLike = async (_id: string) => {
+        setIsLoading(true);
         try {
             await dispatch(userLikeUser(_id)).unwrap();
             handleRemove(_id);
@@ -59,6 +66,7 @@ const Surf: NextPageWithLayout = () => {
         } catch (error) {
             toastError((error as IResponseError).error);
         }
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -66,8 +74,14 @@ const Surf: NextPageWithLayout = () => {
             dispatch(notificationGetNotifications());
         }
         async function findStrangeFriendsAround() {
-            const response = await userApi.findStrangeFriendsAround();
-            setStrangers(response.data.data);
+            setIsFetching(true);
+            try {
+                const response = await userApi.findStrangeFriendsAround();
+                setStrangers(response.data.data);
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+            setIsFetching(false);
         }
         try {
             !sNotification.isCalled && getNotifications();
@@ -134,7 +148,19 @@ const Surf: NextPageWithLayout = () => {
                         </div>
                     }
                 />
-                {strangers.length > 0 ? (
+                {isFetching ? (
+                    <div className="relative rounded-[40px] h-[calc(100vh-172px)] overflow-hidden flex-center">
+                        <div className="image-container">
+                            <Image
+                                className="object-cover image"
+                                alt="avatar"
+                                objectPosition="top"
+                                layout="fill"
+                                src="http://southcloud.space/file/630c291bf7d5012fb3a36b18/undraw-not-found-re-ddk-1.png"
+                            />
+                        </div>
+                    </div>
+                ) : strangers.length > 0 ? (
                     <Swiper
                         grabCursor={true}
                         effect={'creative'}
@@ -153,8 +179,9 @@ const Surf: NextPageWithLayout = () => {
                         {strangers.map((strange, index) => (
                             <SwiperSlide key={index} className="rounded-[40px]">
                                 <UserCard
-                                    onSeen={handleSeenInfo}
+                                    isLoading={isLoading}
                                     user={strange}
+                                    onSeen={handleSeenInfo}
                                     onBlock={handleBlock}
                                     onLike={handleLike}
                                 />
@@ -162,7 +189,7 @@ const Surf: NextPageWithLayout = () => {
                         ))}
                     </Swiper>
                 ) : (
-                    <div className="relative rounded-[40px] h-[70vh] overflow-hidden">
+                    <div className="relative rounded-[40px] h-[calc(100vh-172px)] overflow-hidden">
                         <div className="image-container">
                             <Image
                                 className="object-cover image"
@@ -179,8 +206,15 @@ const Surf: NextPageWithLayout = () => {
                         </div>
                     </div>
                 )}
+
                 {stranger && (
-                    <SurtItem stranger={stranger} onClose={handleClose} onLike={handleLike} onBlock={handleBlock} />
+                    <SurtItem
+                        isLoading={isLoading}
+                        user={stranger}
+                        onClose={handleClose}
+                        onLike={handleLike}
+                        onBlock={handleBlock}
+                    />
                 )}
             </section>
 
