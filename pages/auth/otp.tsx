@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { UserContextType } from '../../types/context/user';
 import { UserContext } from '../../context/userContext';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Button from '../../components/Button';
 import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
@@ -14,10 +14,13 @@ import APP_PATH from '../../constant/appPath';
 import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import InputOTP from '../../components/Auth/InputOTP';
+import { selectUser } from '../../redux/reducers/userSlice';
 
 const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
+
+    const sUser = useAppSelector(selectUser);
 
     const cookies = Cookies.get();
     const userEmail = cookies.userEmail;
@@ -40,14 +43,16 @@ const OTP: NextPage = () => {
             email: userEmail || undefined,
         };
         try {
-            await dispatch(
+            const response = await dispatch(
                 userVerifyOTP({
                     ...body,
                     otp,
                 }),
             ).unwrap();
+
             Cookies.remove('userEmail');
-            router.push(APP_PATH.SURF);
+            if (response.user.status.isFirstUpdate) router.push(APP_PATH.AUTH_UPDATE);
+            else router.push(APP_PATH.SURF);
         } catch (error: any) {
             toastError(error.error);
         }
@@ -60,7 +65,7 @@ const OTP: NextPage = () => {
                     <Title
                         className="mb-8"
                         content={
-                            <button className="p-2">
+                            <button className="p-2" onClick={() => router.back()}>
                                 <ArrowLeft />
                             </button>
                         }

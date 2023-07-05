@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { userVerifyOTP, userCurrentUser, userUpdateLocation } from '../actions/userActions';
+import {
+    userVerifyOTP,
+    userCurrentUser,
+    userUpdateLocation,
+    userUpdateHobbies,
+    userFirstUpdate,
+} from '../actions/userActions';
 
 interface UserState {
     isLogin: boolean;
@@ -16,7 +22,12 @@ const initialState: UserState = {
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        userLogOut: () => {
+            localStorage.removeItem('token');
+            return initialState;
+        },
+    },
     extraReducers(builder) {
         builder.addCase(userCurrentUser.fulfilled, (state, { payload }) => {
             const { token, user } = payload;
@@ -40,10 +51,23 @@ export const userSlice = createSlice({
                 state.data.lastLocation = payload;
             }
         });
+        builder.addCase(userUpdateHobbies.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.hobbies = payload;
+            }
+        });
+        builder.addCase(userFirstUpdate.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.name = payload.name;
+                state.data.email = payload.email;
+                state.data.gender = payload.gender;
+                state.data.birthday = payload.birthday;
+            }
+        });
     },
 });
 
-// export const {} = userSlice.actions;
+export const { userLogOut } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 

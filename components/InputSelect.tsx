@@ -11,7 +11,9 @@ interface Props {
 }
 
 export default function InputSelect({ onChange, name, label, required, options }: Props) {
+    //khong gan dc input
     const [input, setInput] = useState<any>(options[0]);
+
     useEffect(() => {
         onChange && onChange(input);
     }, [input, onChange]);
@@ -28,7 +30,7 @@ export default function InputSelect({ onChange, name, label, required, options }
             <ArrowDownIcon className="absolute-center-y right-6" />
             <Listbox value={input} onChange={setInput}>
                 <Listbox.Button className="text-left">{input.label}</Listbox.Button>
-                <Listbox.Options className="absolute pt-[7px] inset-x-0 bg-neutral-5  shadow-md top-[calc(100%-7px)]">
+                <Listbox.Options className="absolute pt-[7px] inset-x-0 bg-neutral-5 shadow-md top-[calc(100%-7px)] rounded-md overflow-hidden">
                     {options.map((option) => (
                         <Listbox.Option
                             className="transition-all py-1 hover:bg-primary-50 hover:text-white px-[10px] cursor-pointer"

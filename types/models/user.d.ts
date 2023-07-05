@@ -1,17 +1,33 @@
-enum EUserGender {
-    MALE = 'male',
-    FEMALE = 'female',
-    OTHER = 'other',
+declare interface IUserGender {
+    _id: string;
+    name: string;
 }
 
 declare interface IUserStatus {
+    isFirstUpdate: boolean;
     isVerified: boolean;
     isActive: boolean;
+}
+
+declare interface IUserHobby {
+    _id: string;
+    name: string;
 }
 
 declare interface IUserName {
     firstName: string;
     lastName: string;
+}
+
+declare interface IUserHobbyItem {
+    _id: string;
+    name: string;
+}
+
+declare interface IUserInfo {
+    beer: IUserHobbyItem;
+    education: IUserHobbyItem;
+    religion: boolean;
 }
 
 declare interface IUserFriend {
@@ -39,12 +55,13 @@ declare interface IUser {
     email: string;
     name: IUserName;
     nickname: string;
-    gender: EUserGender;
-    birthday: Date;
+    gender: IUserGender;
+    birthday: string;
     status: IUserStatus;
     friends: IUserFriend[];
-    blocks: IUserBlock[];
+    block: IUserBlock[];
     walletAmount: number;
+    hobbies: IUserHobby[];
     avatar: string;
     profile: {
         bio: string;
@@ -53,5 +70,4 @@ declare interface IUser {
     transactions: any[];
     bag: IUserBagItem[];
     lastLocation: IUserLocation;
-    lastLogin: Date;
 }
