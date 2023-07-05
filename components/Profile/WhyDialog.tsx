@@ -1,5 +1,9 @@
 import { RadioGroup } from '@headlessui/react';
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { userUpdateReason } from '../../redux/actions/userActions';
+import { selectUser } from '../../redux/reducers/userSlice';
+import { toastError } from '../../utils/toast';
 import Dialog from '../Dialog';
 import ChatOptionIcon from '../Icons/ChatOptionIcon';
 import CupIcon from '../Icons/CupIcon';
@@ -8,6 +12,7 @@ import KissFaceIcon from '../Icons/KissFaceIcon';
 interface Props {
     isOpen: boolean;
     onClose: () => void;
+    reason: string | undefined;
 }
 
 const WhyOptions = [
@@ -28,10 +33,21 @@ const WhyOptions = [
     },
 ];
 
-export default function WhyDialog({ isOpen, onClose }: Props) {
-    const [value, setValue] = useState(WhyOptions[0]);
+export default function WhyDialog({ isOpen, onClose, reason }: Props) {
+    const dispatch = useAppDispatch();
+    const sUser = useAppSelector(selectUser);
+
+    const [value, setValue] = useState(WhyOptions.find((item) => item.name === reason) || WhyOptions[0]);
+
     const handleClose = () => {
-        onClose();
+        try {
+            onClose();
+            if (sUser.data && sUser.data.info.reason !== value.name) {
+                dispatch(userUpdateReason(value.name)).unwrap();
+            }
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
     };
     return (
         <>

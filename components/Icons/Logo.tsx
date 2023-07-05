@@ -2,14 +2,14 @@ import * as React from 'react';
 import { SVGProps } from 'react';
 
 const Logo = (props: SVGProps<SVGSVGElement>) => (
-    <section className="flex-center flex-col gap-10">
+    <section className="">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={90}
             height={90}
             viewBox="0 0 294 300"
             {...props}
-            className="bg-white p-4 shadow-lg shadow-gray-600 rounded-full animate-bounce"
+            className="p-4 bg-white rounded-full shadow-lg shadow-gray-600 animate-bounce"
         >
             <g fill="#de3387">
                 <path d="M44.9 5.2c-5 18.8-7.3 47.8-5 65.3 2.3 18.2 5.1 27 5.1 16.3 0-15.4 6.5-62.5 9-65.1.4-.5 3.9 1.9 7.8 5.2 12 10.3 25.2 26.4 34 41.4 3.4 5.9 4.9 7.6 6.1 7.1 5.1-2.1 13.9-4.4 23-5.9 19.3-3.3 50.8-.8 64.5 5 4.3 1.8 4.1 1.9 7.3-4 3.1-5.9 11.7-18.1 18-25.7 6.3-7.5 23-23.8 24.5-23.8 2.4 0 7.5 33.4 9.4 61.3.4 5.5 1 9.3 1.4 8.5 1.6-2.9 4.1-20 4.7-31.8.7-14.7-.8-31.4-4.2-46.6-1.4-5.9-2.7-10.9-2.9-11.1-.8-.8-6.2 2.6-15.2 9.5-11.6 9-28.3 26.4-36.1 37.7-3.4 5-6.8 9.8-7.5 10.7-1.2 1.6-1.8 1.6-9.3-.2-11.6-2.9-28.4-4.3-40.5-3.6-9.3.6-27.1 3.6-31.4 5.2-1 .4-2.4-.8-4.2-3.8C94.7 42.9 77.9 24 65.1 13.6 57.5 7.5 48.2 1 46.9 1c-.4 0-1.3 1.9-2 4.2z" />
@@ -18,10 +18,6 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
                 <path d="M140.6 216.6c-5.9 5.9-2 15.4 6.4 15.4 5.5 0 9-3.4 9-8.8 0-8.3-9.6-12.4-15.4-6.6z" />
             </g>
         </svg>
-        <div className="flex-center gap-2 body-2">
-            <p>Loading</p>
-            <span>. . .</span>
-        </div>
     </section>
 );
 

@@ -65,9 +65,15 @@ declare interface IUser {
     avatar: string;
     profile: {
         bio: string;
-        album: string[];
+        albums: IAlbums[];
     };
     transactions: any[];
     bag: IUserBagItem[];
     lastLocation: IUserLocation;
+    info: {
+        reason: string;
+        beer: IBeer;
+        religion: boolean;
+        education: IEducation;
+    };
 }

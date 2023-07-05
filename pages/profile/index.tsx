@@ -1,29 +1,50 @@
 import Title from '../../components/Home/Title';
 import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
-import Tag from '../../components/Home/Tag';
 import DoubleGroup from '../../components/Home/DoubleGroup';
 import SingleGroup from '../../components/Home/SingleGroup';
-import ChildrenIcon from '../../components/Icons/profile/ChildrenIcon';
 import AncoholIcon from '../../components/Icons/profile/AncoholIcon';
 import GenderIcon from '../../components/Icons/profile/GenderIcon';
 import ReligionIcon from '../../components/Icons/profile/ReligionIcon';
 import EducationIcon from '../../components/Icons/profile/EducationIcon';
 import { NextPageWithLayout } from '../../types/global';
 import NavbarLayout from '../../components/NavbarLayout';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import WhyDialog from '../../components/Profile/WhyDialog';
 import BioDialog from '../../components/Profile/BioDialog';
 import HobbyDialog from '../../components/Profile/HobbyDialog';
 import { Popover } from '@headlessui/react';
-import { useAppDispatch } from '../../hooks/redux';
-import { userLogOut } from '../../redux/reducers/userSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { selectUser, userLogOut } from '../../redux/reducers/userSlice';
+import ReligionDialog from '../../components/Profile/ReligionDialog';
+import EducationDialog from '../../components/Profile/EducationDialog';
+import GenderDialog from '../../components/Profile/GenderDialog';
+import BeerDialog from '../../components/Profile/BeerDialog';
+import Hobby from '../../components/Home/Hobby';
+import { toastError } from '../../utils/toast';
+import UploadImageIcon from '../../components/Icons/UploadImageIcon';
+import { useRouter } from 'next/router';
+import APP_PATH from '../../constant/appPath';
+import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
+import { selectInfo } from '../../redux/reducers/infoSlice';
+import AlbumsItem from '../../components/Profile/AlbumsItem';
 
 const Profile: NextPageWithLayout = () => {
+    const router = useRouter();
+
     const dispatch = useAppDispatch();
+    const sUser = useAppSelector(selectUser);
+    const sInfo = useAppSelector(selectInfo);
+
     const [isOpenWhyDialog, setIsOpenWhyDialog] = useState(false);
     const [isOpenBioDialog, setIsOpenBioDialog] = useState(false);
     const [isOpenHobbyDialog, setIsOpenHobbyDialog] = useState(false);
+    const [isOpenReligionDialog, setIsOpenReligionDialog] = useState(false);
+    const [isOpenEducationDialog, setIsOpenEducationDialog] = useState(false);
+    const [isOpenGenderDialog, setIsOpenGenderDialog] = useState(false);
+    const [isOpenBeerDialog, setIsOpenBeerDialog] = useState(false);
+
+    const lengthAlbums = sUser.data?.profile.albums.length;
 
     const handleLogOut = () => {
         dispatch(userLogOut());
@@ -47,12 +68,121 @@ const Profile: NextPageWithLayout = () => {
     const handleCloseBioDialog = () => {
         setIsOpenBioDialog(false);
     };
+
+    const handleOpenReligionDialog = () => {
+        setIsOpenReligionDialog(true);
+    };
+
+    const handleCloseReligionDialog = () => {
+        setIsOpenReligionDialog(false);
+    };
+
+    const handleOpenEducationDialog = () => {
+        setIsOpenEducationDialog(true);
+    };
+
+    const handleCloseEducationDialog = () => {
+        setIsOpenEducationDialog(false);
+    };
+
+    const handleOpenGenderDialog = () => {
+        setIsOpenGenderDialog(true);
+    };
+
+    const handleCloseGenderDialog = () => {
+        setIsOpenGenderDialog(false);
+    };
+
+    const handleOpenBeerDialog = () => {
+        setIsOpenBeerDialog(true);
+    };
+
+    const handleCloseBeerDialog = () => {
+        setIsOpenBeerDialog(false);
+    };
+
+    const handleUploadFile = () => {
+        router.push(APP_PATH.UPLOAD_ALBUMS);
+    };
+
+    const handleViewAlbums = () => {
+        router.push(APP_PATH.ALBUMS);
+    };
+
+    useEffect(() => {
+        async function handleGetGenders() {
+            try {
+                await dispatch(infoGetAllGenders()).unwrap();
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+        }
+
+        async function handleGetEducations() {
+            try {
+                await dispatch(infoGetAllEducations()).unwrap();
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+        }
+
+        async function handleGetBeers() {
+            try {
+                await dispatch(infoGetAllBeers()).unwrap();
+            } catch (error) {
+                toastError((error as IResponseError).error);
+            }
+        }
+
+        if (sInfo.genders.length === 0) {
+            handleGetGenders();
+        }
+
+        if (sInfo.educations.length === 0) {
+            handleGetEducations();
+        }
+
+        if (sInfo.beers.length === 0) {
+            handleGetBeers();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             <HobbyDialog isOpen={isOpenHobbyDialog} onClose={handleCloseHobbyDialog} />
-            <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} />
+            <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} reason={sUser.data?.info.reason} />
             <BioDialog isOpen={isOpenBioDialog} onClose={handleCloseBioDialog} />
-            <section className="container bg-white with-navbar">
+            <ReligionDialog
+                isOpen={isOpenReligionDialog}
+                onClose={handleCloseReligionDialog}
+                religion={sUser.data?.info.religion}
+            />
+            {sInfo.educations.length > 0 && (
+                <EducationDialog
+                    isOpen={isOpenEducationDialog}
+                    onClose={handleCloseEducationDialog}
+                    educationId={sUser.data?.info.education._id}
+                />
+            )}
+
+            {sInfo.genders.length > 0 && (
+                <GenderDialog
+                    isOpen={isOpenGenderDialog}
+                    onClose={handleCloseGenderDialog}
+                    genderId={sUser.data?.gender._id}
+                />
+            )}
+
+            {sInfo.beers.length > 0 && (
+                <BeerDialog
+                    isOpen={isOpenBeerDialog}
+                    onClose={handleCloseBeerDialog}
+                    beerId={sUser.data?.info.beer._id}
+                />
+            )}
+
+            <section className="container with-navbar">
                 <Title
                     className="mb-2"
                     content={
@@ -82,30 +212,99 @@ const Profile: NextPageWithLayout = () => {
                     }
                 />
                 <div className="gap-4 flex-center-y">
-                    <Image className="rounded-xl" src="/assets/images/avatar.png" alt="avatar" height={40} width={40} />
+                    <Image
+                        className="rounded-xl"
+                        src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
+                        alt="avatar"
+                        height={40}
+                        width={40}
+                    />
                     <div>
-                        <h3 className="text-neutral-100">Johny Toàn,30t</h3>
-                        <span className="opacity-50 body-2">“Muốn hẹn hò”</span>
+                        <h3 className="text-neutral-100">
+                            {sUser.data?.name.firstName} {sUser.data?.name.lastName},30t
+                        </h3>
+                        <span className="opacity-50 body-2">
+                            {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
+                        </span>
                     </div>
                 </div>
 
-                <div className="my-8">
-                    <div className="image-container">
-                        <Image className="image" alt="post_image" layout="fill" src={'/assets/images/post.png'} />
+                <div className="grid grid-cols-3 my-8 gap-2.5">
+                    {sUser.data &&
+                        sUser.data.profile.albums.length > 0 &&
+                        sUser.data.profile.albums.map((image, index, albums) => {
+                            if (index === 0) {
+                                return (
+                                    <AlbumsItem key={image.url} url={image.url} firstImage onClick={handleViewAlbums} />
+                                );
+                            } else if (index > 0 && index < 4) {
+                                return (
+                                    <AlbumsItem
+                                        key={image.url}
+                                        url={image.url}
+                                        middleImage
+                                        onClick={handleViewAlbums}
+                                    />
+                                );
+                            } else if (index === 4) {
+                                return (
+                                    <AlbumsItem
+                                        key={image.url}
+                                        url={image.url}
+                                        anotherImages={albums.length - 5}
+                                        onClick={handleViewAlbums}
+                                    />
+                                );
+                            }
+                        })}
+
+                    <div
+                        onClick={handleUploadFile}
+                        className="flex-col w-full overflow-hidden border-2 border-dashed cursor-pointer text-neutral-100 border-sky-400 rounded-xl aspect-square flex-center gap-y-1"
+                    >
+                        <UploadImageIcon />
+                        <span>Tải ảnh lên</span>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <DoubleGroup title="Tại sao bạn lại ở đây" desc="Muốn hẹn hò" onClick={handleOpenWhyDialog} />
-                    <DoubleGroup title="Giới thiệu bản thân" desc="Ăn cơm phải có canh" onClick={handleOpenBioDialog} />
+                    <DoubleGroup
+                        title="Tại sao bạn lại ở đây"
+                        desc={sUser.data?.info.reason ? sUser.data.info.reason : 'Vui lòng chọn'}
+                        onClick={handleOpenWhyDialog}
+                    />
+                    <DoubleGroup
+                        title="Giới thiệu bản thân"
+                        desc={sUser.data?.profile.bio ? sUser.data.profile.bio : 'Hãy thêm giới thiệu về bản thân bạn'}
+                        onClick={handleOpenBioDialog}
+                    />
                 </div>
 
                 <div className="flex flex-col gap-2 my-9">
-                    <SingleGroup icon={<ChildrenIcon />} title="Trẻ con" desc="Không có" />
-                    <SingleGroup icon={<AncoholIcon />} title="Rượu bia" desc="Không bao giờ" />
-                    <SingleGroup icon={<GenderIcon />} title="Giới tính" desc="Giới tính thẳng" />
-                    <SingleGroup icon={<ReligionIcon />} title="Tôn giáo" desc="Không" />
-                    <SingleGroup icon={<EducationIcon />} title="Học vấn" desc="Không" />
+                    <SingleGroup
+                        icon={<AncoholIcon />}
+                        title="Rượu bia"
+                        desc={sUser.data?.info.beer ? sUser.data.info.beer.name : 'Vui lòng chọn'}
+                        onClick={handleOpenBeerDialog}
+                    />
+                    <SingleGroup
+                        icon={<GenderIcon />}
+                        title="Giới tính"
+                        desc={sUser.data?.gender ? sUser.data.gender.name : 'Vui lòng chọn'}
+                        onClick={handleOpenGenderDialog}
+                    />
+                    <SingleGroup
+                        icon={<ReligionIcon />}
+                        title="Tôn giáo"
+                        desc={sUser.data?.info.religion ? 'Có' : 'Không'}
+                        onClick={handleOpenReligionDialog}
+                    />
+                    <SingleGroup
+                        icon={<EducationIcon />}
+                        title="Học vấn"
+                        desc={sUser.data?.info.education ? sUser.data.info.education.name : 'Không'}
+                        onClick={handleOpenEducationDialog}
+                    />
                 </div>
 
                 <div>
@@ -116,10 +315,8 @@ const Profile: NextPageWithLayout = () => {
                         </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        <Tag className="bg-[#FFF0F0]" content="mua sắm" />
-                        <Tag className="bg-[#FFF5ED]" content="cà phê" />
-                        <Tag className="bg-[#EDF7FF]" content="du lịch" />
-                        <Tag className="bg-[#E9FBF1]" content="đọc sách" />
+                        {sUser.data?.hobbies &&
+                            sUser.data.hobbies.map((hobby) => <Hobby key={hobby._id} title={hobby.name} />)}
                     </div>
                 </div>
             </section>
