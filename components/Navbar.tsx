@@ -20,7 +20,7 @@ function Navbar(props: Props) {
     return (
         <Portal
             id="navbar"
-            className="fixed bottom-0 z-[1000] -translate-x-1/2 left-1/2 max-w-[377px] w-full "
+            className="fixed bottom-0 z-[1000] -translate-x-1/2 left-1/2 max-w-[768px] w-full "
             section="section"
         >
             <div className="py-2 px-[26px] bg-white rounded-t-3xl grid grid-cols-4 gap-4 border border-slate-200 shadow-nav">

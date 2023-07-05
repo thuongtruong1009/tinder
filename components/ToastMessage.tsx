@@ -33,7 +33,12 @@ function ToastMessage({ t, data }: Props) {
                             {generateFullName(data.message.senderId.name)}
                         </p>
                         <p className="mt-1 text-sm text-gray-500">
-                            {data.message.messages[0].type === 'text' ? data.message.messages[0].value : 'Đã gửi ảnh'}
+                            {data.message.messages[0].type === 'text'
+                                ? data.message.messages[0].value
+                                : data.message.messages[0].type === 'image'
+                                ? 'Đã gửi ảnh'
+                                : 'Đã gửi âm thanh'}
+                            {/* {data.message.messages[0].type === 'text' ? data.message.messages[0].value : 'Đã gửi ảnh'} */}
                         </p>
                     </div>
                 </div>

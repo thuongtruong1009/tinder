@@ -33,8 +33,13 @@ import AlbumsItem from '../../components/Profile/AlbumsItem';
 import { HiPencil } from 'react-icons/hi';
 import HeightIcon from '../../components/Icons/HeightIcon';
 import HeightDialog from '../../components/Profile/HeightDialog';
+import { useSocket } from '../../context/SocketContext';
+import { clearConversation } from '../../redux/reducers/conversationSlice';
+import { clearNotification } from '../../redux/reducers/notificationSlice';
+import { clearMatch } from '../../redux/reducers/matchSlice';
 
 const Profile: NextPageWithLayout = () => {
+    const socket = useSocket();
     const router = useRouter();
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
@@ -49,9 +54,13 @@ const Profile: NextPageWithLayout = () => {
     const [isOpenBeerDialog, setIsOpenBeerDialog] = useState(false);
     const [isOpenHeightDialog, setIsOpenHeightDialog] = useState(false);
 
-    const lengthAlbums = sUser.data?.profile.albums.length;
+    // const lengthAlbums = sUser.data?.profile.albums.length;
 
     const handleLogOut = () => {
+        socket?.disconnect();
+        dispatch(clearConversation());
+        dispatch(clearNotification());
+        dispatch(clearMatch());
         dispatch(userLogOut());
     };
 
@@ -130,6 +139,13 @@ const Profile: NextPageWithLayout = () => {
         router.push(APP_PATH.UPDATE_COMMON_INFO);
     };
 
+    const handleAge = (birthday: string | undefined) => {
+        if (!birthday) return 0;
+        const newBirthday = new Date(birthday);
+        const now = new Date();
+        return now.getFullYear() - newBirthday.getFullYear();
+    };
+
     useEffect(() => {
         async function handleGetGenders() {
             try {
@@ -166,6 +182,7 @@ const Profile: NextPageWithLayout = () => {
         if (sInfo.beers.length === 0) {
             handleGetBeers();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -232,7 +249,7 @@ const Profile: NextPageWithLayout = () => {
                                                 onClick={onEnterGift}
                                             >
                                                 <BsCoin />
-                                                <p>Coins package</p>
+                                                <p>Package</p>
                                             </button>
                                         </li>
                                     </ul>
@@ -247,12 +264,14 @@ const Profile: NextPageWithLayout = () => {
                             className="rounded-xl"
                             src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
                             alt="avatar"
+                            objectFit="cover"
                             height={40}
                             width={40}
                         />
                         <div>
-                            <h3 className="text-neutral-100">
-                                {sUser.data?.name.firstName} {sUser.data?.name.lastName},30t
+                            <h3 className="text-neutral-100 line-clamp-2">
+                                {sUser.data?.name.firstName} {sUser.data?.name.lastName},{' '}
+                                {handleAge(sUser.data?.birthday)}t
                             </h3>
                             <span className="opacity-50 body-2">
                                 {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
@@ -344,7 +363,7 @@ const Profile: NextPageWithLayout = () => {
                     <SingleGroup
                         icon={<HeightIcon />}
                         title="Chiều cao"
-                        desc={sUser.data?.info.height ? sUser.data.info.height + 'm' : 'Cập nhập chiều cao'}
+                        desc={sUser.data?.info.height ? sUser.data.info.height + 'm' : 'Cập nhật chiều cao'}
                         onClick={handleOpenHeightDialog}
                     />
                 </div>

@@ -5,9 +5,10 @@ const ENDPOINT = 'user';
 const URL = `${API}/${ENDPOINT}`;
 
 const userApi = {
+    getFriends: () => axiosService.get<IGetFriendResponse>(`${URL}/friends`),
     findStrangeFriendsAround: () => axiosService.get<IFindStrangeFriendsAroundResponse>(`${URL}/strange-friends`),
     blockUser: (userId: string) =>
-        axiosService.post<IResponseUser>(`${URL}/block/`, {
+        axiosService.post<IBlockUserResponse>(`${URL}/block/`, {
             userId,
         }),
     unblockUser: (userId: string) =>

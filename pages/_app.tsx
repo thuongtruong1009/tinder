@@ -8,14 +8,15 @@ import Loading from '../components/Loading';
 import { useEffect, useState } from 'react';
 import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
-import ProtectRoute from '../components/ProtectRoute';
-import { SocketProvider } from '../context/SocketContext';
-import UserProvider from '../context/userContext';
+import UserProvider from '../context/UserContext';
+import { useRouter } from 'next/router';
+import ScreenRoute from '../components/Route/ScreenRoute';
+import ProtectRoute from '../components/Route/ProtectRoute';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const getLayout = Component.getLayout ?? ((page) => page);
-
     useEffect(() => {
         async function getCurrentUser() {
             if (localStorage.getItem('token') && !store.getState().user.isLogin) {
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             setLoading(true);
         };
     }, []);
+
     return (
         <UserProvider>
             <Head>
@@ -41,15 +43,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             </Head>
             <Provider store={store}>
                 {!loading ? (
-                    <>
+                    <ScreenRoute>
                         {Component.protected ? (
-                            <ProtectRoute>
-                                <SocketProvider>{getLayout(<Component {...pageProps} />)}</SocketProvider>
-                            </ProtectRoute>
+                            <ProtectRoute>{getLayout(<Component {...pageProps} />)}</ProtectRoute>
                         ) : (
                             getLayout(<Component {...pageProps} />)
                         )}
-                    </>
+                    </ScreenRoute>
                 ) : (
                     <Loading />
                 )}

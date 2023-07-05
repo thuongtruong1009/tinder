@@ -3,6 +3,7 @@ import user from '../redux/reducers/userSlice';
 import notification from '../redux/reducers/notificationSlice';
 import info from '../redux/reducers/infoSlice';
 import conversation from '../redux/reducers/conversationSlice';
+import match from '../redux/reducers/matchSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         notification,
         info,
         conversation,
+        match,
     },
 });
 

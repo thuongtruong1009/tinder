@@ -4,15 +4,17 @@ import HeartIcon from '../Icons/HeartIcon';
 import InformationIcon from '../Icons/InformationIcon';
 import LocationIcon from '../Icons/LocationIcon';
 import CircleButton from '../Home/CircleButton';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 type Props = {
-    user: IStrager;
-    onSeen: (user: IStrager) => () => void;
+    user: IStranger;
+    isLoading: boolean;
+    onSeen: (user: IStranger) => () => void;
     onLike: (_id: string) => void;
     onBlock: (_id: string) => void;
 };
 
-const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
+const UserCard = ({ user, onSeen, onLike, onBlock, isLoading }: Props) => {
     const handleGetDefault = () => {
         if (user.profile.albums.length > 0) {
             const image = user.profile.albums.find((item) => item.isDefault === true);
@@ -24,12 +26,12 @@ const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
         return user.avatar;
     };
     return (
-        <div className="rounded-[40px] h-[70vh] relative before:absolute before:inset-0 before:bg-card before:z-10">
+        <div className="rounded-[40px] h-[calc(100vh-172px)] relative before:absolute before:inset-0 before:bg-card before:z-10">
             <div className="w-full h-full image-container">
                 <Image
                     className="object-cover image"
                     alt="avatar"
-                    objectPosition="top"
+                    objectPosition="center"
                     layout="fill"
                     src={handleGetDefault()}
                 />
@@ -52,16 +54,20 @@ const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
 
                 <div className="justify-center gap-10 mb-6 flex-center-y">
                     <CircleButton
+                        IconLoading={<BiLoaderAlt className="animate-spin" />}
                         Icon={<CloseIcon />}
                         onClick={() => {
                             onBlock(user._id);
                         }}
+                        disabled={isLoading}
                     />
                     <CircleButton
+                        IconLoading={<BiLoaderAlt className="animate-spin" />}
                         Icon={<HeartIcon />}
                         onClick={() => {
                             onLike(user._id);
                         }}
+                        disabled={isLoading}
                     />
                 </div>
             </div>

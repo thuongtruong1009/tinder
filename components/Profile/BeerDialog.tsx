@@ -34,8 +34,8 @@ export default function BeerDialog({ isOpen, onClose, beerId }: Props) {
 
     return (
         <>
-            <Dialog title="Cho mọi người biết tình hình bia rượu của bạn?" isOpen={isOpen} onClose={handleClose}>
-                <RadioGroup value={value} onChange={setValue} className="space-y-4 max-h-96 overflow-y-auto">
+            <Dialog title="Bạn có hay uống sinh tố lúa mạch không?" isOpen={isOpen} onClose={handleClose}>
+                <RadioGroup value={value} onChange={setValue} className="space-y-4 overflow-y-auto max-h-96">
                     {beerOptions.map((item) => (
                         <RadioGroup.Option
                             key={item._id}

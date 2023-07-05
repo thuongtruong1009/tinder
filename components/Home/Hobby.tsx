@@ -3,40 +3,20 @@ interface Props {
 }
 
 export default function Hobby({ title }: Props) {
-    const random = Math.floor(Math.random() * 8);
-
-    let bgColor = '';
-    switch (random) {
-        case 0:
-            bgColor = 'bg-fuchsia-100';
-            break;
-        case 1:
-            bgColor = 'bg-blue-100';
-            break;
-        case 2:
-            bgColor = 'bg-orange-100';
-            break;
-        case 3:
-            bgColor = 'bg-emerald-100';
-            break;
-        case 4:
-            bgColor = 'bg-thirdth-30';
-            break;
-        case 5:
-            bgColor = 'bg-thirdth-40';
-            break;
-        case 6:
-            bgColor = 'bg-thirdth-50';
-            break;
-        case 7:
-            bgColor = 'bg-thirdth-60';
-            break;
-        case 8:
-            bgColor = 'bg-thirdth-70';
-            break;
-    }
-
-    const classCSS = 'gap-2 flex-center-y rounded-[32px] px-4 py-1 w-fit ' + bgColor;
+    const random = Math.floor(Math.random() * 10);
+    const bg = [
+        'bg-[#FFF0F0]',
+        'bg-[#EDF7FF]',
+        'bg-[#FFF5ED]',
+        'bg-[#E9FBF1]',
+        'bg-[#F3D6D6]',
+        'bg-[#F9EDFF]',
+        'bg-[#FFEDF6]',
+        'bg-[#EDDEFF]',
+        'bg-[#E4DAE4]',
+        'bg-[#FFDEFC]',
+    ];
+    const classCSS = `gap-2 flex-center-y rounded-[32px] px-4 py-1 w-fit ${bg[random]}`;
 
     return (
         <div className={classCSS}>

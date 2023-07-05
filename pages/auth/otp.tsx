@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { UserContextType } from '../../types/context/user';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppDispatch } from '../../hooks/redux';
 import Button from '../../components/Button';
 import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
@@ -13,15 +13,13 @@ import APP_PATH from '../../constant/appPath';
 import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import InputOTP from '../../components/Auth/InputOTP';
-import { selectUser } from '../../redux/reducers/userSlice';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/UserContext';
 
 const OTP: NextPage = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
 
-    const sUser = useAppSelector(selectUser);
-
+    const [isLoading, setIsLoading] = useState(false);
     const cookies = Cookies.get();
     const userEmail = cookies.userEmail;
 
@@ -43,7 +41,8 @@ const OTP: NextPage = () => {
             email: userEmail || undefined,
         };
         try {
-            const response = await dispatch(
+            setIsLoading(true);
+            await dispatch(
                 userVerifyOTP({
                     ...body,
                     otp,
@@ -55,6 +54,7 @@ const OTP: NextPage = () => {
         } catch (error: any) {
             toastError(error.error);
         }
+        setIsLoading(false);
     };
 
     return (
@@ -79,12 +79,6 @@ const OTP: NextPage = () => {
                                 Vui lòng nhập mã OTP được gửi về số điện thoại của bạn, để hoàn thành đăng nhập.
                             </p>
                             <InputOTP onChange={handleChangeOtp} />
-
-                            <div className="flex justify-end">
-                                <button className="font-normal underline text-primary-40 text-caption-1 leading-caption-1 hover:cursor-pointer">
-                                    Gửi lại OTP
-                                </button>
-                            </div>
                         </div>
                     </div>
                     <Button
@@ -93,6 +87,7 @@ const OTP: NextPage = () => {
                         Icon={<ArrowRightCircleIcon />}
                         block
                         onClick={handleSubmit}
+                        loading={isLoading}
                     />
                 </div>
             </section>

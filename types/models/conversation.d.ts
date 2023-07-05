@@ -9,4 +9,5 @@ declare interface IConversation {
     users: IConversationUser[];
     messages: IMessage[];
     settings: any[];
+    updatedAt: string;
 }

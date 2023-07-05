@@ -1,21 +1,20 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-let socket: any;
-const ISSERVER = typeof window === 'undefined';
-if (!ISSERVER) {
-    socket = io((process.env.API_HOST as string) + '/notifications', {
-        extraHeaders: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-    });
-}
-export const SocketContext = createContext(socket as Socket);
+export const SocketContext = createContext<Socket | null>(null);
 interface Props {
     children: React.ReactNode;
 }
 export const SocketProvider = ({ children }: Props) => {
-    return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
+    const socket = useRef<Socket>(
+        io((process.env.API_HOST as string) + '/notifications', {
+            extraHeaders: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            autoConnect: false,
+        }),
+    );
+    return <SocketContext.Provider value={socket.current}>{children}</SocketContext.Provider>;
 };
 export const useSocket = () => {
     const socket = useContext(SocketContext);

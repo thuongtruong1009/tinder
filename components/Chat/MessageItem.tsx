@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import React from 'react';
 
 type Props = {
     messages: IMessageItem[];
@@ -20,16 +19,30 @@ const MessageItem = ({ messages, isMe }: Props) => {
                             </div>
                         );
                     } else if (message.type === 'image') {
+                        const classMessage =
+                            message.value.length === 1
+                                ? 'grid-cols-1'
+                                : !(message.value.length % 2)
+                                ? 'grid-cols-2'
+                                : 'grid-cols-3';
                         return (
-                            <div className="flex flex-wrap justify-end" key={index}>
+                            <div className={`max-w-[200px] grid ml-auto gap-2 ${classMessage}`} key={index}>
                                 {(message.value as []).map((image) => (
                                     <div
                                         key={image}
-                                        className="image-container max-w-[200px] rounded-xl overflow-hidden w-full"
+                                        className="w-full overflow-hidden aspect-square image-container rounded-xl"
                                     >
                                         <Image className="image" src={image} alt="img" layout="fill" priority />
                                     </div>
                                 ))}
+                            </div>
+                        );
+                    } else if (message.type === 'audio') {
+                        return (
+                            <div className="flex flex-wrap justify-end" key={index}>
+                                <audio controls className="audio max-w-[250px]">
+                                    <source src={message.value as string} type="audio/mpeg" />
+                                </audio>
                             </div>
                         );
                     }
@@ -48,13 +61,32 @@ const MessageItem = ({ messages, isMe }: Props) => {
                         </div>
                     );
                 } else if (message.type === 'image') {
-                    return (message.value as []).map((image, index) => (
-                        <div className="flex flex-wrap justify-start" key={index}>
-                            <div className="image-container max-w-[200px] rounded-xl overflow-hidden w-full">
-                                <Image className="image" src={image} alt="img" layout="fill" priority />
-                            </div>
+                    const classMessage =
+                        message.value.length === 1
+                            ? 'grid-cols-1'
+                            : !(message.value.length % 2)
+                            ? 'grid-cols-2'
+                            : 'grid-cols-3';
+                    return (
+                        <div className={`max-w-[200px] grid mr-auto gap-2 ${classMessage}`} key={index}>
+                            {(message.value as []).map((image) => (
+                                <div
+                                    key={image}
+                                    className="w-full overflow-hidden aspect-square image-container rounded-xl"
+                                >
+                                    <Image className="image" src={image} alt="img" layout="fill" priority />
+                                </div>
+                            ))}
                         </div>
-                    ));
+                    );
+                } else if (message.type === 'audio') {
+                    return (
+                        <div className="flex flex-wrap justify-start" key={index}>
+                            <audio controls className="audio max-w-[250px]">
+                                <source src={message.value as string} type="audio/mpeg" />
+                            </audio>
+                        </div>
+                    );
                 }
             })}
         </>

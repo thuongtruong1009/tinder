@@ -12,3 +12,14 @@ export const notificationGetNotifications = createAsyncThunk(
         }
     },
 );
+export const notificationUpdateSeenNotification = createAsyncThunk(
+    'notification/UpdateSeenNotification',
+    async (id: string, thunkAPI) => {
+        try {
+            const response = await notificationApi.updateSeenNotification(id);
+            return response.data.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    },
+);

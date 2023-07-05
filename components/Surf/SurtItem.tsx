@@ -2,6 +2,7 @@ import { Transition } from '@headlessui/react';
 import Image from 'next/image';
 import { Fragment } from 'react';
 import { createPortal } from 'react-dom';
+import { BiLoaderAlt } from 'react-icons/bi';
 import CircleButton from '../Home/CircleButton';
 import Hobby from '../Home/Hobby';
 import InfoComponent from '../Home/InfoComponent';
@@ -18,43 +19,47 @@ import AncoholIcon from '../Icons/profile/AncoholIcon';
 import ReligionIcon from '../Icons/profile/ReligionIcon';
 import QuoteLeftIcon from '../Icons/QuoteLeftIcon';
 import SexIcon from '../Icons/SexIcon';
-import SportIcon from '../Icons/SportIcon';
 
 interface Props {
-    stranger: IStrager;
+    user: IStranger;
+    isLoading: boolean;
     onClose: () => void;
     onLike: (_id: string) => void;
     onBlock: (_id: string) => void;
 }
 
-export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) {
+export default function SurtItem({ isLoading, user, onClose, onLike, onBlock }: Props) {
     const handleGetDefault = () => {
-        if (stranger.profile.albums.length > 0) {
-            const image = stranger.profile.albums.find((item) => item.isDefault === true);
+        if (user.profile.albums.length > 0) {
+            const image = user.profile.albums.find((item) => item.isDefault === true);
             if (image) {
                 return image.url;
             }
-            return stranger.profile.albums[0].url;
+            return user.profile.albums[0].url;
         }
-        return stranger.avatar;
+        return user.avatar;
     };
 
     return (
         <div className="animate-up fixed container top-0 px-4 inset-x-0 h-screen z-[1001] overflow-auto bg-white">
             <div className="fixed z-10 gap-10 -translate-x-1/2 left-1/2 bottom-4 flex-center-y">
                 <CircleButton
+                    IconLoading={<BiLoaderAlt className="animate-spin" />}
                     Icon={<CloseIcon />}
                     onClick={() => {
-                        onBlock(stranger._id);
+                        onBlock(user._id);
                         onClose();
                     }}
+                    disabled={isLoading}
                 />
                 <CircleButton
+                    IconLoading={<BiLoaderAlt className="animate-spin" />}
                     Icon={<HeartIcon />}
                     onClick={() => {
-                        onLike(stranger._id);
+                        onLike(user._id);
                         onClose();
                     }}
+                    disabled={isLoading}
                 />
             </div>
             <button
@@ -82,12 +87,11 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                     {/* user name and location */}
                     <div className="space-y-[7px] m-1 pb-[13px]">
                         <h3>
-                            {stranger?.name.firstName + ' ' + stranger?.name.lastName},{' '}
-                            {stranger.age && stranger.age + 't'}
+                            {user?.name.firstName + ' ' + user?.name.lastName}, {user.age && user.age + 't'}
                         </h3>
                         <div className="gap-2 flex-center-y ">
                             <LocationIcon />
-                            <span className="text-caption-1 leading-caption-1">Cách {stranger?.distance}m</span>
+                            <span className="text-caption-1 leading-caption-1">Cách {user?.distance}m</span>
                         </div>
                     </div>
 
@@ -95,24 +99,25 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                     <div className="space-y-6">
                         <div className="p-2 bg-neutral-5 rounded-2xl">
                             <QuoteLeftIcon />
-                            <p>{stranger.profile.bio}</p>
+                            <p>{user.profile.bio || 'Không có giới thiệu'}</p>
                         </div>
 
                         {/* Infor of user */}
                         <div className="space-y-4">
                             <h5 className="font-medium text-caption-1 leading-caption-1 text-neutral-65">
-                                Thông tin của {stranger?.name.lastName}
+                                Thông tin của {user?.name.lastName}
                             </h5>
                             <div className="flex flex-wrap gap-x-4 gap-y-2">
-                                {stranger.gender && <InfoComponent title={stranger.gender.name} Icon={<SexIcon />} />}
-                                {stranger.info.education && (
-                                    <InfoComponent title={stranger.info.education.name} Icon={<EducationIcon />} />
+                                {user.gender && <InfoComponent title={user.gender.name} Icon={<SexIcon />} />}
+                                {user.info.education && (
+                                    <InfoComponent title={user.info.education.name} Icon={<EducationIcon />} />
                                 )}
-                                {stranger.info.beer && (
-                                    <InfoComponent title={stranger.info.beer.name} Icon={<AncoholIcon />} />
+                                {user.info.beer && <InfoComponent title={user.info.beer.name} Icon={<AncoholIcon />} />}
+                                {user.info.height && (
+                                    <InfoComponent title={user.info.height.toString() + 'm'} Icon={<HeightIcon />} />
                                 )}
                                 <InfoComponent
-                                    title={stranger.info.religion ? 'Có' : 'Không'}
+                                    title={user.info.religion ? 'Có' : 'Không có tôn giáo'}
                                     Icon={<ReligionIcon />}
                                 />
                             </div>
@@ -124,9 +129,11 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                                 Tôi thích...
                             </h5>
                             <div className="flex flex-wrap gap-x-4 gap-y-2">
-                                {stranger.hobbies.map((hobby) => (
-                                    <Hobby key={hobby._id} title={hobby.name} />
-                                ))}
+                                {user.hobbies.length > 0 ? (
+                                    user.hobbies.map((hobby) => <Hobby key={hobby._id} title={hobby.name} />)
+                                ) : (
+                                    <p className="text-caption-1 leading-caption-1">Không có thông tin</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -134,7 +141,7 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
 
                 {/* favorite images of user */}
                 <div className="image-container">
-                    {stranger.profile.albums.map((image) => {
+                    {user.profile.albums.map((image) => {
                         if (image.isFavorite) {
                             return (
                                 <Image

@@ -5,7 +5,7 @@ declare interface IResponseUserHobby {
     hobbies: string[];
 }
 declare interface IFindStrangeFriendsAroundResponse {
-    data: IStrager[];
+    data: IStranger[];
 }
 
 declare interface IDataGetNotificationResponse {
@@ -14,12 +14,15 @@ declare interface IDataGetNotificationResponse {
     message: string;
     createdAt: string;
     type: 'like' | 'match';
+    user: IUserFriend[];
 }
 
 declare interface IGetNotificationResponse extends IResponseSuccess {
     data: IDataGetNotificationResponse[];
 }
-
+declare interface IUpdateSeenNotificationResponse extends IResponseSuccess {
+    data: IDataGetNotificationResponse;
+}
 declare interface IUpdateHobbiesResponse extends IResponseSuccess {
     data: IHobby[];
 }
@@ -92,4 +95,14 @@ declare interface IUpdateUserCommonInfoResponse extends IResponseSuccess {
 
 declare interface IUpdateUserHeightResponse extends IResponseSuccess {
     data: number;
+}
+
+declare interface IGetFriendResponse extends IResponseSuccess {
+    data: IUserFriend[];
+}
+
+declare interface IBlockUserResponse extends IResponseUser {
+    data: {
+        user: string;
+    };
 }

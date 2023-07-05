@@ -1,6 +1,8 @@
 declare interface IMessageItem {
-    type: 'text' | 'image';
+    type: 'text' | 'image' | 'audio';
     value: string | [];
+    createdAt?: string;
+    updatedAt?: string;
 }
 declare interface IMessage {
     messages: IMessageItem[];

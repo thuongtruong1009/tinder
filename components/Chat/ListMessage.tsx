@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { conversationGet } from '../../redux/actions/conversationActions';
 import { selectConversation } from '../../redux/reducers/conversationSlice';
+import { compareDateToMinutes, formatDatetime } from '../../utils/date';
 import { toastError } from '../../utils/toast';
 import MessageItem from './MessageItem';
 
@@ -13,16 +14,16 @@ interface Props {
 }
 
 export default function ListMessage({ userId, className, conversationId }: Props) {
+    const flag = useRef<boolean>(false);
+    const dispatch = useAppDispatch();
     const data = useAppSelector(selectConversation).data.find(
         (conversation) => conversation.conversation._id === conversationId,
     );
-    const dispatch = useAppDispatch();
 
     async function fetchConversation(page: number, limit: number) {
         if (data)
             try {
                 await dispatch(conversationGet({ id: conversationId, limit, page })).unwrap();
-                console.log('zo day');
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
@@ -45,27 +46,48 @@ export default function ListMessage({ userId, className, conversationId }: Props
                     <InfiniteScroll
                         dataLength={data.conversation.messages.length}
                         next={() => {
+                            const LIMIT = +(process.env.MESSAGE_LIMIT_DEFAULT as string);
+                            // const nextPage = Math.max(Math.round(data.conversation.messages.length / LIMIT), 1);
+                            // const nextLimit = data.limit + 10;
                             if (data.next) {
                                 fetchConversation(
                                     data.page ? data.page + 1 : +(process.env.MESSAGE_PAGE_DEFAULT as string),
-                                    data.limit ? data.limit : +(process.env.MESSAGE_LIMIT_DEFAULT as string),
+                                    data.limit ? data.limit : LIMIT,
                                 );
                             }
                         }}
                         className="gap-4 px-4 py-2"
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
-                        inverse={true} //
+                        inverse={true}
                         hasMore={data.next}
                         loader={<p className="text-sm font-semibold text-center">Đang tải...</p>}
                         scrollableTarget="scrollableDiv"
                     >
-                        {data.conversation.messages?.map((message) => (
-                            <MessageItem
-                                key={message._id}
-                                isMe={message.senderId._id === userId}
-                                messages={message.messages}
-                            />
-                        ))}
+                        {data.conversation.messages?.map((message, index) => {
+                            if (
+                                !compareDateToMinutes(
+                                    new Date(message.createdAt),
+                                    new Date(data.conversation?.messages[index + 1]?.createdAt),
+                                )
+                            ) {
+                                return (
+                                    <Fragment key={message._id}>
+                                        <MessageItem
+                                            isMe={message.senderId._id === userId}
+                                            messages={message.messages}
+                                        />
+                                        <p className="text-xs text-center">
+                                            {formatDatetime(new Date(message.createdAt))}
+                                        </p>
+                                    </Fragment>
+                                );
+                            }
+                            return (
+                                <Fragment key={message._id}>
+                                    <MessageItem isMe={message.senderId._id === userId} messages={message.messages} />
+                                </Fragment>
+                            );
+                        })}
                     </InfiniteScroll>
                 )}
             </div>

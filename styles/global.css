@@ -90,7 +90,7 @@
         @apply font-primary;
     }
     body {
-        @apply bg-black;
+        /* @apply bg-black; */
     }
 }
 @layer utilities {
@@ -113,10 +113,7 @@
         @apply text-body-3 leading-body-3;
     }
     .container {
-        @apply w-full px-4 mx-auto max-w-[377px] min-h-screen shadow-md;
-    }
-    .container-np {
-        @apply w-full mx-auto max-w-[377px] min-h-screen shadow-md;
+        @apply w-full max-w-3xl min-h-screen px-4 pt-2 mx-auto shadow-md;
     }
     .flex-center {
         @apply flex items-center justify-center;
@@ -157,6 +154,7 @@
 @import './datepicker.css';
 @import './input-otp.css';
 @import './match.css';
+@import './audio.css';
 .animate-up {
     animation: animate-up 0.7s ease-in-out;
 }
@@ -166,5 +164,19 @@
     }
     100% {
         transform: translateY(0%);
+    }
+}
+.animate-hue {
+    animation: animate-hue 0.2s linear infinite;
+}
+@keyframes animate-hue {
+    0% {
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    50% {
+        filter: hue-rotate(0deg) brightness(0);
+    }
+    100% {
+        filter: hue-rotate(360deg) brightness(1);
     }
 }

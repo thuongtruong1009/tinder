@@ -4,8 +4,8 @@ import { memo } from 'react';
 import L from 'leaflet';
 
 interface Props {
-    info: IStrager;
-    onClick?: (user: IStrager) => void;
+    info: IStranger;
+    onClick?: (user: IStranger) => void;
 }
 function getIconMarker() {
     return L.icon({
