@@ -4,8 +4,8 @@ import { memo } from 'react';
 import L from 'leaflet';
 
 interface Props {
-    info: IDataFindFriendsAroundResponse;
-    onClick?: (user: IDataFindFriendsAroundResponse) => void;
+    info: IStrager;
+    onClick?: (user: IStrager) => void;
 }
 function getIconMarker() {
     return L.icon({

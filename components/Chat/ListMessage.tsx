@@ -17,20 +17,19 @@ export default function ListMessage({ userId, className, conversationId }: Props
         (conversation) => conversation.conversation._id === conversationId,
     );
     const dispatch = useAppDispatch();
-    const [hasMore, setHasMore] = useState(true);
 
     async function fetchConversation(page: number, limit: number) {
         if (data)
             try {
-                const response = await dispatch(conversationGet({ id: conversationId, limit, page })).unwrap();
-                setHasMore(response.conversation.messages.length === limit);
+                await dispatch(conversationGet({ id: conversationId, limit, page })).unwrap();
+                console.log('zo day');
             } catch (error) {
                 toastError((error as IResponseError).error);
             }
     }
     useEffect(() => {
         if (data) {
-            if (!data.page && !data.limit) {
+            if (!data.page && !data.limit && data.next) {
                 fetchConversation(
                     +(process.env.MESSAGE_PAGE_DEFAULT as string),
                     +(process.env.MESSAGE_LIMIT_DEFAULT as string),
@@ -46,12 +45,17 @@ export default function ListMessage({ userId, className, conversationId }: Props
                     <InfiniteScroll
                         dataLength={data.conversation.messages.length}
                         next={() => {
-                            fetchConversation(data.page + 1, data.limit);
+                            if (data.next) {
+                                fetchConversation(
+                                    data.page ? data.page + 1 : +(process.env.MESSAGE_PAGE_DEFAULT as string),
+                                    data.limit ? data.limit : +(process.env.MESSAGE_LIMIT_DEFAULT as string),
+                                );
+                            }
                         }}
                         className="gap-4 px-4 py-2"
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
                         inverse={true} //
-                        hasMore={hasMore}
+                        hasMore={data.next}
                         loader={<p className="text-sm font-semibold text-center">Đang tải...</p>}
                         scrollableTarget="scrollableDiv"
                     >

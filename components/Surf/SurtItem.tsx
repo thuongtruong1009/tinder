@@ -14,18 +14,31 @@ import LanguageIcon from '../Icons/LanguageIcon';
 import LocationIcon from '../Icons/LocationIcon';
 import MatiralStatusIcon from '../Icons/MatiralStatusIcon';
 import PetIcon from '../Icons/PetIcon';
+import AncoholIcon from '../Icons/profile/AncoholIcon';
+import ReligionIcon from '../Icons/profile/ReligionIcon';
 import QuoteLeftIcon from '../Icons/QuoteLeftIcon';
 import SexIcon from '../Icons/SexIcon';
 import SportIcon from '../Icons/SportIcon';
 
 interface Props {
-    stranger: IDataFindFriendsAroundResponse;
+    stranger: IStrager;
     onClose: () => void;
     onLike: (_id: string) => void;
     onBlock: (_id: string) => void;
 }
 
 export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) {
+    const handleGetDefault = () => {
+        if (stranger.profile.albums.length > 0) {
+            const image = stranger.profile.albums.find((item) => item.isDefault === true);
+            if (image) {
+                return image.url;
+            }
+            return stranger.profile.albums[0].url;
+        }
+        return stranger.avatar;
+    };
+
     return (
         <div className="animate-up fixed container top-0 px-4 inset-x-0 h-screen z-[1001] overflow-auto bg-white">
             <div className="fixed z-10 gap-10 -translate-x-1/2 left-1/2 bottom-4 flex-center-y">
@@ -60,11 +73,7 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                             className="image w-full h-[555px] object-cover rounded-t-[40px]"
                             alt="avatar"
                             layout="fill"
-                            src={
-                                stranger
-                                    ? stranger.avatar
-                                    : 'https://res.cloudinary.com/cake-shop/image/upload/v1660488404/default_zpdpgj.jpg'
-                            }
+                            src={handleGetDefault()}
                         />
                     </div>
                 </div>
@@ -86,11 +95,7 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                     <div className="space-y-6">
                         <div className="p-2 bg-neutral-5 rounded-2xl">
                             <QuoteLeftIcon />
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic eaque, repellat omnis rerum
-                                architecto esse soluta similique obcaecati fuga exercitationem, accusamus distinctio et
-                                vel itaque molestias quas nisi consequatur sit.
-                            </p>
+                            <p>{stranger.profile.bio}</p>
                         </div>
 
                         {/* Infor of user */}
@@ -99,13 +104,17 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                                 Thông tin của {stranger?.name.lastName}
                             </h5>
                             <div className="flex flex-wrap gap-x-4 gap-y-2">
-                                <InfoComponent title="Độc thân" Icon={<MatiralStatusIcon />} />
-                                <InfoComponent title="Nữ thẳng" Icon={<SexIcon />} />
-                                <InfoComponent title="Mèo" Icon={<PetIcon />} />
-                                <InfoComponent title="164 cm" Icon={<HeightIcon />} />
-                                <InfoComponent title="Bằng đại học" Icon={<EducationIcon />} />
-                                <InfoComponent title="Bơi lội" Icon={<SportIcon />} />
-                                <InfoComponent title="English, Tiếng Đức, Tiếng Việt" Icon={<LanguageIcon />} />
+                                {stranger.gender && <InfoComponent title={stranger.gender.name} Icon={<SexIcon />} />}
+                                {stranger.info.education && (
+                                    <InfoComponent title={stranger.info.education.name} Icon={<EducationIcon />} />
+                                )}
+                                {stranger.info.beer && (
+                                    <InfoComponent title={stranger.info.beer.name} Icon={<AncoholIcon />} />
+                                )}
+                                <InfoComponent
+                                    title={stranger.info.religion ? 'Có' : 'Không'}
+                                    Icon={<ReligionIcon />}
+                                />
                             </div>
                         </div>
 
@@ -115,10 +124,9 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
                                 Tôi thích...
                             </h5>
                             <div className="flex flex-wrap gap-x-4 gap-y-2">
-                                <Hobby title="mua sắm" />
-                                <Hobby title="du lịch" />
-                                <Hobby title="cà phê" />
-                                <Hobby title="đọc sách" />
+                                {stranger.hobbies.map((hobby) => (
+                                    <Hobby key={hobby._id} title={hobby.name} />
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -126,24 +134,19 @@ export default function SurtItem({ stranger, onClose, onLike, onBlock }: Props) 
 
                 {/* favorite images of user */}
                 <div className="image-container">
-                    <Image
-                        src="/assets/images/favoriteImage1.png"
-                        alt="favoriteImage"
-                        className="object-cover image"
-                        layout="fill"
-                    />
-                    <Image
-                        src="/assets/images/favoriteImage2.png"
-                        alt="favoriteImage"
-                        className="object-cover image"
-                        layout="fill"
-                    />
-                    <Image
-                        src="/assets/images/favoriteImage3.png"
-                        alt="favoriteImage"
-                        className="object-cover image"
-                        layout="fill"
-                    />
+                    {stranger.profile.albums.map((image) => {
+                        if (image.isFavorite) {
+                            return (
+                                <Image
+                                    key={image.url}
+                                    src={image.url}
+                                    alt="favoriteImage"
+                                    className="object-cover image"
+                                    layout="fill"
+                                />
+                            );
+                        }
+                    })}
                 </div>
             </div>
         </div>

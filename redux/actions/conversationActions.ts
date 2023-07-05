@@ -50,14 +50,11 @@ export const conversationGet = createAsyncThunk(
     },
 );
 
-export const messageCreate = createAsyncThunk(
-    'conversation/messageCreate',
-    async (body: IDataCreateMessage, thunkAPI) => {
-        try {
-            const response = await messageApi.create(body);
-            return response.data.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error);
-        }
-    },
-);
+export const messageCreate = createAsyncThunk('conversation/messageCreate', async (data: FormData, thunkAPI) => {
+    try {
+        const response = await messageApi.create(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});

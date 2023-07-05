@@ -6,13 +6,23 @@ import LocationIcon from '../Icons/LocationIcon';
 import CircleButton from '../Home/CircleButton';
 
 type Props = {
-    user: IDataFindFriendsAroundResponse;
-    onSeen: (user: IDataFindFriendsAroundResponse) => () => void;
+    user: IStrager;
+    onSeen: (user: IStrager) => () => void;
     onLike: (_id: string) => void;
     onBlock: (_id: string) => void;
 };
 
 const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
+    const handleGetDefault = () => {
+        if (user.profile.albums.length > 0) {
+            const image = user.profile.albums.find((item) => item.isDefault === true);
+            if (image) {
+                return image.url;
+            }
+            return user.profile.albums[0].url;
+        }
+        return user.avatar;
+    };
     return (
         <div className="rounded-[40px] h-[70vh] relative before:absolute before:inset-0 before:bg-card before:z-10">
             <div className="w-full h-full image-container">
@@ -21,7 +31,7 @@ const UserCard = ({ user, onSeen, onLike, onBlock }: Props) => {
                     alt="avatar"
                     objectPosition="top"
                     layout="fill"
-                    src={user.avatar}
+                    src={handleGetDefault()}
                 />
             </div>
             <div className="absolute bottom-0 z-20 w-full px-4">

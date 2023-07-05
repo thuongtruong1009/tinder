@@ -3,6 +3,9 @@ module.exports = {
     content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
+            aspectRatio: {
+                '9/16': '9 / 16',
+            },
             boxShadow: {
                 nav: 'rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset',
             },
@@ -67,6 +70,7 @@ module.exports = {
                     50: '#7a56fe',
                     40: '#5D5FEF',
                     30: '#a48bfe',
+                    20: '#F2EEFF',
                 },
                 thirdth: {
                     70: '#689f38',
@@ -81,6 +85,7 @@ module.exports = {
                     dark_purple: '#EAEAEA',
                     grey: '#343E58',
                     pink: '#fd65b7',
+                    blue: '07C6FD',
                 },
             },
             fontFamily: {
@@ -89,5 +94,5 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    plugins: [require('@tailwindcss/line-clamp')],
 };

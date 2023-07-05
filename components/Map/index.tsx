@@ -13,15 +13,15 @@ import { toastError, toastSuccess } from '../../utils/toast';
 type Props = {
     isFocus: boolean;
     me?: IUserLocation;
-    friends: IDataFindFriendsAroundResponse[];
+    friends: IStrager[];
     handleFocus: () => void;
 };
 
 export default function Map({ me, isFocus, handleFocus, friends }: Props) {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
-    const [userInfo, setUserInfo] = useState<IDataFindFriendsAroundResponse>();
-    const saveUserInfo = (user: IDataFindFriendsAroundResponse) => {
+    const [userInfo, setUserInfo] = useState<IStrager>();
+    const saveUserInfo = (user: IStrager) => {
         setUserInfo(user);
     };
     const handleClose = () => {
@@ -47,7 +47,7 @@ export default function Map({ me, isFocus, handleFocus, friends }: Props) {
         }
     };
     return (
-        <section className="relative container-np">
+        <section className="relative container-np bg-white">
             {me ? (
                 <button
                     className="absolute z-[500] top-4 right-4 p-2 first-letter:font-bold bg-white rounded-sm shadow-md border-2 border-slate-100"

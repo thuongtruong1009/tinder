@@ -4,7 +4,9 @@ declare interface IResponseUser extends IResponseUpdateLocation {
 declare interface IResponseUserHobby {
     hobbies: string[];
 }
-declare interface IFindStrangeFriendsAroundResponse extends IFindFriendsAroundResponse {}
+declare interface IFindStrangeFriendsAroundResponse {
+    data: IStrager[];
+}
 
 declare interface IDataGetNotificationResponse {
     _id: string;
@@ -82,4 +84,12 @@ declare interface IUpdateDefaultResponse extends IResponseSuccess {
 
 declare interface IDeleteImageResponse extends IResponseSuccess {
     data: string;
+}
+
+declare interface IUpdateUserCommonInfoResponse extends IResponseSuccess {
+    data: ICommonInfo;
+}
+
+declare interface IUpdateUserHeightResponse extends IResponseSuccess {
+    data: number;
 }

@@ -22,6 +22,10 @@ const UpLoadAlbums: NextPageWithLayout = () => {
 
     const uploadBtnRef = useRef<HTMLInputElement>(null);
 
+    const [remainingImages, setRemainingImages] = useState<number>(
+        sUser.data ? +(process.env.MAX_IMAGES_ALBUMS as string) - sUser.data.profile.albums.length : 0,
+    );
+
     const [isLoading, setIsLoading] = useState(false);
     const [albums, setAlbums] = useState<File[]>([]);
     console.log('albums: ', albums);
@@ -33,30 +37,30 @@ const UpLoadAlbums: NextPageWithLayout = () => {
     };
 
     const handleFileInput = (e: any) => {
-        if (sUser.data) {
-            const newAlbums: File[] = [];
-            const maxLength = 10 - sUser.data.profile.albums.length - albums.length;
-            const filesLength = e.target.files.length;
+        const newAlbums: File[] = [];
+        const filesLength = e.target.files.length;
 
-            if (maxLength > 0) {
-                if (maxLength < filesLength) {
-                    for (let index = 0; index < maxLength; index++) {
-                        const image = e.target.files[index];
-                        newAlbums.push(image);
-                    }
-                } else {
-                    for (let index = 0; index < filesLength; index++) {
-                        const image = e.target.files[index];
-                        newAlbums.push(image);
-                    }
-                }
-                setAlbums((list) => [...list, ...newAlbums]);
+        if (remainingImages < filesLength) {
+            for (let index = 0; index < remainingImages; index++) {
+                const image = e.target.files[index];
+                newAlbums.push(image);
             }
+
+            setRemainingImages(0);
+        } else {
+            for (let index = 0; index < filesLength; index++) {
+                const image = e.target.files[index];
+                newAlbums.push(image);
+            }
+
+            setRemainingImages(remainingImages - filesLength);
         }
+        setAlbums((list) => [...list, ...newAlbums]);
     };
 
-    const handleRemove = (lastModified: number) => {
-        setAlbums(albums.filter((item) => item.lastModified !== lastModified));
+    const handleRemove = (indexImage: number) => {
+        setAlbums(albums.filter((item, index) => index !== indexImage));
+        setRemainingImages(remainingImages + 1);
     };
 
     const handleSubmit = async () => {
@@ -81,7 +85,7 @@ const UpLoadAlbums: NextPageWithLayout = () => {
     };
 
     return (
-        <section className="container with-navbar">
+        <section className="container bg-white with-navbar">
             <Title
                 className="mb-4"
                 content={
@@ -90,43 +94,41 @@ const UpLoadAlbums: NextPageWithLayout = () => {
                     </button>
                 }
             />
-            {sUser.data && sUser.data.profile.albums.length < 10 ? (
-                <p>Bạn có thể tải thêm {10 - sUser.data.profile.albums.length} ảnh. Tổng ảnh của albums là 10 ảnh.</p>
-            ) : (
-                <p>Albums của bạn đã đầy.</p>
-            )}
+            {remainingImages > 0 ? <p>Bạn có thể tải thêm {remainingImages} ảnh</p> : <p>Albums của bạn đã đầy</p>}
             <div className="grid grid-cols-3 my-8 gap-2.5">
                 {albums &&
-                    albums.map((image) => {
+                    albums.map((image, index) => {
                         const url = URL.createObjectURL(image);
 
                         return (
                             <AlbumsItem
-                                key={image.lastModified}
+                                key={image.lastModified + index}
                                 url={url}
                                 upLoad
-                                onClick={() => handleRemove(image.lastModified)}
+                                onClick={() => handleRemove(index)}
                             />
                         );
                     })}
 
-                <div
-                    onClick={handleClick}
-                    className="flex-col w-full overflow-hidden border-2 border-dashed cursor-pointer text-neutral-100 border-sky-400 rounded-xl aspect-square flex-center gap-y-1"
-                >
-                    <UploadImageIcon />
-                    <span>Tải ảnh lên</span>
-                    <input
-                        type="file"
-                        name="albums"
-                        id="albums"
-                        multiple
-                        hidden
-                        accept="image/png, image/jpg, image/jpeg"
-                        ref={uploadBtnRef}
-                        onChange={handleFileInput}
-                    />
-                </div>
+                {remainingImages > 0 && (
+                    <div
+                        onClick={handleClick}
+                        className="flex-col w-full overflow-hidden border-2 border-dashed cursor-pointer text-neutral-100 border-sky-400 rounded-xl aspect-square flex-center gap-y-1"
+                    >
+                        <UploadImageIcon />
+                        <span>Tải ảnh lên</span>
+                        <input
+                            type="file"
+                            name="albums"
+                            id="albums"
+                            multiple
+                            hidden
+                            accept="image/png, image/jpg, image/jpeg"
+                            ref={uploadBtnRef}
+                            onChange={handleFileInput}
+                        />
+                    </div>
+                )}
             </div>
             {!isLoading && (
                 <Button
@@ -139,7 +141,7 @@ const UpLoadAlbums: NextPageWithLayout = () => {
                 />
             )}
             {isLoading && (
-                <button className="bg-neutral-100 btn-md text-white w-full flex-center">
+                <button className="w-full text-white bg-neutral-100 btn-md flex-center">
                     <VscLoading className="animate-spin" />
                 </button>
             )}

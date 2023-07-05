@@ -24,12 +24,6 @@ declare interface IUserHobbyItem {
     name: string;
 }
 
-declare interface IUserInfo {
-    beer: IUserHobbyItem;
-    education: IUserHobbyItem;
-    religion: boolean;
-}
-
 declare interface IUserFriend {
     _id: string;
     email: string;
@@ -47,6 +41,19 @@ declare interface IUserLocation {
 declare interface IUserBagItem {
     giftId: string;
     quantity: number;
+}
+
+declare interface IUserInfo {
+    height: number;
+    reason: string;
+    beer: IBeer;
+    religion: boolean;
+    education: IEducation;
+}
+
+declare interface IProfile {
+    bio: string;
+    albums: IAlbums[];
 }
 
 declare interface IUser {
@@ -71,9 +78,29 @@ declare interface IUser {
     bag: IUserBagItem[];
     lastLocation: IUserLocation;
     info: {
+        height: Number;
         reason: string;
         beer: IBeer;
         religion: boolean;
         education: IEducation;
     };
+}
+
+declare interface IStrager {
+    _id: string;
+    name: IUserName;
+    avatar: string;
+    age: number;
+    gender: IUserGender;
+    lastLocation: IUserLocation;
+    distance: number;
+    info: IUserInfo;
+    hobbies: IUserHobby[];
+    profile: IProfile;
+}
+
+declare interface ICommonInfo {
+    name?: IUserName;
+    birthday?: string;
+    avatar?: string;
 }

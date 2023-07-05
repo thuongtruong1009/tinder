@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import Title from '../../components/Home/Title';
 import SettingIcon from '../../components/Icons/SettingIcon';
 import Image from 'next/image';
+import { RiLogoutCircleRLine } from 'react-icons/ri';
+import { BsCoin } from 'react-icons/bs';
 import DoubleGroup from '../../components/Home/DoubleGroup';
 import SingleGroup from '../../components/Home/SingleGroup';
 import AncoholIcon from '../../components/Icons/profile/AncoholIcon';
@@ -23,15 +26,16 @@ import BeerDialog from '../../components/Profile/BeerDialog';
 import Hobby from '../../components/Home/Hobby';
 import { toastError } from '../../utils/toast';
 import UploadImageIcon from '../../components/Icons/UploadImageIcon';
-import { useRouter } from 'next/router';
 import APP_PATH from '../../constant/appPath';
 import { infoGetAllBeers, infoGetAllEducations, infoGetAllGenders } from '../../redux/actions/infoAction';
 import { selectInfo } from '../../redux/reducers/infoSlice';
 import AlbumsItem from '../../components/Profile/AlbumsItem';
+import { HiPencil } from 'react-icons/hi';
+import HeightIcon from '../../components/Icons/HeightIcon';
+import HeightDialog from '../../components/Profile/HeightDialog';
 
 const Profile: NextPageWithLayout = () => {
     const router = useRouter();
-
     const dispatch = useAppDispatch();
     const sUser = useAppSelector(selectUser);
     const sInfo = useAppSelector(selectInfo);
@@ -43,11 +47,16 @@ const Profile: NextPageWithLayout = () => {
     const [isOpenEducationDialog, setIsOpenEducationDialog] = useState(false);
     const [isOpenGenderDialog, setIsOpenGenderDialog] = useState(false);
     const [isOpenBeerDialog, setIsOpenBeerDialog] = useState(false);
+    const [isOpenHeightDialog, setIsOpenHeightDialog] = useState(false);
 
     const lengthAlbums = sUser.data?.profile.albums.length;
 
     const handleLogOut = () => {
         dispatch(userLogOut());
+    };
+
+    const onEnterGift = () => {
+        router.push(APP_PATH.GIFT);
     };
 
     const handleOpenHobbyialog = () => {
@@ -101,12 +110,24 @@ const Profile: NextPageWithLayout = () => {
         setIsOpenBeerDialog(false);
     };
 
+    const handleOpenHeightDialog = () => {
+        setIsOpenHeightDialog(true);
+    };
+
+    const handleCloseHeightDialog = () => {
+        setIsOpenHeightDialog(false);
+    };
+
     const handleUploadFile = () => {
         router.push(APP_PATH.UPLOAD_ALBUMS);
     };
 
     const handleViewAlbums = () => {
         router.push(APP_PATH.ALBUMS);
+    };
+
+    const handleUpdateCommonInfo = () => {
+        router.push(APP_PATH.UPDATE_COMMON_INFO);
     };
 
     useEffect(() => {
@@ -145,7 +166,6 @@ const Profile: NextPageWithLayout = () => {
         if (sInfo.beers.length === 0) {
             handleGetBeers();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -153,24 +173,24 @@ const Profile: NextPageWithLayout = () => {
             <HobbyDialog isOpen={isOpenHobbyDialog} onClose={handleCloseHobbyDialog} />
             <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} reason={sUser.data?.info.reason} />
             <BioDialog isOpen={isOpenBioDialog} onClose={handleCloseBioDialog} />
+            <HeightDialog isOpen={isOpenHeightDialog} onClose={handleCloseHeightDialog} />
             <ReligionDialog
                 isOpen={isOpenReligionDialog}
                 onClose={handleCloseReligionDialog}
-                religion={sUser.data?.info.religion}
+                religion={sUser.data?.info?.religion}
             />
             {sInfo.educations.length > 0 && (
                 <EducationDialog
                     isOpen={isOpenEducationDialog}
                     onClose={handleCloseEducationDialog}
-                    educationId={sUser.data?.info.education._id}
+                    educationId={sUser.data?.info?.education?._id}
                 />
             )}
-
             {sInfo.genders.length > 0 && (
                 <GenderDialog
                     isOpen={isOpenGenderDialog}
                     onClose={handleCloseGenderDialog}
-                    genderId={sUser.data?.gender._id}
+                    genderId={sUser.data?.gender?._id}
                 />
             )}
 
@@ -178,11 +198,11 @@ const Profile: NextPageWithLayout = () => {
                 <BeerDialog
                     isOpen={isOpenBeerDialog}
                     onClose={handleCloseBeerDialog}
-                    beerId={sUser.data?.info.beer._id}
+                    beerId={sUser.data?.info?.beer?._id}
                 />
             )}
 
-            <section className="container with-navbar">
+            <section className="container bg-white with-navbar">
                 <Title
                     className="mb-2"
                     content={
@@ -196,13 +216,23 @@ const Profile: NextPageWithLayout = () => {
                                 </Popover.Button>
 
                                 <Popover.Panel className="absolute right-0 z-10 top-full">
-                                    <ul className="flex flex-col gap-1 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
+                                    <ul className="flex flex-col gap-2 p-2 overflow-y-auto bg-white rounded-md shadow-md max-h-60 min-w-[200px]">
                                         <li>
                                             <button
-                                                className="w-full py-1 text-center rounded-md text-primary-50 button-2 bg-slate-100"
+                                                className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-100"
                                                 onClick={handleLogOut}
                                             >
-                                                Đăng xuất
+                                                <RiLogoutCircleRLine />
+                                                <p>Đăng xuất</p>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button
+                                                className="flex items-center justify-start w-full gap-3 py-1 pl-2 rounded-md text-primary-50 button-2 bg-slate-100"
+                                                onClick={onEnterGift}
+                                            >
+                                                <BsCoin />
+                                                <p>Coins package</p>
                                             </button>
                                         </li>
                                     </ul>
@@ -211,22 +241,28 @@ const Profile: NextPageWithLayout = () => {
                         </div>
                     }
                 />
-                <div className="gap-4 flex-center-y">
-                    <Image
-                        className="rounded-xl"
-                        src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
-                        alt="avatar"
-                        height={40}
-                        width={40}
-                    />
-                    <div>
-                        <h3 className="text-neutral-100">
-                            {sUser.data?.name.firstName} {sUser.data?.name.lastName},30t
-                        </h3>
-                        <span className="opacity-50 body-2">
-                            {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
-                        </span>
+                <div className="justify-between flex-center-y">
+                    <div className="flex gap-4 flex-center-y">
+                        <Image
+                            className="rounded-xl"
+                            src={sUser.data ? sUser.data.avatar : '/assets/images/avatar.png'}
+                            alt="avatar"
+                            height={40}
+                            width={40}
+                        />
+                        <div>
+                            <h3 className="text-neutral-100">
+                                {sUser.data?.name.firstName} {sUser.data?.name.lastName},30t
+                            </h3>
+                            <span className="opacity-50 body-2">
+                                {sUser.data?.info.reason ? `”${sUser.data.info.reason}”` : ''}
+                            </span>
+                        </div>
                     </div>
+
+                    <button className="p-2 rounded-xl bg-primary-20" onClick={handleUpdateCommonInfo}>
+                        <HiPencil fill="#7a56fe" size={24} />
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-3 my-8 gap-2.5">
@@ -304,6 +340,12 @@ const Profile: NextPageWithLayout = () => {
                         title="Học vấn"
                         desc={sUser.data?.info.education ? sUser.data.info.education.name : 'Không'}
                         onClick={handleOpenEducationDialog}
+                    />
+                    <SingleGroup
+                        icon={<HeightIcon />}
+                        title="Chiều cao"
+                        desc={sUser.data?.info.height ? sUser.data.info.height + 'm' : 'Cập nhập chiều cao'}
+                        onClick={handleOpenHeightDialog}
                     />
                 </div>
 

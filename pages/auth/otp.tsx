@@ -2,7 +2,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { UserContextType } from '../../types/context/user';
-import { UserContext } from '../../context/userContext';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Button from '../../components/Button';
 import ArrowRightCircleIcon from '../../components/Icons/ArrowRightCircleIcon';
@@ -15,6 +14,7 @@ import { userVerifyOTP } from '../../redux/actions/userActions';
 import { toastError } from '../../utils/toast';
 import InputOTP from '../../components/Auth/InputOTP';
 import { selectUser } from '../../redux/reducers/userSlice';
+import { UserContext } from '../../context/userContext';
 
 const OTP: NextPage = () => {
     const router = useRouter();

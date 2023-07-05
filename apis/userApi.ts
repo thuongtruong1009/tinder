@@ -63,6 +63,13 @@ const userApi = {
                 url,
             },
         }),
+    updateCommonInfo: (formData: FormData) =>
+        axiosService.put<IUpdateUserCommonInfoResponse>(`${URL}/common-info`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }),
+    updateHeight: (height: number) => axiosService.put<IUpdateUserHeightResponse>(`${URL}/update-height`, { height }),
 };
 
 export default userApi;

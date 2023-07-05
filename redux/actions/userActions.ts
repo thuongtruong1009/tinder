@@ -198,3 +198,23 @@ export const userDeleteImage = createAsyncThunk('user/userDeleteImage', async (d
         return thunkAPI.rejectWithValue(error);
     }
 });
+
+export const userUpdateCommonInfo = createAsyncThunk('user/userUpdateCommonInfo', async (data: FormData, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.updateCommonInfo(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
+export const userUpdateHeight = createAsyncThunk('user/userUpdateHeight', async (data: number, thunkAPI) => {
+    try {
+        console.log('data: ', data);
+        const response = await userApi.updateHeight(data);
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});

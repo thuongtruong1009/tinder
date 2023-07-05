@@ -17,6 +17,8 @@ import {
     userUpdateFavorite,
     userUpdateDefault,
     userDeleteImage,
+    userUpdateCommonInfo,
+    userUpdateHeight,
 } from '../actions/userActions';
 
 interface UserState {
@@ -134,6 +136,26 @@ export const userSlice = createSlice({
                 if (index >= 0) {
                     state.data.profile.albums.splice(index, 1);
                 }
+            }
+        });
+
+        builder.addCase(userUpdateCommonInfo.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                if (payload.avatar) {
+                    state.data.avatar = payload.avatar;
+                }
+                if (payload.birthday) {
+                    state.data.birthday = payload.birthday;
+                }
+                if (payload.name) {
+                    state.data.name = payload.name;
+                }
+            }
+        });
+
+        builder.addCase(userUpdateHeight.fulfilled, (state, { payload }) => {
+            if (state.data) {
+                state.data.info.height = payload;
             }
         });
     },

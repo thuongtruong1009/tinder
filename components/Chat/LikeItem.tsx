@@ -12,7 +12,7 @@ export default function LikeItem({ avatar, name }: Props) {
                 <Image className="image" src={avatar} alt="avatar_img" layout="fill" />
             </div>
             <div className="py-2 text-xs text-center text-neutral-80">
-                <span className="font-bold truncate">{name}</span>
+                <span className="font-bold line-clamp-1">{name}</span>
             </div>
         </div>
     );

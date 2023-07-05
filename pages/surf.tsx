@@ -21,19 +21,22 @@ import { toastError, toastSuccess } from '../utils/toast';
 import { selectNotification } from '../redux/reducers/notificationSlice';
 import { userBlockUser, userLikeUser } from '../redux/actions/userActions';
 import { selectUser } from '../redux/reducers/userSlice';
+import Temp from '../components/Match/Temp';
 
 const Surf: NextPageWithLayout = () => {
     const dispatch = useAppDispatch();
     const sUser = useSelector(selectUser);
     const sNotification = useSelector(selectNotification).data;
-    const [stranger, setStranger] = useState<IDataFindFriendsAroundResponse>();
-    const [strangers, setStrangers] = useState<IDataFindFriendsAroundResponse[]>([]);
+    const [isOpenFavourite, setIsOpenFavourite] = useState(false);
+    const [stranger, setStranger] = useState<IStrager>();
+    const [strangers, setStrangers] = useState<IStrager[]>([]);
 
-    const handleSeenInfo = (stranger: IDataFindFriendsAroundResponse) => () => {
+    const handleSeenInfo = (stranger: IStrager) => () => {
         setStranger(stranger);
     };
 
     const handleClose = () => {
+        setIsOpenFavourite(false);
         setStranger(undefined);
     };
 
@@ -41,21 +44,21 @@ const Surf: NextPageWithLayout = () => {
         setStrangers(strangers.filter((stranger) => stranger._id !== _id));
     };
 
-    const handleLike = async (_id: string) => {
-        try {
-            await dispatch(userLikeUser(_id)).unwrap();
-            handleRemove(_id);
-            toastSuccess('Bạn đã thích thành công');
-        } catch (error) {
-            toastError((error as IResponseError).error);
-        }
-    };
-
     const handleBlock = async (_id: string) => {
         try {
             await dispatch(userBlockUser(_id)).unwrap();
             handleRemove(_id);
             toastSuccess('Bạn đã chặn thành công');
+        } catch (error) {
+            toastError((error as IResponseError).error);
+        }
+    };
+
+    const handleLike = async (_id: string) => {
+        try {
+            await dispatch(userLikeUser(_id)).unwrap();
+            handleRemove(_id);
+            toastSuccess('Bạn đã thích thành công');
         } catch (error) {
             toastError((error as IResponseError).error);
         }
@@ -132,8 +135,8 @@ const Surf: NextPageWithLayout = () => {
                                 <UserCard
                                     onSeen={handleSeenInfo}
                                     user={strange}
-                                    onLike={handleLike}
                                     onBlock={handleBlock}
+                                    onLike={handleLike}
                                 />
                             </SwiperSlide>
                         ))}
@@ -159,6 +162,8 @@ const Surf: NextPageWithLayout = () => {
                 {stranger && (
                     <SurtItem stranger={stranger} onClose={handleClose} onLike={handleLike} onBlock={handleBlock} />
                 )}
+
+                {isOpenFavourite && <Temp onClose={handleClose} />}
             </section>
 
             {/* User info */}

@@ -8,6 +8,7 @@ interface ConversationState {
         conversation: IConversation;
         limit: number;
         page: number;
+        next: boolean;
     }[];
 }
 
@@ -47,14 +48,22 @@ export const conversationSlice = createSlice({
             const isExist = state.data.find((item) => item.conversation._id === payload.conversation._id);
             if (isExist) {
                 if (isExist.conversation.messages.length !== 0) {
+                    //* Remove duplicate message
                     isExist.conversation.messages = [
-                        ...isExist.conversation.messages,
-                        ...payload.conversation.messages,
+                        ...new Set([...isExist.conversation.messages, ...payload.conversation.messages]),
                     ];
                     isExist.limit = payload.limit;
                     isExist.page = payload.page;
+                    isExist.next = payload.next;
                 } else {
                     isExist.conversation = payload.conversation;
+                    //* Remove duplicate message
+                    isExist.conversation.messages = [
+                        ...new Set([...isExist.conversation.messages, ...payload.conversation.messages]),
+                    ];
+                    isExist.limit = payload.limit;
+                    isExist.page = payload.page;
+                    isExist.next = payload.next;
                 }
                 // state.data = state.data.map((item) => {
                 //     if (item.conversation._id === payload.conversation._id) {
