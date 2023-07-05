@@ -1,22 +1,21 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Button from '../../components/Button';
-import Title from '../../components/Home/Title';
-import ArrowLeft from '../../components/Icons/ArrowLeft';
-import ProfileIcon from '../../components/Icons/ProfileIcon';
-import Input from '../../components/Input';
-import InputCalendar from '../../components/InputCalendar';
-import InputSelect from '../../components/InputSelect';
-import APP_PATH from '../../constant/appPath';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { genderGetAllGenders } from '../../redux/actions/genderAction';
-import { userFirstUpdate } from '../../redux/actions/userActions';
-import { selectUser } from '../../redux/reducers/userSlice';
-import { NextPageWithLayout } from '../../types/global';
-import { toastError } from '../../utils/toast';
+import Button from './Button';
+import Title from './Home/Title';
+import ArrowLeft from './Icons/ArrowLeft';
+import ProfileIcon from './Icons/ProfileIcon';
+import Input from './Input';
+import InputCalendar from './InputCalendar';
+import InputSelect from './InputSelect';
+import APP_PATH from '../constant/appPath';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { genderGetAllGenders } from '../redux/actions/genderAction';
+import { userFirstUpdate } from '../redux/actions/userActions';
+import { selectUser } from '../redux/reducers/userSlice';
+import { NextPageWithLayout } from '../types/global';
+import { toastError } from '../utils/toast';
 
 interface InputProps {
     email: string;
@@ -35,7 +34,6 @@ const UpdateInfo: NextPageWithLayout = () => {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<InputProps>({
         defaultValues: {
@@ -43,27 +41,23 @@ const UpdateInfo: NextPageWithLayout = () => {
         },
     });
     const [gender, setGender] = useState<any>();
-    const [birthday, setBirthday] = useState<Date>(new Date());
+    const [birthday, setBirthday] = useState<Date>(new Date('1975-04-30'));
     const [genders, setGenders] = useState<IGenderOption[]>();
-
-    if (!sUser.data?.status.isFirstUpdate) {
-        router.push(APP_PATH.SURF);
-    }
-
     const onSubmit: SubmitHandler<InputProps> = async (data) => {
         try {
             if (sUser?.data?.email) {
                 const { name } = data;
-                await dispatch(userFirstUpdate({ name, birthday: birthday.toISOString(), gender: gender.value }));
+                await dispatch(
+                    userFirstUpdate({ name, birthday: birthday.toISOString(), gender: gender.value }),
+                ).unwrap();
             } else {
                 const { name, email } = data;
                 await dispatch(
                     userFirstUpdate({ email, name, birthday: birthday.toISOString(), gender: gender.value }),
-                );
+                ).unwrap();
             }
             router.push(APP_PATH.SURF);
         } catch (error) {
-            console.log('error: ', error);
             toastError((error as IResponseError).error);
         }
     };

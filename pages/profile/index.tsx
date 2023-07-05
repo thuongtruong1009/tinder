@@ -52,7 +52,7 @@ const Profile: NextPageWithLayout = () => {
             <HobbyDialog isOpen={isOpenHobbyDialog} onClose={handleCloseHobbyDialog} />
             <WhyDialog isOpen={isOpenWhyDialog} onClose={handleCloseWhyDialog} />
             <BioDialog isOpen={isOpenBioDialog} onClose={handleCloseBioDialog} />
-            <section className="container with-navbar">
+            <section className="container bg-white with-navbar">
                 <Title
                     className="mb-2"
                     content={

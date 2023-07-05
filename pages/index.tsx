@@ -39,7 +39,7 @@ const Home: NextPageWithLayout = () => {
     };
     return (
         <>
-            <section className="container">
+            <section className="container bg-white">
                 <Title
                     className="mb-4"
                     content={<h1 className="font-extrabold leading-10 text-h2 text-primary-50 font-secondary">Foxy</h1>}

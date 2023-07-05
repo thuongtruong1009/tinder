@@ -51,8 +51,7 @@ const OTP: NextPage = () => {
             ).unwrap();
 
             Cookies.remove('userEmail');
-            if (response.user.status.isFirstUpdate) router.push(APP_PATH.AUTH_UPDATE);
-            else router.push(APP_PATH.SURF);
+            router.push(APP_PATH.SURF);
         } catch (error: any) {
             toastError(error.error);
         }
@@ -60,7 +59,7 @@ const OTP: NextPage = () => {
 
     return (
         <>
-            <section className="container">
+            <section className="container bg-white">
                 <div className="relative min-h-screen with-button">
                     <Title
                         className="mb-8"

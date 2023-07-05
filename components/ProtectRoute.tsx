@@ -5,6 +5,7 @@ import { useAppSelector } from '../hooks/redux';
 import { selectUser } from '../redux/reducers/userSlice';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
+import UpdateInfo from './UpdateInfo';
 
 interface Props {
     children: React.ReactNode;
@@ -41,9 +42,15 @@ export default function ProtectRoute({ children }: Props) {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sUser.isLogin]);
-    if (!sUser.isLogin) {
-        router.push(APP_PATH.ROOT);
-        return null;
+    function render() {
+        if (!sUser.isLogin) {
+            router.push(APP_PATH.ROOT);
+            return null;
+        }
+        if (sUser.data?.status.isFirstUpdate) {
+            return <UpdateInfo />;
+        }
+        return <>{children}</>;
     }
-    return <>{children}</>;
+    return render();
 }

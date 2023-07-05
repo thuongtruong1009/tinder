@@ -9,6 +9,7 @@ import NavbarLayout from '../../components/NavbarLayout';
 import LikeList from '../../components/Chat/LikeList';
 import ChatList from '../../components/Chat/ChatList';
 import { NextPageWithLayout } from '../../types/global';
+import Matching from '../match';
 
 const Index: NextPageWithLayout = () => {
     const router = useRouter();
@@ -16,8 +17,13 @@ const Index: NextPageWithLayout = () => {
     const joinChat = (index: string) => {
         router.push(`/chat/${index}`);
     };
+
+    const [match, setMatch] = useState<boolean>(false);
+    const handleMatch = () => {
+        setMatch(!match);
+    };
     return (
-        <section className="container">
+        <section className="container bg-white">
             <Title
                 className="py-2.75"
                 content={
@@ -35,7 +41,12 @@ const Index: NextPageWithLayout = () => {
             >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
                     <SwiperSlide key={index}>
-                        <LikeList avatar="/assets/images/chat_preview.png" name="Full name" loved={false} />
+                        <LikeList
+                            avatar="/assets/images/chat_preview.png"
+                            name="Full name"
+                            loved={false}
+                            onClick={handleMatch}
+                        />
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -47,6 +58,7 @@ const Index: NextPageWithLayout = () => {
                         avatar="/assets/images/chat_avatar.png"
                         key={index}
                         onClick={() => joinChat(index.toString())}
+                        S
                     />
                 ))}
             </ul>
