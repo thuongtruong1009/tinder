@@ -20,10 +20,10 @@ axiosService.interceptors.request.use(
 // Add a response interceptor
 axiosService.interceptors.response.use(
     function (response) {
-        return response.data;
+        return response;
     },
     function (error) {
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     },
 );
 export default axiosService;

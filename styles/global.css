@@ -24,12 +24,23 @@
     button {
         @apply outline-none;
     }
-    /* svg {
-        @apply flex-center;
+    /* width */
+    ::-webkit-scrollbar {
+        width: 7px;
     }
-    svg path {
-        @apply block;
-    } */
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #a48bfe;
+        border-radius: 5px;
+    }
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #7a56fe;
+    }
 }
 @tailwind components;
 @layer components {
@@ -60,8 +71,14 @@
     .radio:checked::before {
         @apply visible opacity-100;
     }
-    input {
+    /* input {
         box-shadow: inset 100px 100px 100px 100px #f4f5f5;
+    } */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px transparent inset !important;
     }
 }
 @tailwind utilities;
@@ -77,6 +94,9 @@
 @layer utilities {
     .with-navbar {
         @apply pb-24;
+    }
+    .with-button {
+        @apply pb-[76px];
     }
     .button-1 {
         @apply font-bold leading-button-1 text-button-1;
@@ -126,3 +146,15 @@
     }
 }
 @import './datepicker.css';
+@import './input-otp.css';
+.animate-up {
+    animation: animate-up 0.7s ease-in-out;
+}
+@keyframes animate-up {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}

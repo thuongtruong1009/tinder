@@ -5,7 +5,6 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 
 // import * as Yup from 'yup';
-import { useCookies } from 'react-cookie';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../context/userContext';
 import { UserContextType } from '../../types/context/user';
@@ -15,7 +14,13 @@ const Signin: NextPage = () => {
     const { savePhone } = useContext(UserContext) as UserContextType;
     const { register, handleSubmit } = useForm();
     const [phone, setPhone] = useState<any | undefined>();
-    const [cookies, setCookie, removeCookie] = useCookies(['errMessage']);
+
+    const loginWithGoogle = () => {
+        window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
+    };
+    const loginWithFacebook = () => {
+        window.open(`${process.env.URL_LOGIN_WITH_FACEBOOK}`, '_self');
+    };
 
     const onSubmit = async (data: any) => {
         const response = await fetch(`${process.env.LOGIN_WITH_PHONE_LOGIN}`, {
@@ -32,21 +37,10 @@ const Signin: NextPage = () => {
             alert(errorResult.error);
         } else {
             savePhone(phone);
-            router.push('/auth/otp');
+            router.push('/auth/phone');
         }
     };
-    console.log(cookies.errMessage);
-    if (cookies.errMessage) {
-        alert(cookies.errMessage);
-        removeCookie('errMessage');
-    }
-    const loginWithGoogle = async () => {
-        window.open(`${process.env.URL_LOGIN_WITH_GOOGLE}`, '_self');
-    };
-
-    const loginWithFacebook = () => {
-        window.open(`${process.env.URL_LOGIN_WITH_FACEBOOK}`, '_self');
-    };
+   
 
     return (
         <div className="flex flex-col justify-center max-w-md mx-auto">
