@@ -10,24 +10,23 @@ import { useEffect, useState } from 'react';
 import { userCurrentUser } from '../redux/actions/userActions';
 import 'swiper/css/bundle';
 import ProtectRoute from '../components/ProtectRoute';
-
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-    // const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(true);
     const getLayout = Component.getLayout ?? ((page) => page);
+
     useEffect(() => {
         async function getCurrentUser() {
-            await store.dispatch(userCurrentUser());
+            if (localStorage.getItem('token') && !store.getState().user.isLogin) {
+                await store.dispatch(userCurrentUser());
+            }
+            window.setTimeout(() => {
+                setLoading(false);
+            }, 1000);
         }
-        if (localStorage.getItem('token')) {
-            getCurrentUser();
-            window.setTimeout(() => {
-                setLoading(false);
-            }, 1);
-        } else
-            window.setTimeout(() => {
-                setLoading(false);
-            }, 1);
+        getCurrentUser();
+        return () => {
+            setLoading(true);
+        };
     }, []);
     return (
         <UserProvider>
@@ -50,7 +49,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 ) : (
                     <Loading />
                 )}
-
                 <Toaster
                     toastOptions={{
                         className: 'z-[500]',

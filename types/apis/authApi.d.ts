@@ -10,8 +10,7 @@ declare interface IVerifyOTP {
     email?: string;
     phone?: string;
 }
-declare interface IVerifyOTPResponse {
-    message: string;
+declare interface IVerifyOTPResponse extends IResponseSuccess {
     data: {
         token: string;
         user: IUser;

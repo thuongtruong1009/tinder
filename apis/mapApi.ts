@@ -7,6 +7,6 @@ const URL = `${API}/${ENDPOINT}`;
 const mapApi = {
     updateLocation: (body: IUpdateLocation) => axiosService.put<IResponseUpdateLocation>(`${URL}`, body),
 
-    findFriendsAround: () => axiosService.get<IFindFriendsAroundResponse[]>(`${URL}`),
+    findFriendsAround: () => axiosService.get<IFindFriendsAroundResponse>(`${URL}`),
 };
 export default mapApi;

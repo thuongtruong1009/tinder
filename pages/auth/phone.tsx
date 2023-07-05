@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, useContext, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import Button from '../../components/Button';
 import Title from '../../components/Home/Title';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
@@ -19,6 +19,7 @@ interface Props {}
 
 export default function LoginPhone(props: Props) {
     const dispatch = useAppDispatch();
+    const [loading, setIsLoading] = useState(false);
     const inputRef = useRef(null);
     const router = useRouter();
 
@@ -32,14 +33,14 @@ export default function LoginPhone(props: Props) {
         savePhone(e.target.value);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         const regex = /(([03+[2-9]|05+[6|8|9]|07+[0|6|7|8|9]|08+[1-9]|09+[1-4|6-9]]){3})+[0-9]{7}\b/g;
         if (regex.test(phone)) {
             const cookies = Cookies.get();
             const userEmail = cookies.userEmail;
-
+            setIsLoading(true);
             if (userEmail) {
-                console.log('co email');
                 try {
                     await dispatch(
                         userSendOTPRegister({
@@ -47,20 +48,23 @@ export default function LoginPhone(props: Props) {
                             email: userEmail,
                         }),
                     );
+                    setIsLoading(false);
                     Cookies.remove('userEmail');
                     toastSuccess('Verify phone successfully. Next enter OTP.');
                     router.push(APP_PATH.AUTH_OTP);
                 } catch (error: any) {
                     toastError(error.error);
+                    setIsLoading(false);
                 }
             } else {
                 try {
                     await authApi.loginWithPhone({ phone });
+                    setIsLoading(false);
                     toastSuccess('Verify phone successfully. Next enter OTP.');
                     router.push(APP_PATH.AUTH_OTP);
                 } catch (error: any) {
-                    console.log('error1212121: ', error);
                     toastError(error.error);
+                    setIsLoading(false);
                 }
             }
         } else {
@@ -79,7 +83,7 @@ export default function LoginPhone(props: Props) {
                         </button>
                     }
                 />
-                <div className="space-y-6">
+                <form className="space-y-6" id="phone" onSubmit={handleSubmit}>
                     <div className="w-24 h-24 p-4 image-container rounded-3xl bg-neutral-5">
                         <PhoneOtpIcon />
                     </div>
@@ -100,13 +104,16 @@ export default function LoginPhone(props: Props) {
                             ref={inputRef}
                         />
                     </div>
-                </div>
+                </form>
                 <Button
-                    onClick={handleSubmit}
                     className="absolute left-0 bottom-4"
                     title="Xác thực"
                     Icon={<ArrowRightCircleIcon />}
                     block
+                    name="phone"
+                    htmlType="submit"
+                    disabled={loading}
+                    form="phone"
                 />
             </div>
         </section>

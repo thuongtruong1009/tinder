@@ -2,55 +2,36 @@ import { Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { memo, useEffect } from 'react';
 import L from 'leaflet';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/reducers/userSlice';
 
 interface Props {
-    info: IResponseUpdateLocation;
-    current?: boolean;
+    info: IUserLocation;
     isFocus?: boolean;
-    onClick?: (user: IFindFriendsAroundResponse) => void;
 }
 
-function getIconMarkerMe(imageUrl: string) {
+function getIconMarker(imageUrl: string) {
     return L.icon({
         iconUrl: imageUrl,
         iconSize: [50, 50],
-        className: 'rounded-full border-2 border-red-500',
+        className: 'rounded-full border-2 border-red-500 object-cover',
     });
 }
 
-function getIconMarkerFriends(imageUrl: string) {
-    return L.icon({
-        iconUrl: '/Pin.svg',
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-        // className: ' translate-y-full',
-    });
-}
-
-function MapMaker({ isFocus, info, current, onClick }: Props) {
+function MapMaker({ isFocus, info }: Props) {
+    const userAvatar = useSelector(selectUser).data?.avatar;
     const map = useMapEvents({});
     useEffect(() => {
-        if (info && current) {
-            map.flyTo([info.lastLocation.latitude, info.lastLocation.longitude], 18);
+        if (info) {
+            map.flyTo([info.latitude, info.longitude], 18);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFocus]);
 
     return (
         <>
-            <Marker
-                eventHandlers={{
-                    click: () => {
-                        {
-                            onClick && onClick(info);
-                        }
-                    },
-                }}
-                position={[info.lastLocation.latitude, info.lastLocation.longitude]}
-                icon={current ? getIconMarkerMe(info.avatar) : getIconMarkerFriends(info.avatar)}
-            ></Marker>
+            <Marker position={[info.latitude, info.longitude]} icon={getIconMarker(userAvatar || '')}></Marker>
         </>
     );
 }
-// export default (MapMaker);
 export default memo(MapMaker);
